@@ -9,12 +9,11 @@ com/example/tryJwt/demo/Modelo/Users$UsersBuilder.class
 com/example/tryJwt/demo/Repository/UserRepository.class
 com/example/tryJwt/demo/Controller/RegisterRequest.class
 com/example/tryJwt/demo/Repository/Token.class
+com/example/tryJwt/demo/Config/SecurityConfig.class
 com/example/tryJwt/demo/Modelo/Spent.class
 com/example/tryJwt/demo/Servicies/UsersService.class
 com/example/tryJwt/demo/Controller/UsersController.class
-com/example/tryJwt/demo/Config/CorsConfig$1.class
 com/example/tryJwt/demo/Controller/AuthController.class
-com/example/tryJwt/demo/Config/CorsConfig.class
 com/example/tryJwt/demo/Repository/TokenRepository.class
 com/example/tryJwt/demo/Controller/TokenResponse.class
 com/example/tryJwt/demo/Modelo/Users.class
