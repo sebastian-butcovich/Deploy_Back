@@ -9,7 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = "http://myapp-finanzasindicate.com")
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("auth")
