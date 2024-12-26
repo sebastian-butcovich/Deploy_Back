@@ -34,4 +34,9 @@ public class AuthController {
     {
         return service.refreshToken(authHeader);
     }
+    @GetMapping
+    public String vital()
+    {
+        return new String ("El servicio esta vivo");
+    }
 }
