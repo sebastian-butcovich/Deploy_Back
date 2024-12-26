@@ -30,18 +30,6 @@ public class SecurityConfig {
     private TokenRepository tokenRepository;
 
 
-    @Bean
-    public WebMvcConfigurer corsConfigurer()
-    {
-        return new WebMvcConfigurer() {
-            @Override
-            public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**")
-                        .allowedMethods("*")
-                        .allowedOrigins("*");
-            }
-        };
-    }
     private void logout(String token)
     {
         if(token == null || ! token.startsWith("Bearer "))
