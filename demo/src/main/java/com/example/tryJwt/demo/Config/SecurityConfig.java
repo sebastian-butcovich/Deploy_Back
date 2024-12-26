@@ -32,6 +32,30 @@ public class SecurityConfig {
     private TokenRepository tokenRepository;
 
     @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
+    {
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(req->req.requestMatchers("/auth/**")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(sesion-> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout->
+                        logout.addLogoutHandler((request, response, authentication) ->
+                        {
+                            var authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+                            logout(authHeader);
+                        })
+                                .logoutSuccessHandler((request, response, authentication) ->
+                                {
+                                    SecurityContextHolder.clearContext();
+                                }))
+        ;
+
+        return http.build();
+    }
+    @Bean
     public WebMvcConfigurer corsConfigurer()
     {
         return new WebMvcConfigurer() {
