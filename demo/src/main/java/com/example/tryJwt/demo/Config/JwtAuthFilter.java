@@ -1,7 +1,7 @@
 package com.example.tryJwt.demo.Config;
 
 import com.example.tryJwt.demo.Modelo.Users;
-import com.example.tryJwt.demo.Repository.Token;
+import com.example.tryJwt.demo.Modelo.Token;
 import com.example.tryJwt.demo.Repository.TokenRepository;
 import com.example.tryJwt.demo.Repository.UserRepository;
 import com.example.tryJwt.demo.Servicies.JwtService;
@@ -26,6 +26,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Optional;
 
+import static com.fasterxml.jackson.databind.type.LogicalType.Map;
+
 @Component
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -47,7 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return ;
         }
-        String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+        String authHeader = request.getParameter("token");
         if(authHeader== null || !authHeader.startsWith("Bearer "))
         {
             filterChain.doFilter(request,response);

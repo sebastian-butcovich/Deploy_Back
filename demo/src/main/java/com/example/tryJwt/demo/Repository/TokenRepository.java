@@ -1,5 +1,6 @@
 package com.example.tryJwt.demo.Repository;
 
+import com.example.tryJwt.demo.Modelo.Token;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

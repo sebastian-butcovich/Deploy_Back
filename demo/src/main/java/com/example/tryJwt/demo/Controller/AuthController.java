@@ -1,5 +1,8 @@
 package com.example.tryJwt.demo.Controller;
 
+import com.example.tryJwt.demo.FileRequest.LoginRequest;
+import com.example.tryJwt.demo.FileRequest.RegisterRequest;
+import com.example.tryJwt.demo.FileRequest.TokenResponse;
 import com.example.tryJwt.demo.Servicies.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;

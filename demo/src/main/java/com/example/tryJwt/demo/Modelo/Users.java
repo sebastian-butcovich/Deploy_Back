@@ -1,9 +1,9 @@
 package com.example.tryJwt.demo.Modelo;
 
-import com.example.tryJwt.demo.Repository.Token;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name="users")
+@Data
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,6 +24,8 @@ public class Users {
     private String password;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Token> tokens;
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<Spent> gastos;
 
     public Integer getId() {
         return id;
@@ -62,6 +65,14 @@ public class Users {
 
     public void setTokens(List<Token> tokens) {
         this.tokens = tokens;
+    }
+
+    public List<Spent> getGastos() {
+        return gastos;
+    }
+
+    public void setGastos(List<Spent> gastos) {
+        this.gastos = gastos;
     }
 }
 

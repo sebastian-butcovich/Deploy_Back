@@ -1,6 +1,6 @@
 package com.example.tryJwt.demo.Config;
 
-import com.example.tryJwt.demo.Repository.Token;
+import com.example.tryJwt.demo.Modelo.Token;
 import com.example.tryJwt.demo.Repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableWebSecurity
@@ -34,7 +32,25 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
     {
-        http.csrf(AbstractHttpConfigurer::disable);
+        http.csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests(req->req.requestMatchers("/auth/**")
+                        .permitAll()
+                        .anyRequest().authenticated())
+                .sessionManagement(sesion-> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .logout(logout->
+                        logout.addLogoutHandler((request, response, authentication) ->
+                                {
+                                    var authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+                                    logout(authHeader);
+                                })
+                                .logoutSuccessHandler((request, response, authentication) ->
+                                {
+                                    SecurityContextHolder.clearContext();
+                                }))
+        ;
+
         return http.build();
     }
     private void logout(String token)
