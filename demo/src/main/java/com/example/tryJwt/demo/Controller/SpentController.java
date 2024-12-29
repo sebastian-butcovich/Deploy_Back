@@ -4,6 +4,7 @@ import com.example.tryJwt.demo.FileRequest.ParamsHeader;
 import com.example.tryJwt.demo.FileRequest.SpentRequest;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Servicies.SpentService;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +25,8 @@ public class SpentController {
     private SpentService spentService;
 
     @GetMapping("/get_all")
-    public List<Spent> listarGastos(@RequestParam Map<String,String> headers)
+    @JsonFormat
+    public ResponseEntity<List<Spent>> listarGastos(@RequestParam Map<String,String> headers)
     {
         return spentService.listSpent(headers);
     }
@@ -34,19 +36,20 @@ public class SpentController {
         return spentService.obtenerGasto(idSpent);
     }
     @PostMapping("/add")
-    public ResponseEntity<String> agregarGasto(@RequestBody  SpentRequest spent, @RequestHeader Map<String,String> headers )
+    public ResponseEntity<String> agregarGasto(@RequestBody  SpentRequest spent, @RequestParam Map<String,String> headers )
     {
 
         return spentService.addSpent(spent,headers);
     }
     @PutMapping("/update")
-    public ResponseEntity<String> editarGasto(@RequestBody Spent spent)
+    public ResponseEntity<String> editarGasto(@RequestBody SpentRequest spent, @RequestParam Map<String,String>params)
     {
-        return spentService.editSpent(spent);
+        return spentService.editSpent(spent,params);
     }
     @DeleteMapping("/delete")
-    public ResponseEntity<String> eliminarGasto(@RequestHeader Integer id)
+    public ResponseEntity<String> eliminarGasto(@RequestParam  Integer id)
     {
+
         return spentService.removeSpent(id);
     }
 }

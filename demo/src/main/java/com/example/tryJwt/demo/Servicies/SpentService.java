@@ -9,13 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class SpentService {
@@ -25,12 +23,14 @@ public class SpentService {
     private UserRepository userRepository;
     @Autowired
     private JwtService jwtService;
-    public List<Spent> listSpent(Map<String, String> headers)
+    public ResponseEntity<List<Spent>> listSpent(Map<String, String> headers)
     {
         int page = Integer.parseInt(headers.get("page"));
         int page_size = Integer.parseInt(headers.get("page_size"));
          Optional<Users> users = getUsers(headers);
-        return spentRepository.findAllByUsuario(users.get());
+        List<Spent> usuarios = spentRepository.findAll();
+        return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
+                .body(usuarios) ;
     }
     public ResponseEntity<Spent> obtenerGasto(Integer idSpent)
     {
@@ -65,15 +65,20 @@ public class SpentService {
         return users;
     }
 
-    public ResponseEntity<String> editSpent(Spent spent)
+    public ResponseEntity<String> editSpent(SpentRequest spent, Map<String,String> params)
     {
-        if(spent.getTipo() == null || spent.getTipo() ==""
-                &&spent.getDescripcion() ==null && spent.getDescripcion()==""
-                &&spent.getMonto() ==null && spent.getMonto() <= 0 )
+        if(spent.tipo() == null || spent.id() == null || spent.id() <= 0)
         {
             return ResponseEntity.badRequest().body("Uno de los siguientes campos (nombre, descripción, monto) esta vacio o es nulo");
         }
-        spentRepository.save(spent);
+        Spent f_spent = spentRepository.findById(spent.id()).orElseThrow();
+        f_spent.setMonto(spent.monto());
+        f_spent.setDescripcion(spent.descripcion());
+        f_spent.setTipo(spent.tipo());
+        f_spent.setFecha(new Date());
+        Optional<Users> users = getUsers(params);
+        f_spent.setUsuario(users.get());
+        spentRepository.save(f_spent);
         return ResponseEntity.ok().body("Gasto editado correctamente");
     }
     public ResponseEntity<String> removeSpent(Integer idSpent)
@@ -83,7 +88,7 @@ public class SpentService {
             ResponseEntity.badRequest().body("Id ingresado es invalido");
         }else{
             Optional<Spent> spent = spentRepository.findById(idSpent);
-            if(spent.isEmpty()) {
+            if(spent.isPresent()) {
                 spentRepository.deleteById(idSpent);
                 return ResponseEntity.ok().body("Gasto eliminado exitosamente");
             }
