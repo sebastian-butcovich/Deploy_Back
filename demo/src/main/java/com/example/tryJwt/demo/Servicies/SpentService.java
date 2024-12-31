@@ -31,19 +31,23 @@ public class SpentService {
     {
         int page = Integer.parseInt(headers.get("page"));
         int page_size = Integer.parseInt(headers.get("page_size"));
-
         Pageable pageable = PageRequest.of(page,page_size);
         Optional<Users> users = getUsers(headers);
         Page<Spent> spents = spentRepository.findAllByUsuario(users.get().getId(),pageable);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
                 .body(spents) ;
     }
+    private List<Spent> list(Map<String,String> params)
+    {
+        Optional<Users> users = getUsers(params);
+        List<Spent> spents = spentRepository.findAllByUsuario(users.get().getId());
+        return spents;
+    }
     @JsonBackReference
     public ResponseEntity<HashSet<String>> obtenerTipos(Map<String,String> params)
     {
-       List<Spent> lista  = listSpent(params).getBody().getContent().stream().toList();
+       List<Spent> lista  = list(params);
         List<String> retort = new LinkedList<String>();
-        assert lista != null;
         for (Spent l:lista)
         {
             retort.add(l.getTipo());

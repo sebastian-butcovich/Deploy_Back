@@ -14,5 +14,7 @@ import java.util.List;
 public interface SpentRepository extends JpaRepository<Spent,Integer> {
     @Query("select s from Spent s where s.usuario.id = ?1")
     public Page<Spent> findAllByUsuario(Integer id, Pageable pageable);
+    @Query("select s from Spent s where s.usuario.id = ?1")
+    public List<Spent> findAllByUsuario(Integer id);
 
 }
