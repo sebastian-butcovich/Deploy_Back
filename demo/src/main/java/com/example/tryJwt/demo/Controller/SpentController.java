@@ -8,10 +8,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -27,7 +29,7 @@ public class SpentController {
 
     @GetMapping("/get_all")
     @JsonFormat
-    public ResponseEntity<List<Spent>> listarGastos(@RequestParam Map<String,String> headers)
+    public ResponseEntity<Page<Spent>> listarGastos(@RequestParam Map<String,String> headers)
     {
         return spentService.listSpent(headers);
     }
@@ -53,7 +55,7 @@ public class SpentController {
         return spentService.removeSpent(id);
     }
     @GetMapping("/tipos")
-    public ResponseEntity<List<String>> obtenerTipos(@RequestParam Map<String,String> params)
+    public ResponseEntity<HashSet<String>> obtenerTipos(@RequestParam Map<String,String> params)
     {
        return  spentService.obtenerTipos(params);
     }

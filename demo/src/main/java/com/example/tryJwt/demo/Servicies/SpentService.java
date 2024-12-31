@@ -9,6 +9,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -26,26 +27,29 @@ public class SpentService {
     private UserRepository userRepository;
     @Autowired
     private JwtService jwtService;
-    public ResponseEntity<List<Spent>> listSpent(Map<String, String> headers)
+    public ResponseEntity<Page<Spent>> listSpent(Map<String, String> headers)
     {
-        //int page = Integer.parseInt(headers.get("page"));
-        //int page_size = Integer.parseInt(headers.get("page_size"));
-         Optional<Users> users = getUsers(headers);
-        List<Spent> usuarios = spentRepository.findAll();
+        int page = Integer.parseInt(headers.get("page"));
+        int page_size = Integer.parseInt(headers.get("page_size"));
+
+        Pageable pageable = PageRequest.of(page,page_size);
+        Optional<Users> users = getUsers(headers);
+        Page<Spent> spents = spentRepository.findAllByUsuario(users.get().getId(),pageable);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
-                .body(usuarios) ;
+                .body(spents) ;
     }
     @JsonBackReference
-    public ResponseEntity<List<String>> obtenerTipos(Map<String,String> params)
+    public ResponseEntity<HashSet<String>> obtenerTipos(Map<String,String> params)
     {
-        List<Spent> lista = listSpent(params).getBody();
+       List<Spent> lista  = listSpent(params).getBody().getContent().stream().toList();
         List<String> retort = new LinkedList<String>();
         assert lista != null;
         for (Spent l:lista)
         {
             retort.add(l.getTipo());
         }
-        return ResponseEntity.ok(retort);
+        HashSet<String> result = new HashSet<String>(retort);
+        return ResponseEntity.ok(result);
     }
     public ResponseEntity<Spent> obtenerGasto(Integer idSpent)
     {
