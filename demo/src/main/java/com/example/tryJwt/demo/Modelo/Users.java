@@ -1,5 +1,6 @@
 package com.example.tryJwt.demo.Modelo;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -58,7 +59,7 @@ public class Users {
     public void setPassword(String password) {
         this.password = password;
     }
-
+    @JsonManagedReference
     public List<Token> getTokens() {
         return tokens;
     }
@@ -66,7 +67,7 @@ public class Users {
     public void setTokens(List<Token> tokens) {
         this.tokens = tokens;
     }
-
+    @JsonManagedReference
     public List<Spent> getGastos() {
         return gastos;
     }

@@ -5,6 +5,7 @@ import com.example.tryJwt.demo.FileRequest.SpentRequest;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Servicies.SpentService;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -38,7 +39,6 @@ public class SpentController {
     @PostMapping("/add")
     public ResponseEntity<String> agregarGasto(@RequestBody  SpentRequest spent, @RequestParam Map<String,String> headers )
     {
-
         return spentService.addSpent(spent,headers);
     }
     @PutMapping("/update")
@@ -51,5 +51,10 @@ public class SpentController {
     {
 
         return spentService.removeSpent(id);
+    }
+    @GetMapping("/tipos")
+    public ResponseEntity<List<String>> obtenerTipos(@RequestParam Map<String,String> params)
+    {
+       return  spentService.obtenerTipos(params);
     }
 }

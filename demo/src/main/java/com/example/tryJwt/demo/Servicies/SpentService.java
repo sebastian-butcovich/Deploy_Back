@@ -5,6 +5,8 @@ import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.SpentRepository;
 import com.example.tryJwt.demo.Repository.UserRepository;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.PageRequest;
@@ -14,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SpentService {
@@ -25,12 +28,24 @@ public class SpentService {
     private JwtService jwtService;
     public ResponseEntity<List<Spent>> listSpent(Map<String, String> headers)
     {
-        int page = Integer.parseInt(headers.get("page"));
-        int page_size = Integer.parseInt(headers.get("page_size"));
+        //int page = Integer.parseInt(headers.get("page"));
+        //int page_size = Integer.parseInt(headers.get("page_size"));
          Optional<Users> users = getUsers(headers);
         List<Spent> usuarios = spentRepository.findAll();
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
                 .body(usuarios) ;
+    }
+    @JsonBackReference
+    public ResponseEntity<List<String>> obtenerTipos(Map<String,String> params)
+    {
+        List<Spent> lista = listSpent(params).getBody();
+        List<String> retort = new LinkedList<String>();
+        assert lista != null;
+        for (Spent l:lista)
+        {
+            retort.add(l.getTipo());
+        }
+        return ResponseEntity.ok(retort);
     }
     public ResponseEntity<Spent> obtenerGasto(Integer idSpent)
     {

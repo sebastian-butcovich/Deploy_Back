@@ -1,5 +1,7 @@
 package com.example.tryJwt.demo.Modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -66,7 +68,7 @@ public class Token {
     public void setExpired(boolean expired) {
         this.expired = expired;
     }
-
+    @JsonBackReference
     public Users getUser() {
         return user;
     }

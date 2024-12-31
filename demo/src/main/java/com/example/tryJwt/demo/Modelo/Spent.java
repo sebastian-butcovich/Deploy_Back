@@ -1,5 +1,6 @@
 package com.example.tryJwt.demo.Modelo;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -57,7 +58,7 @@ public class Spent {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
-
+    @JsonBackReference
     public Users getUsuario() {
         return usuario;
     }
