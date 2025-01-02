@@ -43,7 +43,7 @@ public class SpentController {
     {
         return spentService.addSpent(spent,headers);
     }
-    @PutMapping("/update")
+    @PostMapping("/update")
     public ResponseEntity<String> editarGasto(@RequestBody SpentRequest spent, @RequestParam Map<String,String>params)
     {
         return spentService.editSpent(spent,params);

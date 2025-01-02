@@ -49,6 +49,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return ;
         }
+
         String authHeader = request.getParameter("token");
         if(authHeader== null || !authHeader.startsWith("Bearer "))
         {
