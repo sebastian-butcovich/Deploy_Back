@@ -1,14 +1,13 @@
 package com.example.tryJwt.demo.Servicies;
 
-import com.example.tryJwt.demo.FileRequest.SpentRequest;
+import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.SpentRepository;
 import com.example.tryJwt.demo.Repository.UserRepository;
+import com.example.tryJwt.demo.Utils.FunctionUtils;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class SpentService {
@@ -27,19 +25,21 @@ public class SpentService {
     private UserRepository userRepository;
     @Autowired
     private JwtService jwtService;
+    @Autowired(required = true)
+    private FunctionUtils functionUtils;
     public ResponseEntity<Page<Spent>> listSpent(Map<String, String> headers)
     {
         int page = Integer.parseInt(headers.get("page"));
         int page_size = Integer.parseInt(headers.get("page_size"));
         Pageable pageable = PageRequest.of(page,page_size);
-        Optional<Users> users = getUsers(headers);
+        Optional<Users> users = functionUtils.getUsers(headers);
         Page<Spent> spents = spentRepository.findAllByUsuario(users.get().getId(),pageable);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
                 .body(spents) ;
     }
     private List<Spent> list(Map<String,String> params)
     {
-        Optional<Users> users = getUsers(params);
+        Optional<Users> users = functionUtils.getUsers(params);
         List<Spent> spents = spentRepository.findAllByUsuario(users.get().getId());
         return spents;
     }
@@ -63,32 +63,27 @@ public class SpentService {
         Spent spent = spentRepository.findById(idSpent).orElseThrow();
         return ResponseEntity.ok().body(spent);
     }
-    public ResponseEntity<String> addSpent(SpentRequest spentRequest, Map<String,String> headers)
+    public ResponseEntity<String> addSpent(MovementsRequest movementsRequest, Map<String,String> headers)
     {
-        if(spentRequest.monto() == null)
+        if(movementsRequest.monto() == null)
         {
             return ResponseEntity.badRequest().body("Uno de los siguientes campos (tipo, descripción, monto) esta vacio o es nulo");
         }
         Date fecha = new Date();
         Spent spent  = new Spent();
         spent.setFecha(fecha);
-        spent.setDescripcion(spentRequest.descripcion());
-        spent.setMonto(spentRequest.monto());
-        spent.setTipo(spentRequest.tipo());
-        Optional<Users> users = getUsers(headers);
+        spent.setDescripcion(movementsRequest.descripcion());
+        spent.setMonto(movementsRequest.monto());
+        spent.setTipo(movementsRequest.tipo());
+        Optional<Users> users = functionUtils.getUsers(headers);
         spent.setUsuario(users.get());
         spentRepository.save(spent);
         return ResponseEntity.ok().body("Gasto agregado correctamente");
     }
 
-    private Optional<Users> getUsers(Map<String, String> headers) {
-        String token = headers.get("token").substring(7);
-        String username = jwtService.extractUsername(token);
-        Optional<Users> users = userRepository.findByEmail(username);
-        return users;
-    }
 
-    public ResponseEntity<String> editSpent(SpentRequest spent, Map<String,String> params)
+
+    public ResponseEntity<String> editSpent(MovementsRequest spent, Map<String,String> params)
     {
         if(spent.tipo() == null || spent.id() == null || spent.id() <= 0)
         {
@@ -99,7 +94,7 @@ public class SpentService {
         f_spent.setDescripcion(spent.descripcion());
         f_spent.setTipo(spent.tipo());
         f_spent.setFecha(new Date());
-        Optional<Users> users = getUsers(params);
+        Optional<Users> users = functionUtils.getUsers(params);
         f_spent.setUsuario(users.get());
         spentRepository.save(f_spent);
         return ResponseEntity.ok().body("Gasto editado correctamente");

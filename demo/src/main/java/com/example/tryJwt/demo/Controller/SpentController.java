@@ -1,11 +1,9 @@
 package com.example.tryJwt.demo.Controller;
 
-import com.example.tryJwt.demo.FileRequest.ParamsHeader;
-import com.example.tryJwt.demo.FileRequest.SpentRequest;
+import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Servicies.SpentService;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,9 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @Controller
@@ -39,12 +35,12 @@ public class SpentController {
         return spentService.obtenerGasto(idSpent);
     }
     @PostMapping("/add")
-    public ResponseEntity<String> agregarGasto(@RequestBody  SpentRequest spent, @RequestParam Map<String,String> headers )
+    public ResponseEntity<String> agregarGasto(@RequestBody MovementsRequest spent, @RequestParam Map<String,String> headers )
     {
         return spentService.addSpent(spent,headers);
     }
     @PostMapping("/update")
-    public ResponseEntity<String> editarGasto(@RequestBody SpentRequest spent, @RequestParam Map<String,String>params)
+    public ResponseEntity<String> editarGasto(@RequestBody MovementsRequest spent, @RequestParam Map<String,String>params)
     {
         return spentService.editSpent(spent,params);
     }

@@ -9,12 +9,10 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name="users")
-@Data
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,7 +25,8 @@ public class Users {
     private List<Token> tokens;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Spent> gastos;
-
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<Income> ingresos;
     public Integer getId() {
         return id;
     }
@@ -74,6 +73,14 @@ public class Users {
 
     public void setGastos(List<Spent> gastos) {
         this.gastos = gastos;
+    }
+    @JsonManagedReference
+    public List<Income> getIngresos() {
+        return ingresos;
+    }
+
+    public void setIngresos(List<Income> ingresos) {
+        this.ingresos = ingresos;
     }
 }
 
