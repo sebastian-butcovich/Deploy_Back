@@ -40,7 +40,13 @@ public class IncomeService {
     }
     public ResponseEntity<Income> obtenerUnIngreso(Map<String,String> params)
     {
-        return null;
+        if(params.get("id").isEmpty())
+        {
+            ResponseEntity.badRequest().body(null);
+        }
+        Integer id = Integer.parseInt(params.get("id"));
+        Income income = incomeRepository.findById(id).orElseThrow();
+        return ResponseEntity.ok(income);
     }
     public ResponseEntity<String> agregarIngreso(MovementsRequest ingreso, Map<String,String> params)
     {
@@ -61,11 +67,37 @@ public class IncomeService {
     }
     public ResponseEntity<String> editarIngreso(MovementsRequest ingreso, Map<String,String> params)
     {
-        return null;
+        if(ingreso.id() == null)
+        {
+            return ResponseEntity.badRequest().body("No se ingreso ningun id");
+        }
+        Integer id = ingreso.id();
+        Optional<Income> optionalIncome = incomeRepository.findById(id);
+        if (optionalIncome.isEmpty())
+        {
+            return ResponseEntity.badRequest().body("No se encontro ningún ingreso con ese id");
+        }
+        Income income = optionalIncome.get();
+        income.setMonto(ingreso.monto());
+        income.setTipo(ingreso.tipo());
+        income.setDescripcion(ingreso.descripcion());
+        incomeRepository.save(income);
+        return ResponseEntity.ok().body("El ingreso se edito correctamente");
     }
     public ResponseEntity<String> eliminarIngreso( Map<String,String> params)
     {
-        return null;
+        if(params.get("id").isEmpty())
+        {
+            return ResponseEntity.badRequest().body("No se envio ningún id");
+        }
+        Integer id = Integer.parseInt(params.get("id"));
+        Optional<Income> optionalIncome = incomeRepository.findById(id);
+        if (optionalIncome.isEmpty())
+        {
+            return ResponseEntity.badRequest().body("No se encontro ningún ingreso con ese id");
+        }
+        incomeRepository.deleteById(id);
+        return ResponseEntity.ok().body("Se elimino el ingreso correctamente");
     }
     public ResponseEntity<HashSet<String>> obtenerTiposIngreso(Map<String,String> params)
     {
