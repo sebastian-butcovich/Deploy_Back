@@ -17,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class IncomeService {
@@ -37,6 +34,12 @@ public class IncomeService {
         Page<Income> incomes = incomeRepository.findAllByUsuario(users.get().getId(),pageable);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
                 .body(incomes) ;
+    }
+    private List<Income> list(Map<String,String> params)
+    {
+        Optional<Users> users = functionUtils.getUsers(params);
+        List<Income> incomes = incomeRepository.findAllByUsuario(users.get().getId());
+        return incomes;
     }
     public ResponseEntity<Income> obtenerUnIngreso(Map<String,String> params)
     {
@@ -101,7 +104,14 @@ public class IncomeService {
     }
     public ResponseEntity<HashSet<String>> obtenerTiposIngreso(Map<String,String> params)
     {
-        return null;
+        List<Income> list = this.list(params);
+        List<String> retort = new LinkedList<String>();
+        for (Income l:list)
+        {
+            retort.add(l.getTipo());
+        }
+        HashSet<String> result = new HashSet<String>(retort);
+        return ResponseEntity.ok(result);
     }
 
 }
