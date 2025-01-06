@@ -1,7 +1,9 @@
 package com.example.tryJwt.demo.Controller;
 
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.TotalResponse;
 import com.example.tryJwt.demo.Modelo.Income;
+import com.example.tryJwt.demo.Servicies.DashboardService;
 import com.example.tryJwt.demo.Servicies.IncomeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,8 @@ import java.util.Map;
 public class IncomeController {
     @Autowired
     private IncomeService incomeService;
+    @Autowired
+    private DashboardService dashboardService;
     @GetMapping("/get_all")
     public ResponseEntity<Page<Income>> listaIngresos(@RequestParam Map<String, String> params)
     {
@@ -46,5 +50,10 @@ public class IncomeController {
     public ResponseEntity<HashSet<String>> obtenerTiposIngresos(@RequestParam Map<String,String> params)
     {
     return incomeService.obtenerTiposIngreso(params);
+    }
+    @GetMapping("/total")
+    public ResponseEntity<TotalResponse> getTotalIngreso(@RequestParam Map<String,String> param)
+    {
+        return dashboardService.getTotalIngresos(param);
     }
 }

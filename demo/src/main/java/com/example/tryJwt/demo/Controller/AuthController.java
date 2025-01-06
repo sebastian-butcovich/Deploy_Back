@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @Controller
 @CrossOrigin(origins = "*")
@@ -33,9 +35,9 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
     @PostMapping("/refresh")
-    public TokenResponse refreshToken(@RequestHeader(HttpHeaders.AUTHORIZATION) final String authHeader )
+    public TokenResponse refreshToken(@RequestParam Map<String, String> params )
     {
-        return service.refreshToken(authHeader);
+        return service.refreshToken(params);
     }
     @GetMapping("/vital")
     public String vital()

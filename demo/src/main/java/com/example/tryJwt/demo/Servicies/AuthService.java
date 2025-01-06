@@ -17,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -59,8 +60,10 @@ public class AuthService {
         saveUserToken(user,jwtToken);
         return new TokenResponse(jwtToken,refreshToken);
     }
-    public TokenResponse refreshToken(String authHeader)
+    public TokenResponse refreshToken(Map<String, String> params)
     {
+        String authHeader = params.get("token");
+
         if(authHeader ==null || !authHeader.startsWith("Bearer "))
         {
             throw new IllegalArgumentException("Invalid Bearer token");

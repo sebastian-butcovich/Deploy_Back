@@ -7,11 +7,13 @@ com/example/tryJwt/demo/Config/SecurityConfig.class
 com/example/tryJwt/demo/Servicies/UsersService.class
 com/example/tryJwt/demo/Controller/SpentController.class
 com/example/tryJwt/demo/Controller/AuthController.class
+com/example/tryJwt/demo/Servicies/DashboardService.class
 com/example/tryJwt/demo/Modelo/Token$TokenBuilder.class
 com/example/tryJwt/demo/Servicies/IncomeService.class
 com/example/tryJwt/demo/Modelo/Users.class
 com/example/tryJwt/demo/Repository/IncomeRepository.class
 com/example/tryJwt/demo/Controller/IncomeController.class
+com/example/tryJwt/demo/FileRequest/TotalResponse.class
 com/example/tryJwt/demo/Config/JwtAuthFilter.class
 com/example/tryJwt/demo/Servicies/AuthService.class
 com/example/tryJwt/demo/FileRequest/ParamsHeader.class

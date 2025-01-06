@@ -1,7 +1,9 @@
 package com.example.tryJwt.demo.Controller;
 
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.TotalResponse;
 import com.example.tryJwt.demo.Modelo.Spent;
+import com.example.tryJwt.demo.Servicies.DashboardService;
 import com.example.tryJwt.demo.Servicies.SpentService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +24,8 @@ import java.util.Map;
 public class SpentController {
     @Autowired
     private SpentService spentService;
-
+    @Autowired
+    private DashboardService dashboardService;
     @GetMapping("/get_all")
     @JsonFormat
     public ResponseEntity<Page<Spent>> listarGastos(@RequestParam Map<String,String> headers)
@@ -54,5 +57,10 @@ public class SpentController {
     public ResponseEntity<HashSet<String>> obtenerTipos(@RequestParam Map<String,String> params)
     {
        return  spentService.obtenerTipos(params);
+    }
+    @GetMapping("/total")
+    public ResponseEntity<TotalResponse> getTotalGastos(@RequestParam Map<String, String> param)
+    {
+        return dashboardService.getTotalGastos(param);
     }
 }
