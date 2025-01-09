@@ -1,5 +1,6 @@
 package com.example.tryJwt.demo.Servicies;
 
+import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
@@ -27,6 +28,7 @@ public class SpentService {
     private JwtService jwtService;
     @Autowired(required = true)
     private FunctionUtils functionUtils;
+
     public ResponseEntity<Page<Spent>> listSpent(Map<String, String> headers)
     {
         int page = Integer.parseInt(headers.get("page"));
@@ -34,8 +36,18 @@ public class SpentService {
         Pageable pageable = PageRequest.of(page,page_size);
         Optional<Users> users = functionUtils.getUsers(headers);
         Page<Spent> spents = spentRepository.findAllByUsuario(users.get().getId(),pageable);
+        String current = "";
+        String current_type = "";
+        if(headers.get("currency")== null)
+        {
+            return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
+                    .body(spents);
+        }
+        current = headers.get("currency");
+        current_type = headers.get("currency_type");
+        functionUtils.changeCoinsSpent(spents.getContent(),current,current_type);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
-                .body(spents) ;
+                .body(spents);
     }
     private List<Spent> list(Map<String,String> params)
     {
@@ -46,6 +58,7 @@ public class SpentService {
     @JsonBackReference
     public ResponseEntity<HashSet<String>> obtenerTipos(Map<String,String> params)
     {
+
        List<Spent> lista  = list(params);
         List<String> retort = new LinkedList<String>();
         for (Spent l:lista)

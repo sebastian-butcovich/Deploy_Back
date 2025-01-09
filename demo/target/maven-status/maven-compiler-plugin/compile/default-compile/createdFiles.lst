@@ -1,3 +1,4 @@
+com/example/tryJwt/demo/Servicies/RequestService.class
 com/example/tryJwt/demo/DemoApplication.class
 com/example/tryJwt/demo/Modelo/Token$TokenType.class
 com/example/tryJwt/demo/FileRequest/LoginRequest.class
@@ -6,6 +7,7 @@ com/example/tryJwt/demo/FileRequest/MovementsRequest.class
 com/example/tryJwt/demo/Config/SecurityConfig.class
 com/example/tryJwt/demo/Servicies/UsersService.class
 com/example/tryJwt/demo/Controller/SpentController.class
+com/example/tryJwt/demo/Config/RestTemplateConfig.class
 com/example/tryJwt/demo/Controller/AuthController.class
 com/example/tryJwt/demo/Servicies/DashboardService.class
 com/example/tryJwt/demo/Modelo/Token$TokenBuilder.class
@@ -17,6 +19,7 @@ com/example/tryJwt/demo/FileRequest/TotalResponse.class
 com/example/tryJwt/demo/Config/JwtAuthFilter.class
 com/example/tryJwt/demo/Servicies/AuthService.class
 com/example/tryJwt/demo/FileRequest/ParamsHeader.class
+com/example/tryJwt/demo/FileRequest/ApiDolarResponse.class
 com/example/tryJwt/demo/Repository/SpentRepository.class
 com/example/tryJwt/demo/Config/AppConfig.class
 com/example/tryJwt/demo/Servicies/SpentService.class

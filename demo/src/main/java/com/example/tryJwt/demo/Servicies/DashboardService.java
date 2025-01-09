@@ -24,20 +24,31 @@ public class DashboardService {
     @Autowired
     private FunctionUtils functionUtils;
 
-    public ResponseEntity<TotalResponse>  getTotalGastos(Map<String, String> param)
+    public ResponseEntity<TotalResponse>  getTotalGastos(Map<String, String> params)
     {
-        Users users = functionUtils.getUsers(param).orElseThrow();
+        Users users = functionUtils.getUsers(params).orElseThrow();
         List<Spent> spents =  spentRepository.findAllByUsuario(users.getId());
         if(spents.isEmpty())
         {
             return ResponseEntity.badRequest().body(new TotalResponse(0.0,"No hay gastos agregados"));
         }
         double gasto = 0.0;
-        for(Spent l: spents)
-        {
-            gasto+= l.getMonto();
+        if(params.get("currency") == null){
+            for(Spent i:spents)
+            {
+                gasto+=i.getMonto();
+            }
+            return ResponseEntity.ok(new TotalResponse(gasto,"El total de lo ingresado"));
         }
-    return ResponseEntity.ok(new TotalResponse(gasto,"El total de lo gastado"));
+        String current = params.get("currency");
+        String current_type = params.get("currency_type");
+        functionUtils.changeCoinsSpent(spents,current,current_type);
+        for(Spent i:spents)
+        {
+            gasto+=i.getMonto();
+        }
+        double valorRedondeado = Math.round(gasto * 100.0) / 100.0;
+        return ResponseEntity.ok(new TotalResponse(valorRedondeado,"El total de lo ingresado"));
     }
     public ResponseEntity<TotalResponse> getTotalIngresos(Map<String,String> params)
     {
@@ -48,10 +59,21 @@ public class DashboardService {
             return ResponseEntity.badRequest().body(new TotalResponse(0.0,"No hay ingresos agregados"));
         }
         double ingresos = 0.0;
+        if(params.get("currency") == null){
+            for(Income i:incomes)
+            {
+                ingresos+=i.getMonto();
+            }
+            return ResponseEntity.ok(new TotalResponse(ingresos,"El total de lo ingresado"));
+        }
+        String current = params.get("currency");
+        String current_type = params.get("currency_type");
+        functionUtils.changeCoinsIncome(incomes,current,current_type);
         for(Income i:incomes)
         {
             ingresos+=i.getMonto();
         }
-        return ResponseEntity.ok(new TotalResponse(ingresos,"El total de lo ingresado"));
+        double valorRedondeado = Math.round(ingresos * 100.0) / 100.0;
+        return ResponseEntity.ok(new TotalResponse(valorRedondeado,"El total de lo ingresado"));
     }
 }

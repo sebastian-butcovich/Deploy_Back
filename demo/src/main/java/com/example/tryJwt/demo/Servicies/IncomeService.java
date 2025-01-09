@@ -32,8 +32,16 @@ public class IncomeService {
         Pageable pageable = PageRequest.of(page,page_size);
         Optional<Users> users = functionUtils.getUsers(params);
         Page<Income> incomes = incomeRepository.findAllByUsuario(users.get().getId(),pageable);
+        if(params.get("currency")== null)
+        {
+            return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
+                    .body(incomes);
+        }
+        String current = params.get("currency");
+        String current_type = params.get("currency_type");
+        functionUtils.changeCoinsIncome(incomes.getContent(),current,current_type);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
-                .body(incomes) ;
+                .body(incomes);
     }
     private List<Income> list(Map<String,String> params)
     {
