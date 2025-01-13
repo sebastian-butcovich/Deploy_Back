@@ -35,7 +35,34 @@ public class SpentService {
         int page_size = Integer.parseInt(headers.get("page_size"));
         Pageable pageable = PageRequest.of(page,page_size);
         Optional<Users> users = functionUtils.getUsers(headers);
-        Page<Spent> spents = spentRepository.findAllByUsuario(users.get().getId(),pageable);
+        Page<Spent> spents = null;
+        double montoMin=0.0;
+        double montoMax=0.0;
+        String tipo = null;
+        String fecha_inicio = null;
+        String fecha_final = null;
+        if(!Objects.equals(headers.get("monto_min"), "") && !Objects.equals(headers.get("monto_max"), "")
+                && headers.get("monto_min") != null && headers.get("monto_max") !=null) {
+             montoMin = Double.parseDouble(headers.get("monto_min"));
+             montoMax = Double.parseDouble(headers.get("monto_max"));
+            spents = spentRepository.findAllByUsuario(users.get().getId(), montoMin, montoMax, pageable);
+
+        }
+        else if(!Objects.equals(headers.get("tipo"),"") && headers.get("tipo") != null)
+        {
+            tipo = headers.get("tipo");
+            spents = spentRepository.findAllByUsuario(users.get().getId(),tipo, pageable);
+        }
+        else if(!Objects.equals(headers.get("fecha_inicio"),"") && !Objects.equals(headers.get("fecha_fin"),"")
+                && headers.get("fecha_inicio") !=null && headers.get("fecha_fin") != null)
+        {
+            fecha_inicio = headers.get("fecha_inicio");
+            fecha_final = headers.get("fecha_fin");
+            spents = spentRepository.findAllByUsuario(users.get().getId(),fecha_inicio,fecha_final, pageable);
+        }
+        else {
+            spents = spentRepository.findAllByUsuario(users.get().getId(), pageable);
+        }
         String current = "";
         String current_type = "";
         if(headers.get("currency")== null)

@@ -31,14 +31,43 @@ public class IncomeService {
         int page_size = Integer.parseInt(params.get("page_size"));
         Pageable pageable = PageRequest.of(page,page_size);
         Optional<Users> users = functionUtils.getUsers(params);
-        Page<Income> incomes = incomeRepository.findAllByUsuario(users.get().getId(),pageable);
+        Page<Income> incomes = null;
+        double montoMin=0.0;
+        double montoMax=0.0;
+        String tipo = null;
+        String fecha_inicio = null;
+        String fecha_final = null;
+        if(!Objects.equals(params.get("monto_min"), "") && !Objects.equals(params.get("monto_max"), "")
+                && params.get("monto_min") != null && params.get("monto_max") !=null) {
+            montoMin = Double.parseDouble(params.get("monto_min"));
+            montoMax = Double.parseDouble(params.get("monto_max"));
+            incomes = incomeRepository.findAllByUsuario(users.get().getId(), montoMin, montoMax, pageable);
+
+        }
+        else if(!Objects.equals(params.get("tipo"),"") && params.get("tipo") != null)
+        {
+            tipo = params.get("tipo");
+            incomes = incomeRepository.findAllByUsuario(users.get().getId(),tipo, pageable);
+        }
+        else if(!Objects.equals(params.get("fecha_inicio"),"") && !Objects.equals(params.get("fecha_fin"),"")
+                && params.get("fecha_inicio") !=null && params.get("fecha_fin") != null)
+        {
+            fecha_inicio = params.get("fecha_inicio");
+            fecha_final = params.get("fecha_fin");
+            incomes = incomeRepository.findAllByUsuario(users.get().getId(),fecha_inicio,fecha_final, pageable);
+        }
+        else {
+            incomes = incomeRepository.findAllByUsuario(users.get().getId(), pageable);
+        }
+        String current = "";
+        String current_type = "";
         if(params.get("currency")== null)
         {
             return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
                     .body(incomes);
         }
-        String current = params.get("currency");
-        String current_type = params.get("currency_type");
+         current = params.get("currency");
+         current_type = params.get("currency_type");
         functionUtils.changeCoinsIncome(incomes.getContent(),current,current_type);
         return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
                 .body(incomes);
