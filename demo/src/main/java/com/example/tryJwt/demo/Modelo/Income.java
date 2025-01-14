@@ -21,6 +21,8 @@ public class Income {
     @JoinColumn(name = "id_autor")
     @ManyToOne(fetch = FetchType.LAZY)
     private Users usuario;
+    @Transient
+    private String moneda;
 
     public Integer getId() {
         return id;
@@ -68,5 +70,13 @@ public class Income {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
     }
 }

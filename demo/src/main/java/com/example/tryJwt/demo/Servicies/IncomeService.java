@@ -63,6 +63,10 @@ public class IncomeService {
         String current_type = "";
         if(params.get("currency")== null)
         {
+            for(Income i: incomes)
+            {
+                i.setMoneda("args");
+            }
             return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
                     .body(incomes);
         }

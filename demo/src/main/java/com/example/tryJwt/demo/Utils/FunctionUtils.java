@@ -38,11 +38,12 @@ public class FunctionUtils {
     {
         double value = getValue(current, currentType);
         for(Spent lis:spents)
-    {
-        double valor = (lis.getMonto()/value);
-        double valorRedondeado = Math.round(valor * 100.0) / 100.0;
-        lis.setMonto(valorRedondeado);
-    }
+        {
+            double valor = (lis.getMonto()/value);
+            double valorRedondeado = Math.round(valor * 100.0) / 100.0;
+            lis.setMonto(valorRedondeado);
+            lis.setMoneda(current);
+        }
     }
     public void changeCoinsIncome(List<Income> incomes, String current, String currentType)
     {
@@ -52,6 +53,7 @@ public class FunctionUtils {
             double valor = (lis.getMonto()/value);
             double valorRedondeado = Math.round(valor * 100.0) / 100.0;
             lis.setMonto(valorRedondeado);
+            lis.setMoneda(current);
         }
     }
 

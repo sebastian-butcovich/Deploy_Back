@@ -1,6 +1,5 @@
 package com.example.tryJwt.demo.Servicies;
 
-import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
@@ -36,6 +35,7 @@ public class SpentService {
         Pageable pageable = PageRequest.of(page,page_size);
         Optional<Users> users = functionUtils.getUsers(headers);
         Page<Spent> spents = null;
+        String where = "";
         double montoMin=0.0;
         double montoMax=0.0;
         String tipo = null;
@@ -48,7 +48,7 @@ public class SpentService {
             spents = spentRepository.findAllByUsuario(users.get().getId(), montoMin, montoMax, pageable);
 
         }
-        else if(!Objects.equals(headers.get("tipo"),"") && headers.get("tipo") != null)
+        else if(!Objects.equals(headers.get("tipo"),"") && where.isEmpty() && headers.get("tipo") != null)
         {
             tipo = headers.get("tipo");
             spents = spentRepository.findAllByUsuario(users.get().getId(),tipo, pageable);
@@ -65,8 +65,13 @@ public class SpentService {
         }
         String current = "";
         String current_type = "";
+
         if(headers.get("currency")== null)
         {
+            for(Spent s: spents)
+            {
+                s.setMoneda("args");
+            }
             return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
                     .body(spents);
         }
