@@ -65,7 +65,6 @@ public class SpentService {
         }
         String current = "";
         String current_type = "";
-
         if(headers.get("currency")== null)
         {
             for(Spent s: spents)

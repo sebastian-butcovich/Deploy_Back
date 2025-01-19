@@ -59,8 +59,8 @@ public class IncomeService {
         else {
             incomes = incomeRepository.findAllByUsuario(users.get().getId(), pageable);
         }
-        String current = "";
         String current_type = "";
+        String current = "";
         if(params.get("currency")== null)
         {
             for(Income i: incomes)
