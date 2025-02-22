@@ -1,3 +1,4 @@
+com/example/tryJwt/demo/FileRequest/MovementsResponse.class
 com/example/tryJwt/demo/Servicies/RequestService.class
 com/example/tryJwt/demo/DemoApplication.class
 com/example/tryJwt/demo/Modelo/Token$TokenType.class
@@ -16,7 +17,9 @@ com/example/tryJwt/demo/Modelo/Users.class
 com/example/tryJwt/demo/Controller/IncomeController.class
 com/example/tryJwt/demo/Repository/IncomeRepository.class
 com/example/tryJwt/demo/FileRequest/TotalResponse.class
+com/example/tryJwt/demo/FileRequest/Additional_info.class
 com/example/tryJwt/demo/Config/JwtAuthFilter.class
+com/example/tryJwt/demo/Modelo/Debts.class
 com/example/tryJwt/demo/FileRequest/ParamsHeader.class
 com/example/tryJwt/demo/FileRequest/ApiDolarResponse.class
 com/example/tryJwt/demo/Servicies/AuthService.class
