@@ -112,7 +112,7 @@ public class FunctionUtils {
         int page_size = Integer.parseInt(headers.get("page_size"));
         int total_entries=ingresos.size();
         int total_pages=0;
-        if( ingresos.size() /page_size == 0)
+        if( (ingresos.size() /page_size == 0) || (ingresos.size() /page_size == 1))
         {
             total_pages=1;
             next_page=1;
@@ -164,7 +164,7 @@ public class FunctionUtils {
         int page_size = Integer.parseInt(headers.get("page_size"));
         int total_entries=spent.size();
         int total_pages=0;
-        if( spent.size() /page_size == 0)
+        if( (spent.size() /page_size == 0) || (spent.size() /page_size == 1) )
         {
             total_pages=1;
             next_page=1;
