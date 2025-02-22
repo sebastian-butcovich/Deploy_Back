@@ -127,7 +127,7 @@ public class FunctionUtils {
         }
        if(!ingresos.isEmpty())
        {
-           for(int i=(page-1)*page_size;i<page_size*(page-1)+5&&i<ingresos.size()-1;i++)
+           for(int i=(page-1)*page_size;i<page_size*(page-1)+5&&i<=ingresos.size()-1;i++)
            {
                list.add(new MovementsRequest(ingresos.get(i).getMonto(),ingresos.get(i).getTipo()
                        ,ingresos.get(i).getDescripcion(),ingresos.get(i).getFecha(),ingresos.get(i).getId()));
