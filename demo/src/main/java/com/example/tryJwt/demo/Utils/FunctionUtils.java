@@ -179,7 +179,7 @@ public class FunctionUtils {
         }
         if(!spent.isEmpty())
         {
-            for(int i=(page-1)*page_size;i<page_size*page+5&&i<=spent.size()-1;i++)
+            for(int i=(page-1)*page_size;i<page_size*(page-1)+5&&i<=spent.size()-1;i++)
             {
                 list.add(new MovementsRequest(spent.get(i).getMonto(),spent.get(i).getTipo()
                         ,spent.get(i).getDescripcion(),spent.get(i).getFecha(),spent.get(i).getId()));
