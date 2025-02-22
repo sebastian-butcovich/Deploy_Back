@@ -1,6 +1,7 @@
 package com.example.tryJwt.demo.Controller;
 
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.MovementsResponse;
 import com.example.tryJwt.demo.FileRequest.TotalResponse;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Servicies.DashboardService;
@@ -28,7 +29,7 @@ public class SpentController {
     private DashboardService dashboardService;
     @GetMapping("/get_all")
     @JsonFormat
-    public ResponseEntity<Page<Spent>> listarGastos(@RequestParam Map<String,String> headers)
+    public ResponseEntity<MovementsResponse> listarGastos(@RequestParam Map<String,String> headers)
     {
         return spentService.listSpent(headers);
     }

@@ -1,5 +1,7 @@
 package com.example.tryJwt.demo.FileRequest;
 
-public record MovementsRequest(Double monto, String descripcion, String tipo, Integer id){
+import java.util.Date;
+
+public record MovementsRequest(Double monto, String descripcion, String tipo, Date fecha, Integer id){
 
 }

@@ -16,17 +16,13 @@ import java.util.List;
 public interface SpentRepository extends CrudRepository<Spent,Integer> {
     //Busqueda completa sin filtros
     @Query(value = "select * from spent  where id_autor = ?1 order by id asc",nativeQuery = true)
-    public Page<Spent> findAllByUsuario(Integer id, Pageable pageable);
+    public List<Spent> findAllByUsuario(Integer id);
     //Busquda con filtro monto solamente
     @Query(value = "select * from spent where id_autor  = ?1 and monto between ?2 and ?3  order by id desc", nativeQuery = true)
-    public Page<Spent> findAllByUsuario(Integer id,Double monto_min, Double monto_max, Pageable pageable);
+    public List<Spent> findAllByUsuario(Integer id,Double monto_min, Double monto_max);
     //Busqueda con filtro monto y tipo
     @Query(value = "select * from spent where id_autor  = ?1  and tipo = ?2  order by id desc", nativeQuery = true)
-    public Page<Spent> findAllByUsuario(Integer id, String tipo, Pageable pageable);
+    public List<Spent> findAllByUsuario(Integer id, String tipo);
     @Query(value = "select * from spent where id_autor  = ?1  and fecha between ?2 and ?3  order by id desc", nativeQuery = true)
-    public Page<Spent> findAllByUsuario(Integer id,  String fecha_inicio, String fecha_final, Pageable pageable);
-
-    @Query("select s from Spent s where s.usuario.id = ?1")
-    public List<Spent> findAllByUsuario(Integer id);
-
+    public List<Spent> findAllByUsuario(Integer id,  String fecha_inicio, String fecha_final);
 }

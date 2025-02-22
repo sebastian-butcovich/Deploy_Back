@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Income {
+public class Income{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;

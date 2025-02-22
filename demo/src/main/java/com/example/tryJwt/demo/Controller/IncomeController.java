@@ -1,6 +1,7 @@
 package com.example.tryJwt.demo.Controller;
 
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.MovementsResponse;
 import com.example.tryJwt.demo.FileRequest.TotalResponse;
 import com.example.tryJwt.demo.Modelo.Income;
 import com.example.tryJwt.demo.Servicies.DashboardService;
@@ -22,7 +23,7 @@ public class IncomeController {
     @Autowired
     private DashboardService dashboardService;
     @GetMapping("/get_all")
-    public ResponseEntity<Page<Income>> listaIngresos(@RequestParam Map<String, String> params)
+    public ResponseEntity<MovementsResponse> listaIngresos(@RequestParam Map<String, String> params)
     {
       return   incomeService.listarIngresos(params);
     }

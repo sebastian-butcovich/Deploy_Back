@@ -59,7 +59,7 @@ public class DashboardService {
             return ResponseEntity.badRequest().body(new TotalResponse(0.0,"","No hay ingresos agregados"));
         }
         double ingresos = 0.0;
-        if(params.get("currency") == null){
+        if(!params.containsKey("currency")){
             for(Income i:incomes)
             {
                 ingresos+=i.getMonto();

@@ -110,4 +110,12 @@ public class AuthService {
             tokenRepository.saveAll(validUserTokens);
         }
     }
+    public Integer validate(String token)
+    {
+        if(jwtService.isTokenExpirated(token))
+        {
+            return 1;
+        }
+        return 0;
+    }
 }

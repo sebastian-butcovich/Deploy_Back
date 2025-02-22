@@ -1,6 +1,7 @@
 package com.example.tryJwt.demo.Servicies;
 
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.MovementsResponse;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.SpentRepository;
@@ -28,13 +29,12 @@ public class SpentService {
     @Autowired(required = true)
     private FunctionUtils functionUtils;
 
-    public ResponseEntity<Page<Spent>> listSpent(Map<String, String> headers)
+    public ResponseEntity<MovementsResponse> listSpent(Map<String, String> headers)
     {
         int page = Integer.parseInt(headers.get("page"));
         int page_size = Integer.parseInt(headers.get("page_size"));
-        Pageable pageable = PageRequest.of(page,page_size);
         Optional<Users> users = functionUtils.getUsers(headers);
-        Page<Spent> spents = null;
+        List<Spent> spents = null;
         String where = "";
         double montoMin=0.0;
         double montoMax=0.0;
@@ -45,40 +45,25 @@ public class SpentService {
                 && headers.get("monto_min") != null && headers.get("monto_max") !=null) {
              montoMin = Double.parseDouble(headers.get("monto_min"));
              montoMax = Double.parseDouble(headers.get("monto_max"));
-            spents = spentRepository.findAllByUsuario(users.get().getId(), montoMin, montoMax, pageable);
+            spents = spentRepository.findAllByUsuario(users.get().getId(), montoMin, montoMax);
 
         }
-        else if(!Objects.equals(headers.get("tipo"),"") && where.isEmpty() && headers.get("tipo") != null)
+        else if(!Objects.equals(headers.get("tipo"),"") &&  headers.get("tipo") != null)
         {
             tipo = headers.get("tipo");
-            spents = spentRepository.findAllByUsuario(users.get().getId(),tipo, pageable);
+            spents = spentRepository.findAllByUsuario(users.get().getId(),tipo);
         }
         else if(!Objects.equals(headers.get("fecha_inicio"),"") && !Objects.equals(headers.get("fecha_fin"),"")
                 && headers.get("fecha_inicio") !=null && headers.get("fecha_fin") != null)
         {
             fecha_inicio = headers.get("fecha_inicio");
             fecha_final = headers.get("fecha_fin");
-            spents = spentRepository.findAllByUsuario(users.get().getId(),fecha_inicio,fecha_final, pageable);
+            spents = spentRepository.findAllByUsuario(users.get().getId(),fecha_inicio,fecha_final);
         }
         else {
-            spents = spentRepository.findAllByUsuario(users.get().getId(), pageable);
+            spents = spentRepository.findAllByUsuario(users.get().getId());
         }
-        String current = "";
-        String current_type = "";
-        if(headers.get("currency")== null)
-        {
-            for(Spent s: spents)
-            {
-                s.setMoneda("args");
-            }
-            return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
-                    .body(spents);
-        }
-        current = headers.get("currency");
-        current_type = headers.get("currency_type");
-        functionUtils.changeCoinsSpent(spents.getContent(),current,current_type);
-        return ResponseEntity.status(HttpStatus.OK).header("Content-Type","application/json")
-                .body(spents);
+        return ResponseEntity.ok().body(functionUtils.armarRespuestaGasto(spents,headers));
     }
     private List<Spent> list(Map<String,String> params)
     {
