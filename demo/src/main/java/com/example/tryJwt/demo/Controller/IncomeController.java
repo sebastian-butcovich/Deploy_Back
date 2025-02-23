@@ -53,6 +53,7 @@ public class IncomeController {
     return incomeService.obtenerTiposIngreso(params);
     }
     @GetMapping("/total")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<TotalResponse> getTotalIngreso(@RequestParam Map<String,String> param)
     {
         return dashboardService.getTotalIngresos(param);

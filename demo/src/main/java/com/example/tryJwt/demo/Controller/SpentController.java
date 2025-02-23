@@ -60,6 +60,7 @@ public class SpentController {
        return  spentService.obtenerTipos(params);
     }
     @GetMapping("/total")
+    @CrossOrigin(origins = "*")
     public ResponseEntity<TotalResponse> getTotalGastos(@RequestParam Map<String, String> param)
     {
         return dashboardService.getTotalGastos(param);

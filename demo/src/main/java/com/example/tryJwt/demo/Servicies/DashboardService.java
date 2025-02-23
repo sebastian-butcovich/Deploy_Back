@@ -27,10 +27,16 @@ public class DashboardService {
     public ResponseEntity<TotalResponse>  getTotalGastos(Map<String, String> params)
     {
         Users users = functionUtils.getUsers(params).orElseThrow();
-        List<Spent> spents =  spentRepository.findAllByUsuario(users.getId());
+        List<Spent> spents = null;
+        if(params.containsKey("fecha_inicio") && params.containsKey("fecha_fin"))
+        {
+            spents = spentRepository.findAllByUsuario(users.getId(),params.get("fecha_inicio"),params.get("fecha_fin"));
+        }else {
+            spents = spentRepository.findAllByUsuario(users.getId());
+        }
         if(spents.isEmpty())
         {
-            return ResponseEntity.badRequest().body(new TotalResponse(0.0,"","No hay gastos agregados"));
+            return ResponseEntity.ok().body(new TotalResponse(0.0,"","No hay gastos agregados"));
         }
         double gasto = 0.0;
         if(params.get("currency") == null){
@@ -53,10 +59,17 @@ public class DashboardService {
     public ResponseEntity<TotalResponse> getTotalIngresos(Map<String,String> params)
     {
         Users users = functionUtils.getUsers(params).orElseThrow();
-        List<Income> incomes = incomeRepository.findAllByUsuario(users.getId());
+        List<Income> incomes = null;
+        if(params.containsKey("fecha_inicio") && params.containsKey("fecha_fin"))
+        {
+             incomes = incomeRepository.findAllByUsuario(users.getId(),params.get("fecha_inicio"),params.get("fecha_fin"));
+        }else
+        {
+             incomes = incomeRepository.findAllByUsuario(users.getId());
+        }
         if(incomes.isEmpty())
         {
-            return ResponseEntity.badRequest().body(new TotalResponse(0.0,"","No hay ingresos agregados"));
+            return ResponseEntity.ok().body(new TotalResponse(0.0,"","No hay ingresos agregados"));
         }
         double ingresos = 0.0;
         if(!params.containsKey("currency")){
