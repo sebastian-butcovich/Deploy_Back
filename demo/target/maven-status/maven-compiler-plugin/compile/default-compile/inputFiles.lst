@@ -9,6 +9,8 @@
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/DemoApplication.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/Additional_info.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/ApiDolarResponse.java
+/home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/Fecha.java
+/home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/ListTotalResponse.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/LoginRequest.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/MovementsRequest.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/MovementsResponse.java
