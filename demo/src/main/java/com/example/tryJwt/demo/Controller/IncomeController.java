@@ -1,8 +1,6 @@
 package com.example.tryJwt.demo.Controller;
 
-import com.example.tryJwt.demo.FileRequest.MovementsRequest;
-import com.example.tryJwt.demo.FileRequest.MovementsResponse;
-import com.example.tryJwt.demo.FileRequest.TotalResponse;
+import com.example.tryJwt.demo.FileRequest.*;
 import com.example.tryJwt.demo.Modelo.Income;
 import com.example.tryJwt.demo.Servicies.DashboardService;
 import com.example.tryJwt.demo.Servicies.IncomeService;
@@ -12,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -57,5 +56,11 @@ public class IncomeController {
     public ResponseEntity<TotalResponse> getTotalIngreso(@RequestParam Map<String,String> param)
     {
         return dashboardService.getTotalIngresos(param);
+    }
+    @PutMapping("/totalGraphics")
+    @CrossOrigin(origins = "*")
+    public ResponseEntity<ListTotalResponse> getTotalIngresoGraphics(@RequestParam Map<String,String> param, @RequestBody List<Fecha> list)
+    {
+        return dashboardService.getTotalIngresosGraphics(param,list);
     }
 }

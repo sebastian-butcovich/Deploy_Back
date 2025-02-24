@@ -19,4 +19,6 @@ public interface IncomeRepository extends JpaRepository<Income,Integer> {
     public List<Income> findAllByUsuario(Integer id, String tipo);
     @Query(value = "select * from income where id_autor  = ?1  and fecha between ?2 and ?3 order by id desc", nativeQuery = true)
     public List<Income> findAllByUsuario(Integer id,  String fecha_inicio, String fecha_final);
+    @Query(value = "select * from income  where id_autor = ?1 order by fecha",nativeQuery = true)
+    public List<Income> findAllByUsuarioFecha(Integer id);
 }
