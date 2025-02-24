@@ -52,7 +52,8 @@ public class DashboardService {
         }
         String current = params.get("currency");
         String current_type = params.get("currency_type");
-        functionUtils.changeCoinsSpent(spents,current,current_type);
+        double value = functionUtils.getValue(current,current_type);
+        functionUtils.changeCoinsSpent(spents,current,value);
         for(Spent i:spents)
         {
             gasto+=i.getMonto();
@@ -79,14 +80,16 @@ public class DashboardService {
         }else {
             String current = params.get("currency");
             String current_type = params.get("currency_type");
+            double value = functionUtils.getValue(current,current_type);
             for (int j = 0; j < list.size() - 1; j++) {
                 List<Spent> spents = spentRepository.findAllByUsuario(users.getId(), list.get(j).fecha_string(), list.get(j + 1).fecha_string());
-                functionUtils.changeCoinsSpent(spents, current, current_type);
+                functionUtils.changeCoinsSpent(spents, current, value);
                 for (Spent i : spents) {
                     suma += i.getMonto();
                 }
                 double valorRedondeado = Math.round(suma * 100.0) / 100.0;
                 respuesta.add(valorRedondeado);
+                suma=0.0;
             }
             return  ResponseEntity.ok(new ListTotalResponse(respuesta,current,"Los valores totales para los graficos"));
         }
@@ -116,7 +119,8 @@ public class DashboardService {
         }
         String current = params.get("currency");
         String current_type = params.get("currency_type");
-        functionUtils.changeCoinsIncome(incomes,current,current_type);
+        double value = functionUtils.getValue(current,current_type);
+        functionUtils.changeCoinsIncome(incomes,current,value);
         for(Income i:incomes)
         {
             ingresos+=i.getMonto();
@@ -143,14 +147,16 @@ public class DashboardService {
         }else {
             String current = params.get("currency");
             String current_type = params.get("currency_type");
+            double value = functionUtils.getValue(current,current_type);
             for (int j = 0; j < list.size() - 1; j++) {
                 List<Income> incomes = incomeRepository.findAllByUsuario(users.getId(), list.get(j).fecha_string(), list.get(j + 1).fecha_string());
-                functionUtils.changeCoinsIncome(incomes, current, current_type);
+                functionUtils.changeCoinsIncome(incomes, current, value);
                 for (Income i : incomes) {
                     suma += i.getMonto();
                 }
                 double valorRedondeado = Math.round(suma * 100.0) / 100.0;
                 respuesta.add(valorRedondeado);
+                suma=0.0;
             }
             return  ResponseEntity.ok(new ListTotalResponse(respuesta,current,"Los valores totales para los graficos"));
         }

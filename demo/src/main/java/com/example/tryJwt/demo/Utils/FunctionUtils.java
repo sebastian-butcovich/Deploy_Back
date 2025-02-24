@@ -35,9 +35,9 @@ public class FunctionUtils {
         Optional<Users> users = userRepository.findByEmail(username);
         return users;
     }
-    public void changeCoinsSpent(List<Spent> spents, String current, String currentType)
+    public void changeCoinsSpent(List<Spent> spents, String current, double value)
     {
-        double value = getValue(current, currentType);
+        //double value = getValue(current, currentType);
         for(Spent lis:spents)
         {
             double valor = (lis.getMonto()/value);
@@ -46,9 +46,9 @@ public class FunctionUtils {
             lis.setMoneda(current);
         }
     }
-    public void changeCoinsIncome(List<Income> incomes, String current, String currentType)
+    public void changeCoinsIncome(List<Income> incomes, String current, double value)
     {
-        double value = getValue(current, currentType);
+        //double value = getValue(current, currentType);
         for(Income lis:incomes)
         {
             double valor = (lis.getMonto()/value);
@@ -58,7 +58,7 @@ public class FunctionUtils {
         }
     }
 
-    private double getValue(String current, String currentType) {
+    public double getValue(String current, String currentType) {
         double value = 0.0;
         List<ApiDolarResponse> apiDolarResponse = requestService.obtenerCoins();
         List<ApiDolarResponse> apiOther = requestService.obtenerOtrasCoins();
@@ -105,7 +105,8 @@ public class FunctionUtils {
             {
                 cotizacion=headers.get("currency");
             }
-            changeCoinsIncome(ingresos,cotizacion,tipo_de_cotizacion);
+            double value = getValue(cotizacion,tipo_de_cotizacion);
+            changeCoinsIncome(ingresos,cotizacion,value);
         }
         int next_page=0;
         int page = Integer.parseInt(headers.get("page"));
@@ -157,7 +158,8 @@ public class FunctionUtils {
             {
                 cotizacion=headers.get("currency");
             }
-            changeCoinsSpent(spent,cotizacion,tipo_de_cotizacion);
+            double value = getValue(cotizacion,tipo_de_cotizacion);
+            changeCoinsSpent(spent,cotizacion,value);
         }
         int next_page=0;
         int page = Integer.parseInt(headers.get("page"));

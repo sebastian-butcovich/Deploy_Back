@@ -44,10 +44,4 @@ public class AuthController {
     {
         return new String ("El servicio esta vivo");
     }
-    @GetMapping("/validate")
-    @CrossOrigin(origins = "*")
-    public Integer validate(@RequestParam String token)
-    {
-        return service.validate(token);
-    }
 }
