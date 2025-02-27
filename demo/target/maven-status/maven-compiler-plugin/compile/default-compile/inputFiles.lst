@@ -3,6 +3,7 @@
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Config/RestTemplateConfig.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Config/SecurityConfig.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Controller/AuthController.java
+/home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Controller/DebtsController.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Controller/IncomeController.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Controller/SpentController.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Controller/UsersController.java
