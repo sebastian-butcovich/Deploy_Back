@@ -31,8 +31,7 @@ public class UsersService {
         return userRepository.findAll();
     }
     public ResponseEntity<String> updateUser(UpdateUsers users, Map<String,String> params){
-        if(users.name().equals("") || users.email().equals("") || users.oldPassword().equals("") ||
-                users.newPassword().equals("")){
+        if(users.name().equals("") || users.email().equals("")){
             return ResponseEntity.badRequest().body("No se enviaron todos los datos necesarios. Los datos son: nombre," +
                     " email, contraseña vieja y contraseña nueva");
         }
@@ -41,13 +40,19 @@ public class UsersService {
         {
             return ResponseEntity.badRequest().body("El usuario que se quiere editar no existe");
         }
-        if(!passwordEncoder.matches(users.oldPassword(),user1.get().getPassword())){
-            return ResponseEntity.badRequest().body("La contraseña anterior no es correcta");
-        }
         Users us = user1.get();
         us.setName(users.name());
         us.setEmail(users.email());
-        us.setPassword(passwordEncoder.encode(users.newPassword()));
+        if(users.newPassword() != null && !users.newPassword().isEmpty())
+        {
+            if(!passwordEncoder.matches(users.oldPassword(),user1.get().getPassword())){
+                return ResponseEntity.badRequest().body("La contraseña anterior no es correcta");
+            }
+            us.setPassword(passwordEncoder.encode(users.newPassword()));
+        }else {
+            us.setPassword(user1.get().getPassword());
+        }
+       us.setFoto(users.foto());
         userRepository.save(us);
         return ResponseEntity.ok().body("Se actualizo el usuario correctamente");
     }
@@ -56,6 +61,6 @@ public class UsersService {
         String jwtToken = token.substring(7);
        String username = jwtService.extractUsername(jwtToken);
        Users user = userRepository.findByEmail(username).orElseThrow();
-       return new RegisterRequest(user.getEmail(),"",user.getName());
+       return new RegisterRequest(user.getEmail(),"",user.getName(),"");
     }
 }

@@ -21,6 +21,8 @@ public class Users {
     @Column(unique = true)
     private String email;
     private String password;
+    @Lob
+    private String foto;
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Token> tokens;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
@@ -82,5 +84,14 @@ public class Users {
     public void setIngresos(List<Income> ingresos) {
         this.ingresos = ingresos;
     }
+
+    public String getFoto() {
+        return foto;
+    }
+
+    public void setFoto(String foto) {
+        this.foto = foto;
+    }
+
 }
 

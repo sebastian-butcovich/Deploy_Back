@@ -40,11 +40,12 @@ public class AuthService {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
+        user.setFoto(request.foto());
         var saveUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(saveUser,jwtToken);
-        return new TokenResponse(jwtToken,refreshToken,request.name());
+        return new TokenResponse(jwtToken,refreshToken,request.name(),"");
     }
     public TokenResponse login (LoginRequest request)
     {
@@ -59,7 +60,7 @@ public class AuthService {
         var refreshToken = jwtService.generateRefreshToken(user);
         revokedAllUserTokens(user);
         saveUserToken(user,jwtToken);
-        return new TokenResponse(jwtToken,refreshToken,user.getName());
+        return new TokenResponse(jwtToken,refreshToken,user.getName(),user.getFoto());
     }
     public ResponseEntity<TokenResponse> refreshToken(Map<String, String> params)
     {
@@ -84,7 +85,7 @@ public class AuthService {
         String accessToken = jwtService.generateToken(user);
         revokedAllUserTokens(user);
         saveUserToken(user,accessToken);
-        return  ResponseEntity.ok(new TokenResponse(accessToken,refreshToken,user.getName()));
+        return  ResponseEntity.ok(new TokenResponse(accessToken,refreshToken,user.getName(),""));
 
     }
     private void saveUserToken(Users user, String jwtToken)
