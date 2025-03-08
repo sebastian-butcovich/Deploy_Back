@@ -44,7 +44,7 @@ public class AuthService {
         var saveUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(saveUser,jwtToken);
+       // saveUserToken(saveUser,jwtToken);
         return new TokenResponse(jwtToken,refreshToken,request.name(),"");
     }
     public TokenResponse login (LoginRequest request)
@@ -58,8 +58,8 @@ public class AuthService {
         var user = userRepository.findByEmail(request.email()).orElseThrow();
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
-        revokedAllUserTokens(user);
-        saveUserToken(user,jwtToken);
+        //revokedAllUserTokens(user);
+        //saveUserToken(user,jwtToken);
         return new TokenResponse(jwtToken,refreshToken,user.getName(),user.getFoto());
     }
     public ResponseEntity<TokenResponse> refreshToken(Map<String, String> params)
@@ -83,12 +83,12 @@ public class AuthService {
             throw new IllegalArgumentException("Invalid Refresh Token");
         }
         String accessToken = jwtService.generateToken(user);
-        revokedAllUserTokens(user);
-        saveUserToken(user,accessToken);
+        //revokedAllUserTokens(user);
+        //saveUserToken(user,accessToken);
         return  ResponseEntity.ok(new TokenResponse(accessToken,refreshToken,user.getName(),""));
 
     }
-    private void saveUserToken(Users user, String jwtToken)
+   /* private void saveUserToken(Users user, String jwtToken)
     {
         Token token = new Token();
         token.setUser(user);
@@ -98,7 +98,7 @@ public class AuthService {
         token.setExpired(false);
         tokenRepository.save(token);
     }
-    private void revokedAllUserTokens(Users users)
+      private void revokedAllUserTokens(Users users)
     {
         List<Token> validUserTokens = tokenRepository.findAllValidIsFalseOrRevokedIsFalseByUserId(users.getId());
         if(!validUserTokens.isEmpty())
@@ -110,5 +110,5 @@ public class AuthService {
             }
             tokenRepository.saveAll(validUserTokens);
         }
-    }
+    }*/
 }

@@ -62,11 +62,12 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         {
             return;
         }
-        Token token = tokenRepository.findByToken(jwtToken).orElse(null);
+        /*Token token = tokenRepository.findByToken(jwtToken).orElse(null);
         if(token ==null || token.isExpired() || token.isRevoked())
         {
             filterChain.doFilter(request,response);
-        }
+            return;
+        }*/
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
         Optional<Users> user = userRepository.findByEmail(userDetails.getUsername());
         if(user.isEmpty())
