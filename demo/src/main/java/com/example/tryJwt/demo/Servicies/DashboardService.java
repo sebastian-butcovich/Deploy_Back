@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -132,14 +135,22 @@ public class DashboardService {
     {
         Users users = functionUtils.getUsers(params).orElseThrow();
         List<Double> respuesta = new ArrayList<Double>();
+        String fecha_inicio = list.get(0).fecha_string();
+        String fecha_fin = list.get(list.size()-1).fecha_string();
+        List<Income> incomes = incomeRepository.findAllByUsuario(users.getId(), fecha_inicio, fecha_fin);
         double suma = 0.0;
-        if(!params.containsKey("currency")){
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        try{
+            LocalDate fechaInicioC = LocalDate.parse(fecha_inicio,dateTimeFormatter);
 
+        }catch(DateTimeParseException e){
+            e.printStackTrace();
+        }
+        if(!params.containsKey("currency")){
             for(int j=0;j<list.size()-1;j++) {
-                List<Income> incomes = incomeRepository.findAllByUsuario(users.getId(), list.get(j).fecha_string(), list.get(j + 1).fecha_string());
-                for (Income i : incomes) {
-                    suma += i.getMonto();
-                }
+              //  while (incomes.get(j).getFecha()) {
+                //    suma += i.getMonto();
+                //}
                 respuesta.add(suma);
                 suma=0.0;
             }
@@ -149,7 +160,7 @@ public class DashboardService {
             String current_type = params.get("currency_type");
             double value = functionUtils.getValue(current,current_type);
             for (int j = 0; j < list.size() - 1; j++) {
-                List<Income> incomes = incomeRepository.findAllByUsuario(users.getId(), list.get(j).fecha_string(), list.get(j + 1).fecha_string());
+               // List<Income> incomes = incomeRepository.findAllByUsuario(users.getId(), list.get(j).fecha_string(), list.get(j + 1).fecha_string());
                 functionUtils.changeCoinsIncome(incomes, current, value);
                 for (Income i : incomes) {
                     suma += i.getMonto();
