@@ -25,4 +25,6 @@ public interface SpentRepository extends CrudRepository<Spent,Integer> {
     public List<Spent> findAllByUsuario(Integer id, String tipo);
     @Query(value = "select * from spent where id_autor  = ?1  and fecha between ?2 and ?3 order by id desc", nativeQuery = true)
     public List<Spent> findAllByUsuario(Integer id,  String fecha_inicio, String fecha_final);
+    @Query(value = "select * from spent where id_autor  = ?1  and fecha between ?2 and ?3 order by fecha", nativeQuery = true)
+    public List<Spent> findAllByUsuarioFecha(Integer id,  String fecha_inicio, String fecha_final);
 }
