@@ -116,31 +116,49 @@ public class DashboardService {
                     mesF = list.get(j + 1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j + 1).day();
-                    while( i<= spents.size()-1&&yearI != yearF && yearI<= spents.get(i).getFecha().getYear() + 1900 &&
-                            spents.get(i).getFecha().getYear() + 1900<yearF )
+                    int yearA = spents.get(i).getFecha().getYear() + 1900;
+                    int mesA = spents.get(i).getFecha().getMonth()+1;
+                    int diaA = spents.get(i).getFecha().getDate();
+                    while( i<= spents.size()-1&&yearI != yearF && yearI<= yearA &&
+                            yearA + 1900<yearF )
                     {
                         suma+= spents.get(i).getMonto();
                         i++;
+                        yearA = spents.get(i).getFecha().getYear() + 1900;
+                        mesA = spents.get(i).getFecha().getMonth()+1;
+                        diaA = spents.get(i).getFecha().getDate();
                     }
-                    while(i<= spents.size()-1&&yearI == yearF && mesI<= spents.get(i).getFecha().getMonth()+1
-                            && spents.get(i).getFecha().getMonth()+1<mesF)
+                    while(i<= spents.size()-1&&yearI == yearF && mesI<= mesA
+                            && mesA<mesF)
                     {
                         suma+= spents.get(i).getMonto();
                         i++;
+                        yearA = spents.get(i).getFecha().getYear() + 1900;
+                        mesA = spents.get(i).getFecha().getMonth()+1;
+                        diaA = spents.get(i).getFecha().getDate();
                     }
-                    while(i<=spents.size()-1 && yearI == yearF && mesI<= spents.get(i).getFecha().getMonth()+1
-                            && spents.get(i).getFecha().getMonth()+1>=mesF && diaI>diaF)
+                    while(i<=spents.size()-1 && yearI == yearF && mesI<= mesA
+                            && mesA>=mesF && diaI>diaA && diaA<diaF)
                     {
                         suma+= spents.get(i).getMonto();
                         i++;
+                        yearA = spents.get(i).getFecha().getYear() + 1900;
+                        mesA = spents.get(i).getFecha().getMonth()+1;
+                        diaA = spents.get(i).getFecha().getDate();
                     }
-                    while(i<= spents.size()-1 && yearI== yearF && mesI==mesF && diaI<= spents.get(i).getFecha().getDate()
-                            && spents.get(i).getFecha().getDate()<diaF ){
+                    while(i<= spents.size()-1 && yearI== yearF && mesI==mesF && diaI<= diaA
+                            && diaA<diaF ){
                         suma+= spents.get(i).getMonto();
                         i++;
+                        if(i<=spents.size()-1)
+                        {
+                            yearA = spents.get(i).getFecha().getYear() + 1900;
+                            mesA = spents.get(i).getFecha().getMonth()+1;
+                            diaA = spents.get(i).getFecha().getDate();
+                        }
                     }
                     respuesta.add(suma);
-                    suma+=0;
+                    suma=0;
                 }
                 }else{
                 //manipular  dias
