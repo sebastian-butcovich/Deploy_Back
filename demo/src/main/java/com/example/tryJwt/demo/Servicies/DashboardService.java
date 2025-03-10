@@ -129,8 +129,7 @@ public class DashboardService {
                         suma+= spents.get(i).getMonto();
                         i++;
                     }
-                    while(i<= spents.size()-1 && yearI== yearF && mesI!=mesF && diaI<= spents.get(i).getFecha().getDate()
-                            && spents.get(i).getFecha().getDate()<diaF ){
+                    while(i<= spents.size()-1 && yearI== yearF && mesI!=mesF){
                         suma+= spents.get(i).getMonto();
                         i++;
                     }
@@ -210,8 +209,7 @@ public class DashboardService {
                         suma+=spents.get(i).getMonto();
                         i++;
                     }
-                    while(i<= spents.size()-1 && yearI== yearF && mesI!=mesF && diaI<= spents.get(i).getFecha().getDate()
-                            && spents.get(i).getFecha().getDate()<diaF ){
+                    while(i<= spents.size()-1 && yearI== yearF && mesI!=mesF  ){
                         suma+= spents.get(i).getMonto();
                         i++;
                     }
@@ -332,8 +330,7 @@ public class DashboardService {
                         suma+= incomes.get(i).getMonto();
                         i++;
                     }
-                    while(i<= incomes.size()-1 && yearI== yearF && mesI!=mesF && diaI<= incomes.get(i).getFecha().getDate()
-                            && incomes.get(i).getFecha().getDate()<diaF ){
+                    while(i<= incomes.size()-1 && yearI== yearF && mesI!=mesF ){
                         suma+= incomes.get(i).getMonto();
                         i++;
                     }
@@ -413,8 +410,7 @@ public class DashboardService {
                         suma+=incomes.get(i).getMonto();
                         i++;
                     }
-                    while(i<= incomes.size()-1 && yearI== yearF && mesI!=mesF && diaI<= incomes.get(i).getFecha().getDate()
-                            && incomes.get(i).getFecha().getDate()<diaF ){
+                    while(i<= incomes.size()-1 && yearI== yearF && mesI!=mesF ){
                         suma+= incomes.get(i).getMonto();
                         i++;
                     }
