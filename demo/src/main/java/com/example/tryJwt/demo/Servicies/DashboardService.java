@@ -9,16 +9,11 @@ import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.IncomeRepository;
 import com.example.tryJwt.demo.Repository.SpentRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +22,7 @@ public class DashboardService {
     @Autowired
     private IncomeRepository incomeRepository;
     @Autowired
-    private SpentRepository spentRepository;
+    private SpentRepository incomes;
     @Autowired
     private FunctionUtils functionUtils;
 
@@ -35,9 +30,9 @@ public class DashboardService {
         Users users = functionUtils.getUsers(params).orElseThrow();
         List<Spent> spents = null;
         if (params.containsKey("fecha_inicio") && params.containsKey("fecha_fin")) {
-            spents = spentRepository.findAllByUsuario(users.getId(), params.get("fecha_inicio"), params.get("fecha_fin"));
+            spents = incomes.findAllByUsuario(users.getId(), params.get("fecha_inicio"), params.get("fecha_fin"));
         } else {
-            spents = spentRepository.findAllByUsuario(users.getId());
+            spents = incomes.findAllByUsuario(users.getId());
         }
         if (spents.isEmpty()) {
             return ResponseEntity.ok().body(new TotalResponse(0.0, "", "No hay gastos agregados"));
@@ -64,139 +59,163 @@ public class DashboardService {
         Users users = functionUtils.getUsers(params).orElseThrow();
         List<Double> respuesta = new ArrayList<Double>();
         double suma = 0.0;
-        String fecha_inicial = list.get(0).fecha_string();
-        String fecha_final = list.get(list.size() - 1).fecha_string();
-        List<Spent> spents = spentRepository.findAllByUsuarioFecha(users.getId(), fecha_inicial, fecha_final);
-        if (!params.containsKey("currency")) {
-            int i = 0;
-            if (list.get(0).day() == 0 && list.get(0).month() == 0) {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int yearI = list.get(j).year();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= spents.size() - 1) && (yearI <= spents.get(i).getFecha().getYear() + 1900
-                            && spents.get(i).getFecha().getYear() + 1900 < yearS)) {
-                        suma += spents.get(i).getMonto();
+        String fecha_inicio = list.get(0).fecha_string();
+        String fecha_fin = list.get(list.size()-1).fecha_string();
+        List<Spent> spents = incomes.findAllByUsuarioFecha(users.getId(), fecha_inicio,fecha_fin);
+        int yearI = 0;
+        int yearF = 0;
+        int mesI =  0;
+        int mesF =  0;
+        int diaI =  0;
+        int diaF =  0;
+        int i = 0;
+        if(!params.containsKey("currency")){
+            if(list.get(0).day() == 0 && list.get(0).month() == 0)
+            {// Manipular años
+                for(int j =0; j<list.size()-1; j++){
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    while(i<=spents.size()-1&&yearI<=spents.get(i).getFecha().getYear()+1900 &&
+                            spents.get(i).getFecha().getYear()+1900<yearF )
+                    {
+                        suma+=spents.get(i).getMonto();
                         i++;
                     }
                     respuesta.add(suma);
-                    suma = 0.0;
-                }
-            } else if (list.get(0).day() == 0) {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int mesI = list.get(j).month();
-                    int yearI = list.get(j).year();
-                    int mesS = list.get(j + 1).month();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= spents.size() - 1) && (yearI <= spents.get(i).getFecha().getYear() + 1900
-                            && spents.get(i).getFecha().getYear() + 1900 <= yearS)) {
-                        if ((mesI <= spents.get(i).getFecha().getMonth() + 1 && spents.get(i).getFecha().getMonth() + 1 < mesS)) {
-                            suma += spents.get(i).getMonto();
-                            i++;
-                        }else{
-                            break;
-                        }
-                    }
-                    double valorRedondeado = Math.round(suma * 100.0) / 100.0;
-                    respuesta.add(valorRedondeado);
                     suma=0.0;
                 }
-            } else {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int diaI = list.get(j).day();
-                    int mesI = list.get(j).month();
-                    int yearI = list.get(j).year();
-                    int diaS = list.get(j + 1).day();
-                    int mesS = list.get(j + 1).month();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= spents.size() - 1) && (yearI <= spents.get(i).getFecha().getYear() + 1900
-                            && spents.get(i).getFecha().getYear() + 1900 <= yearS)) {
-                        if ((mesI < spents.get(i).getFecha().getMonth() + 1 && spents.get(i).getFecha().getMonth() + 1 < mesS)) {
-                            suma += spents.get(i).getMonto();
-                            i++;
-                        } else if ((diaI <= spents.get(i).getFecha().getDate() && spents.get(i).getFecha().getDate() < diaS)) {
-                            suma += spents.get(i).getMonto();
-                            i++;
-                        } else {
-                            break;
-                        }
+            }else if(list.get(0).day() == 0)
+            {// Manipular meses
+                for(int j=0;j<list.size()-1;j++)
+                {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j+1).month();
+                    while(yearI != yearF && i<=spents.size()-1&&yearI<=spents.get(i).getFecha().getYear()+1900 &&
+                        spents.get(i).getFecha().getYear()+1900<yearF )
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
                     }
-                    double valorRedondeado = Math.round(suma * 100.0) / 100.0;
-                    respuesta.add(valorRedondeado);
-                    suma = 0.0;
+                    while(i<=spents.size()-1&&yearI == yearF && mesI<=spents.get(i).getFecha().getMonth()+1
+                            && spents.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+=spents.get(i).getMonto();
+                        i++;
+                    }
+                    respuesta.add(suma);
+                    suma=0.0;
+                }
+            }else{
+                //manipular semanas y dias
+                for(int j=0;j<list.size()-1;j++)
+                {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j+1).month();
+                    diaI = list.get(j).day();
+                    diaF = list.get(j+1).day();
+                    while( i<=spents.size()-1&&yearI != yearF && yearI<=spents.get(i).getFecha().getYear() + 1900 &&
+                            spents.get(i).getFecha().getYear() + 1900<yearF )
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=spents.size()-1&&yearI == yearF && mesI<=spents.get(i).getFecha().getMonth()+1
+                            && spents.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+=spents.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=spents.size()-1 && yearI== yearF && mesI==mesF && diaI<=spents.get(i).getFecha().getDate()
+                            && spents.get(i).getFecha().getDate()<diaF ){
+                        suma+=spents.get(i).getMonto();
+                        i++;
+                    }
+                    respuesta.add(suma);
+                    suma=0.0;
                 }
             }
-            if(list.size() > 5)
-            {
-                respuesta = respuesta.reversed();
-            }
-            return ResponseEntity.ok(new ListTotalResponse(respuesta, "args", "Los valores totales para los gráficos"));
-        } else {
+            return  ResponseEntity.ok(new ListTotalResponse(respuesta,"args","Los valores totales para los gráficos"));
+        }else {
             String current = params.get("currency");
             String current_type = params.get("currency_type");
-            double value = functionUtils.getValue(current, current_type);
+            double value = functionUtils.getValue(current,current_type);
             functionUtils.changeCoinsSpent(spents, current, value);
-            int i = 0;
-            if (list.get(0).day() == 0 && list.get(0).month() == 0) {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int yearI = list.get(j).year();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= spents.size() - 1) && (yearI <= spents.get(i).getFecha().getYear() + 1900
-                            && spents.get(i).getFecha().getYear() + 1900 < yearS)) {
-                        suma += spents.get(i).getMonto();
+            if(list.get(0).day() == 0 && list.get(0).month() == 0)
+            {// Manipular años
+                for(int j =0; j<list.size()-1; j++){
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    while(i<=spents.size()-1&&yearI<=spents.get(i).getFecha().getYear()+1900 &&
+                            spents.get(i).getFecha().getYear()+1900<yearF )
+                    {
+                        suma+=spents.get(i).getMonto();
                         i++;
-                    }
-                    respuesta.add(suma);
-                    suma = 0.0;
-                }
-            } else if (list.get(0).day() == 0) {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int mesI = list.get(j).month();
-                    int yearI = list.get(j).year();
-                    int mesS = list.get(j + 1).month();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= spents.size() - 1) && (yearI <= spents.get(i).getFecha().getYear() + 1900
-                            && spents.get(i).getFecha().getYear() + 1900 <= yearS)) {
-                        if ((mesI <= spents.get(i).getFecha().getMonth() + 1 && spents.get(i).getFecha().getMonth() + 1 < mesS)) {
-                            suma += spents.get(i).getMonto();
-                            i++;
-                        }else{
-                            break;
-                        }
                     }
                     double valorRedondeado = Math.round(suma * 100.0) / 100.0;
                     respuesta.add(valorRedondeado);
                     suma=0.0;
                 }
-            } else {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int diaI = list.get(j).day();
-                    int mesI = list.get(j).month();
-                    int yearI = list.get(j).year();
-                    int diaS = list.get(j + 1).day();
-                    int mesS = list.get(j + 1).month();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= spents.size() - 1) && (yearI <= spents.get(i).getFecha().getYear() + 1900
-                            && spents.get(i).getFecha().getYear() + 1900 <= yearS)) {
-                        if ((mesI < spents.get(i).getFecha().getMonth() + 1 && spents.get(i).getFecha().getMonth() + 1 < mesS)) {
-                            suma += spents.get(i).getMonto();
-                            i++;
-                        } else if ((diaI <= spents.get(i).getFecha().getDate() && spents.get(i).getFecha().getDate() < diaS)) {
-                            suma += spents.get(i).getMonto();
-                            i++;
-                        } else {
-                            break;
-                        }
+            }else if(list.get(0).day() == 0)
+            {// Manipular meses
+                for(int j=0;j<list.size()-1;j++)
+                {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j+1).month();
+                    while(yearI != yearF && i<=spents.size()-1&&yearI<=spents.get(i).getFecha().getYear()+1900 &&
+                            spents.get(i).getFecha().getYear()+1900<yearF )
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=spents.size()-1&&yearI == yearF && mesI<=spents.get(i).getFecha().getMonth()+1
+                            && spents.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+=spents.get(i).getMonto();
+                        i++;
                     }
                     double valorRedondeado = Math.round(suma * 100.0) / 100.0;
                     respuesta.add(valorRedondeado);
-                    suma = 0.0;
+                    suma=0.0;
+                }
+            }else{
+                //manipular semanas y dias
+                for(int j=0;j<list.size()-1;j++)
+                {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j+1).month();
+                    diaI = list.get(j).day();
+                    diaF = list.get(j+1).day();
+                    while( i<=spents.size()-1&&yearI != yearF && yearI<=spents.get(i).getFecha().getYear() + 1900 &&
+                            spents.get(i).getFecha().getYear() + 1900<yearF )
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=spents.size()-1&&yearI == yearF && mesI<=spents.get(i).getFecha().getMonth()+1
+                            && spents.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+=spents.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=spents.size()-1 && yearI== yearF && mesI==mesF && diaI<=spents.get(i).getFecha().getDate()
+                            && spents.get(i).getFecha().getDate()<diaF ){
+                        suma+=spents.get(i).getMonto();
+                        i++;
+                    }
+                    double valorRedondeado = Math.round(suma * 100.0) / 100.0;
+                    respuesta.add(valorRedondeado);
+                    suma=0.0;
                 }
             }
-            if(list.size() > 5)
-            {
-                respuesta = respuesta.reversed();
-            }
-            return ResponseEntity.ok(new ListTotalResponse(respuesta, current, "Los valores totales para los graficos"));
+            return  ResponseEntity.ok(new ListTotalResponse(respuesta,current,"Los valores totales para los graficos"));
         }
     }
 
@@ -232,140 +251,164 @@ public class DashboardService {
     public ResponseEntity<ListTotalResponse> getTotalIngresosGraphics(Map<String, String> params, List<Fecha> list) {
         Users users = functionUtils.getUsers(params).orElseThrow();
         List<Double> respuesta = new ArrayList<Double>();
-        String fecha_inicio = list.get(0).fecha_string();
-        String fecha_fin = list.get(list.size() - 1).fecha_string();
-        List<Income> incomes = incomeRepository.findAllByUsuarioFecha(users.getId(), fecha_inicio, fecha_fin);
         double suma = 0.0;
+        String fecha_inicio = list.get(0).fecha_string();
+        String fecha_fin = list.get(list.size()-1).fecha_string();
+        List<Income> incomes = incomeRepository.findAllByUsuarioFecha(users.getId(), fecha_inicio,fecha_fin);
+        int yearI = 0;
+        int yearF = 0;
+        int mesI =  0;
+        int mesF =  0;
+        int diaI =  0;
+        int diaF =  0;
         int i = 0;
-        if (!params.containsKey("currency")) {
-            if (list.get(0).day() == 0 && list.get(0).month() == 0) {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int yearI = list.get(j).year();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= incomes.size() - 1) && (yearI <= incomes.get(i).getFecha().getYear() + 1900
-                            && incomes.get(i).getFecha().getYear() + 1900 < yearS)) {
-                        suma += incomes.get(i).getMonto();
+        if(!params.containsKey("currency")){
+            if(list.get(0).day() == 0 && list.get(0).month() == 0)
+            {// Manipular años
+                for(int j =0; j<list.size()-1; j++){
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    while(i<=incomes.size()-1&&yearI<= incomes.get(i).getFecha().getYear()+1900 &&
+                            incomes.get(i).getFecha().getYear()+1900<yearF )
+                    {
+                        suma+=incomes.get(i).getMonto();
                         i++;
                     }
                     respuesta.add(suma);
-                    suma = 0.0;
-                }
-            } else if (list.get(0).day() == 0) {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int mesI = list.get(j).month();
-                    int yearI = list.get(j).year();
-                    int mesS = list.get(j + 1).month();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= incomes.size() - 1) && (yearI <= incomes.get(i).getFecha().getYear() + 1900
-                            && incomes.get(i).getFecha().getYear() + 1900 <= yearS)) {
-                        if ((mesI <= incomes.get(i).getFecha().getMonth() + 1 && incomes.get(i).getFecha().getMonth() + 1 < mesS)) {
-                            suma += incomes.get(i).getMonto();
-                            i++;
-                        }else{
-                            break;
-                        }
-                    }
-                    double valorRedondeado = Math.round(suma * 100.0) / 100.0;
-                    respuesta.add(valorRedondeado);
                     suma=0.0;
                 }
-            } else {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int diaI = list.get(j).day();
-                    int mesI = list.get(j).month();
-                    int yearI = list.get(j).year();
-                    int diaS = list.get(j + 1).day();
-                    int mesS = list.get(j + 1).month();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= incomes.size() - 1) && (yearI <= incomes.get(i).getFecha().getYear() + 1900
-                            && incomes.get(i).getFecha().getYear() + 1900 <= yearS)) {
-                        if ((mesI < incomes.get(i).getFecha().getMonth() + 1 && incomes.get(i).getFecha().getMonth() + 1 < mesS)) {
-                            suma += incomes.get(i).getMonto();
-                            i++;
-                        } else if ((diaI <= incomes.get(i).getFecha().getDate() && incomes.get(i).getFecha().getDate() < diaS))  {
-                            suma += incomes.get(i).getMonto();
-                            i++;
-                        } else {
-                            break;
-                        }
+            }else if(list.get(0).day() == 0)
+            {// Manipular meses
+                for(int j=0;j<list.size()-1;j++)
+                {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j+1).month();
+                    while(yearI != yearF && i<= incomes.size()-1&&yearI<= incomes.get(i).getFecha().getYear()+1900 &&
+                            incomes.get(i).getFecha().getYear()+1900<yearF )
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
                     }
-                    double valorRedondeado = Math.round(suma * 100.0) / 100.0;
-                    respuesta.add(valorRedondeado);
-                    suma = 0.0;
+                    while(i<= incomes.size()-1&&yearI == yearF && mesI<= incomes.get(i).getFecha().getMonth()+1
+                            && incomes.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                    }
+                    respuesta.add(suma);
+                    suma=0.0;
+                }
+            }else{
+                //manipular semanas y dias
+                for(int j=0;j<list.size()-1;j++)
+                {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j+1).month();
+                    diaI = list.get(j).day();
+                    diaF = list.get(j+1).day();
+                    while( i<= incomes.size()-1&&yearI != yearF && yearI<= incomes.get(i).getFecha().getYear() + 1900 &&
+                            incomes.get(i).getFecha().getYear() + 1900<yearF )
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<= incomes.size()-1&&yearI == yearF && mesI<= incomes.get(i).getFecha().getMonth()+1
+                            && incomes.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<= incomes.size()-1 && yearI== yearF && mesI==mesF && diaI<= incomes.get(i).getFecha().getDate()
+                            && incomes.get(i).getFecha().getDate()<diaF ){
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                    }
+                    respuesta.add(suma);
+                    suma=0.0;
                 }
             }
-            if(list.size() > 5)
-            {
-                respuesta = respuesta.reversed();
-            }
-            return ResponseEntity.ok(new ListTotalResponse(respuesta, "args", "Los valores totales para los gráficos"));
-        } else {
+            return  ResponseEntity.ok(new ListTotalResponse(respuesta,"args","Los valores totales para los gráficos"));
+        }else {
             String current = params.get("currency");
             String current_type = params.get("currency_type");
-            double value = functionUtils.getValue(current, current_type);
+            double value = functionUtils.getValue(current,current_type);
             functionUtils.changeCoinsIncome(incomes, current, value);
-            if (list.get(0).day() == 0 && list.get(0).month() == 0) {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int yearI = list.get(j).year();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= incomes.size() - 1) && (yearI <= incomes.get(i).getFecha().getYear() + 1900
-                            && incomes.get(i).getFecha().getYear() + 1900 < yearS)) {
-                        suma += incomes.get(i).getMonto();
+            if(list.get(0).day() == 0 && list.get(0).month() == 0)
+            {// Manipular años
+                for(int j =0; j<list.size()-1; j++){
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    while(i<=incomes.size()-1&&yearI<=incomes.get(i).getFecha().getYear()+1900 &&
+                            incomes.get(i).getFecha().getYear()+1900<yearF )
+                    {
+                        suma+=incomes.get(i).getMonto();
                         i++;
-                    }
-                    respuesta.add(suma);
-                    suma = 0.0;
-                }
-            } else if (list.get(0).day() == 0) {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int mesI = list.get(j).month();
-                    int yearI = list.get(j).year();
-                    int mesS = list.get(j + 1).month();
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= incomes.size() - 1) && (yearI <= incomes.get(i).getFecha().getYear() + 1900
-                            && incomes.get(i).getFecha().getYear() + 1900 <= yearS)) {
-                        if ((mesI <= incomes.get(i).getFecha().getMonth() + 1 && incomes.get(i).getFecha().getMonth() + 1 < mesS)) {
-                            suma += incomes.get(i).getMonto();
-                            i++;
-                        }else{
-                            break;
-                        }
                     }
                     double valorRedondeado = Math.round(suma * 100.0) / 100.0;
                     respuesta.add(valorRedondeado);
                     suma=0.0;
                 }
-            } else {
-                for (int j = 0; j < list.size() - 1; j++) {
-                    int diaI = list.get(j).day();
-                    int mesI = list.get(j).month();
-                    int yearI = list.get(j).year();
-                    int diaS = list.get(j + 1).day();
-                    int mesS = list.get(j + 1).month();
-                    System.out.println(incomes.get(0).getFecha().getMonth());
-                    int yearS = list.get(j + 1).year();
-                    while ((i <= incomes.size() - 1) && (yearI <= incomes.get(i).getFecha().getYear() + 1900
-                            && incomes.get(i).getFecha().getYear() + 1900 <= yearS)) {
-                        if ((mesI < incomes.get(i).getFecha().getMonth() + 1 && incomes.get(i).getFecha().getMonth() + 1 < mesS)) {
-                            suma += incomes.get(i).getMonto();
-                            i++;
-                        } else if ((diaI <= incomes.get(i).getFecha().getDate() && incomes.get(i).getFecha().getDate() < diaS)) {
-                            suma += incomes.get(i).getMonto();
-                            i++;
-                        } else {
-                            break;
-                        }
+            }else if(list.get(0).day() == 0)
+            {// Manipular meses
+                for(int j=0;j<list.size()-1;j++)
+                {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j+1).month();
+                    while(yearI != yearF && i<=incomes.size()-1&&yearI<=incomes.get(i).getFecha().getYear()+1900 &&
+                            incomes.get(i).getFecha().getYear()+1900<yearF )
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=incomes.size()-1&&yearI == yearF && mesI<=incomes.get(i).getFecha().getMonth()+1
+                            && incomes.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+=incomes.get(i).getMonto();
+                        i++;
                     }
                     double valorRedondeado = Math.round(suma * 100.0) / 100.0;
                     respuesta.add(valorRedondeado);
-                    suma = 0.0;
+                    suma=0.0;
+                }
+            }else{
+                //manipular semanas y dias
+                for(int j=0;j<list.size()-1;j++)
+                {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j+1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j+1).month();
+                    diaI = list.get(j).day();
+                    diaF = list.get(j+1).day();
+                    while( i<=incomes.size()-1&&yearI != yearF && yearI<=incomes.get(i).getFecha().getYear() + 1900 &&
+                            incomes.get(i).getFecha().getYear() + 1900<yearF )
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=incomes.size()-1&&yearI == yearF && mesI<=incomes.get(i).getFecha().getMonth()+1
+                            && incomes.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+=incomes.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=incomes.size()-1 && yearI== yearF && mesI==mesF && diaI<=incomes.get(i).getFecha().getDate()
+                            && incomes.get(i).getFecha().getDate()<diaF ){
+                        suma+=incomes.get(i).getMonto();
+                        i++;
+                    }
+                    double valorRedondeado = Math.round(suma * 100.0) / 100.0;
+                    respuesta.add(valorRedondeado);
+                    suma=0.0;
                 }
             }
-            if(list.size() > 5)
-            {
-                respuesta = respuesta.reversed();
-            }
-            return ResponseEntity.ok(new ListTotalResponse(respuesta, current, "Los valores totales para los graficos"));
+            return  ResponseEntity.ok(new ListTotalResponse(respuesta,current,"Los valores totales para los graficos"));
         }
     }
 }
