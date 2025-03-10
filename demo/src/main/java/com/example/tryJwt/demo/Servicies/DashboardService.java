@@ -107,8 +107,43 @@ public class DashboardService {
                     respuesta.add(suma);
                     suma=0.0;
                 }
-            }else{
-                //manipular semanas y dias
+            }else if(list.get(0).day() + 7 == list.get(1).day()){
+                //Manipular semanas
+                for(int j=0;j<list.size()-1;j++) {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j + 1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j + 1).month();
+                    diaI = list.get(j).day();
+                    diaF = list.get(j + 1).day();
+                    while( i<= spents.size()-1&&yearI != yearF && yearI<= spents.get(i).getFecha().getYear() + 1900 &&
+                            spents.get(i).getFecha().getYear() + 1900<yearF )
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<= spents.size()-1&&yearI == yearF && mesI<= spents.get(i).getFecha().getMonth()+1
+                            && spents.get(i).getFecha().getMonth()+1<mesF)
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<=spents.size()-1 && yearI == yearF && mesI<= spents.get(i).getFecha().getMonth()+1
+                            && spents.get(i).getFecha().getMonth()+1>mesF && diaI>diaF)
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                    }
+                    while(i<= spents.size()-1 && yearI== yearF && mesI==mesF && diaI<= spents.get(i).getFecha().getDate()
+                            && spents.get(i).getFecha().getDate()<diaF ){
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                    }
+                    respuesta.add(suma);
+                    suma+=0;
+                }
+                }else{
+                //manipular  dias
                 for(int j=0;j<list.size()-1;j++)
                 {
                     yearI = list.get(j).year();
