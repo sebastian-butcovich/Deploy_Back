@@ -22,7 +22,7 @@ public class DashboardService {
     @Autowired
     private IncomeRepository incomeRepository;
     @Autowired
-    private SpentRepository incomes;
+    private SpentRepository spentRepository;
     @Autowired
     private FunctionUtils functionUtils;
 
@@ -30,9 +30,9 @@ public class DashboardService {
         Users users = functionUtils.getUsers(params).orElseThrow();
         List<Spent> spents = null;
         if (params.containsKey("fecha_inicio") && params.containsKey("fecha_fin")) {
-            spents = incomes.findAllByUsuario(users.getId(), params.get("fecha_inicio"), params.get("fecha_fin"));
+            spents = spentRepository.findAllByUsuario(users.getId(), params.get("fecha_inicio"), params.get("fecha_fin"));
         } else {
-            spents = incomes.findAllByUsuario(users.getId());
+            spents = spentRepository.findAllByUsuario(users.getId());
         }
         if (spents.isEmpty()) {
             return ResponseEntity.ok().body(new TotalResponse(0.0, "", "No hay gastos agregados"));
@@ -61,7 +61,7 @@ public class DashboardService {
         double suma = 0.0;
         String fecha_inicio = list.get(0).fecha_string();
         String fecha_fin = list.get(list.size()-1).fecha_string();
-        List<Spent> spents = incomes.findAllByUsuarioFecha(users.getId(), fecha_inicio,fecha_fin);
+        List<Spent> spents = spentRepository.findAllByUsuarioFecha(users.getId(), fecha_inicio,fecha_fin);
         int yearI = 0;
         int yearF = 0;
         int mesI =  0;
@@ -117,21 +117,21 @@ public class DashboardService {
                     mesF = list.get(j+1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j+1).day();
-                    while( i<=spents.size()-1&&yearI != yearF && yearI<=spents.get(i).getFecha().getYear() + 1900 &&
+                    while( i<= spents.size()-1&&yearI != yearF && yearI<= spents.get(i).getFecha().getYear() + 1900 &&
                             spents.get(i).getFecha().getYear() + 1900<yearF )
                     {
                         suma+= spents.get(i).getMonto();
                         i++;
                     }
-                    while(i<=spents.size()-1&&yearI == yearF && mesI<=spents.get(i).getFecha().getMonth()+1
+                    while(i<= spents.size()-1&&yearI == yearF && mesI<= spents.get(i).getFecha().getMonth()+1
                             && spents.get(i).getFecha().getMonth()+1<mesF)
                     {
-                        suma+=spents.get(i).getMonto();
+                        suma+= spents.get(i).getMonto();
                         i++;
                     }
-                    while(i<=spents.size()-1 && yearI== yearF && mesI==mesF && diaI<=spents.get(i).getFecha().getDate()
+                    while(i<= spents.size()-1 && yearI== yearF && mesI==mesF && diaI<= spents.get(i).getFecha().getDate()
                             && spents.get(i).getFecha().getDate()<diaF ){
-                        suma+=spents.get(i).getMonto();
+                        suma+= spents.get(i).getMonto();
                         i++;
                     }
                     respuesta.add(suma);
