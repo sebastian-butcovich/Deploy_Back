@@ -129,7 +129,7 @@ public class DashboardService {
                         i++;
                     }
                     while(i<=spents.size()-1 && yearI == yearF && mesI<= spents.get(i).getFecha().getMonth()+1
-                            && spents.get(i).getFecha().getMonth()+1>mesF && diaI>diaF)
+                            && spents.get(i).getFecha().getMonth()+1>=mesF && diaI>diaF)
                     {
                         suma+= spents.get(i).getMonto();
                         i++;
