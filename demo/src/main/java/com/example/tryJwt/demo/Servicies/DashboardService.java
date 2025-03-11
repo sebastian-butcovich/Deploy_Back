@@ -140,7 +140,7 @@ public class DashboardService {
                     }
                     //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
                     // los días antes de finde demes
-                    while(i<=spents.size()-1 && yearI == yearF && mesI<= mesA
+                    while(i<spents.size()-1 && yearI == yearF && mesI<= mesA
                             && mesA<=mesF && diaF<diaA)
                     {
                         suma+= spents.get(i).getMonto();
@@ -287,7 +287,7 @@ public class DashboardService {
                     //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
                     // los días antes de finde demes
                     while(i<=spents.size()-1 && yearI == yearF && mesI<= mesA
-                            && mesA<=mesF && diaF<diaA)
+                            && mesA<mesF && diaF<diaA)
                     {
                         suma+= spents.get(i).getMonto();
                         i++;
@@ -477,9 +477,9 @@ public class DashboardService {
                         }
                     }
                     //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
-                    // los días antes de finde demes
+                    // los días antes de finde de mes
                     while(i<=incomes.size()-1 && yearI == yearF && mesI<= mesA
-                            && mesA<=mesF && diaF<diaA)
+                            && mesA<mesF && diaF<diaA)
                     {
                         suma+= incomes.get(i).getMonto();
                         i++;
@@ -625,7 +625,7 @@ public class DashboardService {
                     //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
                     // los días antes de finde demes
                     while(i<=incomes.size()-1 && yearI == yearF && mesI<= mesA
-                            && mesA<=mesF && diaF<diaA)
+                            && mesA<mesF && diaF<diaA)
                     {
                         suma+= incomes.get(i).getMonto();
                         i++;
