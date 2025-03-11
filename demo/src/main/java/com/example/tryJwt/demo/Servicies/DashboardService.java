@@ -68,6 +68,9 @@ public class DashboardService {
         int mesF =  0;
         int diaI =  0;
         int diaF =  0;
+        int yearA = 0;
+        int mesA =  0;
+        int diaA =  0;
         int i = 0;
         if(!params.containsKey("currency")){
             if(list.get(0).day() == 0 && list.get(0).month() == 0)
@@ -116,9 +119,12 @@ public class DashboardService {
                     mesF = list.get(j + 1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j + 1).day();
-                    int yearA = spents.get(i).getFecha().getYear() + 1900;
-                    int mesA = spents.get(i).getFecha().getMonth()+1;
-                    int diaA = spents.get(i).getFecha().getDate();
+                    if(i<=spents.size()-1)
+                    {
+                         yearA = spents.get(i).getFecha().getYear() + 1900;
+                         mesA = spents.get(i).getFecha().getMonth()+1;
+                         diaA = spents.get(i).getFecha().getDate();
+                    }
                     //caso3: cambia de año
                     while( i<= spents.size()-1&&yearI != yearF && yearI<= yearA &&
                             yearA + 1900<yearF && mesI>=mesA && mesF<=mesA && diaI>diaA && diaA<diaF )
