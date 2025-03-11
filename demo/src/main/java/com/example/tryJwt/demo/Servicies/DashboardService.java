@@ -256,8 +256,79 @@ public class DashboardService {
                     respuesta.add(valorRedondeado);
                     suma=0.0;
                 }
+            }else if(list.get(0).day() + 7 == list.get(1).day()){
+                //Manipular semanas
+                for(int j=0;j<list.size()-1;j++) {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j + 1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j + 1).month();
+                    diaI = list.get(j).day();
+                    diaF = list.get(j + 1).day();
+                    if(i<=spents.size()-1)
+                    {
+                        yearA = spents.get(i).getFecha().getYear() + 1900;
+                        mesA = spents.get(i).getFecha().getMonth()+1;
+                        diaA = spents.get(i).getFecha().getDate();
+                    }
+                    //caso3: cambia de año
+                    while( i<= spents.size()-1&&yearI != yearF && yearI<= yearA &&
+                            yearA + 1900<yearF && mesI>=mesA && mesF<=mesA && diaI>diaA && diaA<diaF )
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                        if(i<=spents.size()-1)
+                        {
+                            yearA = spents.get(i).getFecha().getYear() + 1900;
+                            mesA = spents.get(i).getFecha().getMonth()+1;
+                            diaA = spents.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
+                    // los días antes de finde demes
+                    while(i<=spents.size()-1 && yearI == yearF && mesI<= mesA
+                            && mesA<=mesF && diaF<diaA)
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                        if(i<=spents.size()-1)
+                        {
+                            yearA = spents.get(i).getFecha().getYear() + 1900;
+                            mesA = spents.get(i).getFecha().getMonth()+1;
+                            diaA = spents.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso 2.2: mismo año pero cambia el mes tomando los dias de comienzo de mes
+                    while(i<=spents.size()-1 && yearI == yearF && mesI< mesA
+                            && mesA<=mesF && diaA<diaF)
+                    {
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                        if(i<=spents.size()-1)
+                        {
+                            yearA = spents.get(i).getFecha().getYear() + 1900;
+                            mesA = spents.get(i).getFecha().getMonth()+1;
+                            diaA = spents.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso 1: no cambia de mes ni de año y solo se toma en cuenta los dias
+                    while(i<= spents.size()-1 && yearI== yearF && mesI==mesF && diaI<= diaA
+                            && diaA<diaF ){
+                        suma+= spents.get(i).getMonto();
+                        i++;
+                        if(i<=spents.size()-1)
+                        {
+                            yearA = spents.get(i).getFecha().getYear() + 1900;
+                            mesA = spents.get(i).getFecha().getMonth()+1;
+                            diaA = spents.get(i).getFecha().getDate();
+                        }
+                    }
+                    double valorRedondeado = Math.round(suma * 100.0) / 100.0;
+                    respuesta.add(valorRedondeado);
+                    suma=0;
+                }
             }else{
-                //manipular semanas y dias
+                //manipular dias
                 for(int j=0;j<list.size()-1;j++)
                 {
                     yearI = list.get(j).year();
@@ -335,6 +406,9 @@ public class DashboardService {
         int mesF =  0;
         int diaI =  0;
         int diaF =  0;
+        int yearA = 0;
+        int mesA = 0;
+        int diaA = 0;
         int i = 0;
         if(!params.containsKey("currency")){
             if(list.get(0).day() == 0 && list.get(0).month() == 0)
@@ -374,8 +448,78 @@ public class DashboardService {
                     respuesta.add(suma);
                     suma=0.0;
                 }
+            }else if(list.get(0).day() + 7 == list.get(1).day()){
+                //Manipular semanas
+                for(int j=0;j<list.size()-1;j++) {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j + 1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j + 1).month();
+                    diaI = list.get(j).day();
+                    diaF = list.get(j + 1).day();
+                    if(i<=incomes.size()-1)
+                    {
+                        yearA = incomes.get(i).getFecha().getYear() + 1900;
+                        mesA = incomes.get(i).getFecha().getMonth()+1;
+                        diaA = incomes.get(i).getFecha().getDate();
+                    }
+                    //caso3: cambia de año
+                    while( i<= incomes.size()-1&&yearI != yearF && yearI<= yearA &&
+                            yearA + 1900<yearF && mesI>=mesA && mesF<=mesA && diaI>diaA && diaA<diaF )
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                        if(i<=incomes.size()-1)
+                        {
+                            yearA = incomes.get(i).getFecha().getYear() + 1900;
+                            mesA = incomes.get(i).getFecha().getMonth()+1;
+                            diaA = incomes.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
+                    // los días antes de finde demes
+                    while(i<=incomes.size()-1 && yearI == yearF && mesI<= mesA
+                            && mesA<=mesF && diaF<diaA)
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                        if(i<=incomes.size()-1)
+                        {
+                            yearA = incomes.get(i).getFecha().getYear() + 1900;
+                            mesA = incomes.get(i).getFecha().getMonth()+1;
+                            diaA = incomes.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso 2.2: mismo año pero cambia el mes tomando los dias de comienzo de mes
+                    while(i<=incomes.size()-1 && yearI == yearF && mesI< mesA
+                            && mesA<=mesF && diaA<diaF)
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                        if(i<=incomes.size()-1)
+                        {
+                            yearA = incomes.get(i).getFecha().getYear() + 1900;
+                            mesA = incomes.get(i).getFecha().getMonth()+1;
+                            diaA = incomes.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso 1: no cambia de mes ni de año y solo se toma en cuenta los dias
+                    while(i<= incomes.size()-1 && yearI== yearF && mesI==mesF && diaI<= diaA
+                            && diaA<diaF ){
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                        if(i<=incomes.size()-1)
+                        {
+                            yearA = incomes.get(i).getFecha().getYear() + 1900;
+                            mesA = incomes.get(i).getFecha().getMonth()+1;
+                            diaA = incomes.get(i).getFecha().getDate();
+                        }
+                    }
+                    respuesta.add(suma);
+                    suma=0;
+                }
             }else{
-                //manipular semanas y dias
+                //manipular  dias
                 for(int j=0;j<list.size()-1;j++)
                 {
                     yearI = list.get(j).year();
@@ -450,8 +594,79 @@ public class DashboardService {
                     respuesta.add(valorRedondeado);
                     suma=0.0;
                 }
+            }else if(list.get(0).day() + 7 == list.get(1).day()){
+                //Manipular semanas
+                for(int j=0;j<list.size()-1;j++) {
+                    yearI = list.get(j).year();
+                    yearF = list.get(j + 1).year();
+                    mesI = list.get(j).month();
+                    mesF = list.get(j + 1).month();
+                    diaI = list.get(j).day();
+                    diaF = list.get(j + 1).day();
+                    if(i<=incomes.size()-1)
+                    {
+                        yearA = incomes.get(i).getFecha().getYear() + 1900;
+                        mesA = incomes.get(i).getFecha().getMonth()+1;
+                        diaA = incomes.get(i).getFecha().getDate();
+                    }
+                    //caso3: cambia de año
+                    while( i<= incomes.size()-1&&yearI != yearF && yearI<= yearA &&
+                            yearA + 1900<yearF && mesI>=mesA && mesF<=mesA && diaI>diaA && diaA<diaF )
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                        if(i<=incomes.size()-1)
+                        {
+                            yearA = incomes.get(i).getFecha().getYear() + 1900;
+                            mesA = incomes.get(i).getFecha().getMonth()+1;
+                            diaA = incomes.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
+                    // los días antes de finde demes
+                    while(i<=incomes.size()-1 && yearI == yearF && mesI<= mesA
+                            && mesA<=mesF && diaF<diaA)
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                        if(i<=incomes.size()-1)
+                        {
+                            yearA = incomes.get(i).getFecha().getYear() + 1900;
+                            mesA = incomes.get(i).getFecha().getMonth()+1;
+                            diaA = incomes.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso 2.2: mismo año pero cambia el mes tomando los dias de comienzo de mes
+                    while(i<=incomes.size()-1 && yearI == yearF && mesI< mesA
+                            && mesA<=mesF && diaA<diaF)
+                    {
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                        if(i<=incomes.size()-1)
+                        {
+                            yearA = incomes.get(i).getFecha().getYear() + 1900;
+                            mesA = incomes.get(i).getFecha().getMonth()+1;
+                            diaA = incomes.get(i).getFecha().getDate();
+                        }
+                    }
+                    //caso 1: no cambia de mes ni de año y solo se toma en cuenta los dias
+                    while(i<= incomes.size()-1 && yearI== yearF && mesI==mesF && diaI<= diaA
+                            && diaA<diaF ){
+                        suma+= incomes.get(i).getMonto();
+                        i++;
+                        if(i<=incomes.size()-1)
+                        {
+                            yearA = incomes.get(i).getFecha().getYear() + 1900;
+                            mesA = incomes.get(i).getFecha().getMonth()+1;
+                            diaA = incomes.get(i).getFecha().getDate();
+                        }
+                    }
+                    double valorRedondeado = Math.round(suma * 100.0) / 100.0;
+                    respuesta.add(valorRedondeado);
+                    suma=0;
+                }
             }else{
-                //manipular semanas y dias
+                //manipular  dias
                 for(int j=0;j<list.size()-1;j++)
                 {
                     yearI = list.get(j).year();
