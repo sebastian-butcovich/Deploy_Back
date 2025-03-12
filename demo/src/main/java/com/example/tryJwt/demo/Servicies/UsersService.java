@@ -63,4 +63,19 @@ public class UsersService {
        Users user = userRepository.findByEmail(username).orElseThrow();
        return new RegisterRequest(user.getEmail(),"",user.getName(),"");
     }
+    public ResponseEntity<String> deleteUser(String token)
+    {
+        String jwtToken = token.substring(7);
+        String username = jwtService.extractUsername(jwtToken);
+        Optional<Users> user = userRepository.findByEmail(username);
+        if(user.isPresent())
+        {
+            long id = user.get().getId();
+            userRepository.deleteById(id);
+            return ResponseEntity.ok().body("Se elimino el usuario correctamente");
+        }
+        return ResponseEntity.badRequest().body("No fue posible eliminar el usuario. Seguramente el usuari que quiere" +
+                "eliminar no existe");
+
+    }
 }

@@ -33,4 +33,9 @@ public class UsersController {
     {
         return userService.quienSoy(token);
     }
+    @DeleteMapping("/delete")
+    public ResponseEntity<String> deleteUser(@RequestParam String token)
+    {
+        return userService.deleteUser(token);
+    }
 }
