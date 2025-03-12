@@ -119,7 +119,11 @@ public class FunctionUtils {
             next_page=1;
         }else
         {
-            total_pages = (ingresos.size() /page_size)+1;
+            if((ingresos.size() % page_size) == 0){
+                total_pages = ingresos.size()/page_size;
+            }else{
+                total_pages = ingresos.size()/page_size +1;
+            }
         }
         List< MovementsRequest> list = new LinkedList<>();
         if(page<total_pages)
@@ -172,7 +176,12 @@ public class FunctionUtils {
             next_page=1;
         }else
         {
-            total_pages = (spent.size() /page_size)+1;
+            if((spent.size() % page_size) == 0){
+                total_pages = spent.size()/page_size;
+            }else{
+                total_pages = spent.size()/page_size +1;
+            }
+
         }
         List< MovementsRequest> list = new LinkedList<>();
         if(page<total_pages)
