@@ -166,7 +166,7 @@ public class DashboardService {
                         }
                     }
                     //caso 1: no cambia de mes ni de año y solo se toma en cuenta los dias
-                    while(i<= spents.size()-1 && yearI== yearF && mesI==mesF && diaI<= diaA
+                    while(i<= spents.size()-1 && yearI== yearF && mesI<=mesA && mesA<=mesF && diaI<= diaA
                             && diaA<diaF ){
                         suma+= spents.get(i).getMonto();
                         i++;
@@ -533,7 +533,7 @@ public class DashboardService {
                         }
                     }
                     //caso 1: no cambia de mes ni de año y solo se toma en cuenta los dias
-                    while(i<= incomes.size()-1 && yearI== yearF && mesI==mesF && diaI<= diaA
+                    while(i<= incomes.size()-1 && yearI== yearF && mesI<= mesA && mesA<=mesF && diaI<= diaA
                             && diaA<diaF ){
                         suma+= incomes.get(i).getMonto();
                         i++;
