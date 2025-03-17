@@ -72,6 +72,12 @@ public class DashboardService {
         int mesA =  0;
         int diaA =  0;
         int i = 0;
+        if(i<=spents.size()-1)
+        {
+            diaA = spents.get(i).getFecha().getDate();
+            mesA = spents.get(i).getFecha().getMonth()+1;
+            yearA = spents.get(i).getFecha().getYear()+1900;
+        }
         if(!params.containsKey("currency")){
             if(list.get(0).day() == 0 && list.get(0).month() == 0)
             {// Manipular años
@@ -119,12 +125,6 @@ public class DashboardService {
                     mesF = list.get(j + 1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j + 1).day();
-                    if(i<=spents.size()-1)
-                    {
-                         yearA = spents.get(i).getFecha().getYear() + 1900;
-                         mesA = spents.get(i).getFecha().getMonth()+1;
-                         diaA = spents.get(i).getFecha().getDate();
-                    }
                     //caso3: cambia de año
                     while( i<= spents.size()-1&&yearI != yearF && yearI<= yearA &&
                             yearA + 1900<yearF && mesI>=mesA && mesF<=mesA && diaI>diaA && diaA<diaF )
@@ -141,7 +141,7 @@ public class DashboardService {
                     //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
                     // los días antes de finde demes
                     while(i<spents.size()-1 && yearI == yearF && mesI<= mesA
-                            && mesA<=mesF && diaF<diaA)
+                            && mesA<mesF && diaF<diaA)
                     {
                         suma+= spents.get(i).getMonto();
                         i++;
@@ -190,12 +190,7 @@ public class DashboardService {
                     mesF = list.get(j+1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j+1).day();
-                   if(i<=spents.size()-1)
-                   {
-                       diaA = spents.get(i).getFecha().getDate();
-                       mesA = spents.get(i).getFecha().getMonth()+1;
-                       yearA = spents.get(i).getFecha().getYear()+1900;
-                   }
+                    //Toma el dia final de un año
                     while( i<= spents.size()-1&&yearI != yearF && yearI<= yearA && yearA<yearF )
                     {
                         suma+= spents.get(i).getMonto();
@@ -208,17 +203,16 @@ public class DashboardService {
                         }
                     }
                     while(i<= spents.size()-1&&yearI == yearF && mesI<= mesA
-                            && mesA<mesF)
-                    {
-                        suma+= spents.get(i).getMonto();
+                            && mesA<mesF) {
+                        suma += spents.get(i).getMonto();
                         i++;
-                        if(i<=spents.size()-1)
-                        {
+                        if (i <= spents.size() - 1) {
                             diaA = spents.get(i).getFecha().getDate();
-                            mesA = spents.get(i).getFecha().getMonth()+1;
-                            yearA = spents.get(i).getFecha().getYear()+1900;
+                            mesA = spents.get(i).getFecha().getMonth() + 1;
+                            yearA = spents.get(i).getFecha().getYear() + 1900;
                         }
                     }
+                    // Mismo mes y mismo año en una semana cualquiera
                     while(i<= spents.size()-1 && yearI<= yearA &&  yearA<=yearF && mesI<=mesA && mesA<=mesF && diaI<=diaA
                             && diaA<diaF ){
                         suma+= spents.get(i).getMonto();
@@ -288,12 +282,6 @@ public class DashboardService {
                     mesF = list.get(j + 1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j + 1).day();
-                    if(i<=spents.size()-1)
-                    {
-                        yearA = spents.get(i).getFecha().getYear() + 1900;
-                        mesA = spents.get(i).getFecha().getMonth()+1;
-                        diaA = spents.get(i).getFecha().getDate();
-                    }
                     //caso3: cambia de año
                     while( i<= spents.size()-1&&yearI != yearF && yearI<= yearA &&
                             yearA + 1900<yearF && mesI>=mesA && mesF<=mesA && diaI>diaA && diaA<diaF )
@@ -360,12 +348,6 @@ public class DashboardService {
                     mesF = list.get(j+1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j+1).day();
-                    if(i<=spents.size()-1)
-                    {
-                        diaA = spents.get(i).getFecha().getDate();
-                        mesA = spents.get(i).getFecha().getMonth()+1;
-                        yearA = spents.get(i).getFecha().getYear()+1900;
-                    }
                     while( i<=spents.size()-1&&yearI != yearF && yearI<=yearA &&
                             yearA<yearF )
                     {
@@ -457,6 +439,12 @@ public class DashboardService {
         int mesA = 0;
         int diaA = 0;
         int i = 0;
+        if(i<=incomes.size()-1)
+        {
+            diaA = incomes.get(i).getFecha().getDate();
+            mesA = incomes.get(i).getFecha().getMonth()+1;
+            yearA = incomes.get(i).getFecha().getYear()+1900;
+        }
         if(!params.containsKey("currency")){
             if(list.get(0).day() == 0 && list.get(0).month() == 0)
             {// Manipular años
@@ -504,12 +492,6 @@ public class DashboardService {
                     mesF = list.get(j + 1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j + 1).day();
-                    if(i<=incomes.size()-1)
-                    {
-                        yearA = incomes.get(i).getFecha().getYear() + 1900;
-                        mesA = incomes.get(i).getFecha().getMonth()+1;
-                        diaA = incomes.get(i).getFecha().getDate();
-                    }
                     //caso3: cambia de año
                     while( i<= incomes.size()-1&&yearI != yearF && yearI<= yearA &&
                             yearA + 1900<yearF && mesI>=mesA && mesF<=mesA && diaI>diaA && diaA<diaF )
@@ -575,12 +557,6 @@ public class DashboardService {
                     mesF = list.get(j+1).month();
                     diaI = list.get(j).day();
                     diaF = list.get(j+1).day();
-                    if(i<=incomes.size()-1)
-                    {
-                        diaA = incomes.get(i).getFecha().getDate();
-                        mesA = incomes.get(i).getFecha().getMonth()+1;
-                        yearA = incomes.get(i).getFecha().getYear()+1900;
-                    }
                     while( i<= incomes.size()-1&&yearI != yearF && yearI<= yearA  && yearA<yearF )
                     {
                         suma+= incomes.get(i).getMonto();
