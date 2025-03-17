@@ -116,7 +116,8 @@ public class DashboardService {
                     respuesta.add(suma);
                     suma=0.0;
                 }
-            }else if(list.get(0).day() + 7 == list.get(1).day()){
+            }else if((list.get(0).day() + 7 == list.get(1).day() && list.get(0).month() == list.get(1).month())
+            ||(list.get(0).month()+1 == list.get(1).month() && list.get(0).day() > list.get(1).day())){
                 //Manipular semanas
                 for(int j=0;j<list.size()-1;j++) {
                     yearI = list.get(j).year();
@@ -273,7 +274,8 @@ public class DashboardService {
                     respuesta.add(valorRedondeado);
                     suma=0.0;
                 }
-            }else if(list.get(0).day() + 7 == list.get(1).day()){
+            }else if((list.get(0).day() + 7 == list.get(1).day() && list.get(0).month() == list.get(1).month())
+                    ||(list.get(0).month()+1 == list.get(1).month() && list.get(0).day() > list.get(1).day())){
                 //Manipular semanas
                 for(int j=0;j<list.size()-1;j++) {
                     yearI = list.get(j).year();
@@ -483,7 +485,8 @@ public class DashboardService {
                     respuesta.add(suma);
                     suma=0.0;
                 }
-            }else if(list.get(0).day() + 7 == list.get(1).day()){
+            }else  if((list.get(0).day() + 7 == list.get(1).day() && list.get(0).month() == list.get(1).month())
+                    ||(list.get(0).month()+1 == list.get(1).month() && list.get(0).day() > list.get(1).day())){
                 //Manipular semanas
                 for(int j=0;j<list.size()-1;j++) {
                     yearI = list.get(j).year();
@@ -639,7 +642,8 @@ public class DashboardService {
                     respuesta.add(valorRedondeado);
                     suma=0.0;
                 }
-            }else if(list.get(0).day() + 7 == list.get(1).day()){
+            }else if((list.get(0).day() + 7 == list.get(1).day() && list.get(0).month() == list.get(1).month())
+                    ||(list.get(0).month()+1 == list.get(1).month() && list.get(0).day() > list.get(1).day())){
                 //Manipular semanas
                 for(int j=0;j<list.size()-1;j++) {
                     yearI = list.get(j).year();
