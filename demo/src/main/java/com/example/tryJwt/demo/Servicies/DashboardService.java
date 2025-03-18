@@ -571,8 +571,7 @@ public class DashboardService {
                             yearA = incomes.get(i).getFecha().getYear()+1900;
                         }
                     }
-                    while(i<= incomes.size()-1&&yearI == yearF && mesI<= mesA
-                            && mesA<mesF)
+                    while(i<= incomes.size()-1&&yearI == yearF && mesI<= mesA && mesA<mesF)
                     {
                         suma+= incomes.get(i).getMonto();
                         i++;
