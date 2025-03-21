@@ -29,6 +29,8 @@ public class Users {
     private List<Spent> gastos;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Income> ingresos;
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Debts> debts;
     public Integer getId() {
         return id;
     }
@@ -93,5 +95,12 @@ public class Users {
         this.foto = foto;
     }
 
+    public List<Debts> getDebts() {
+        return debts;
+    }
+
+    public void setDebts(List<Debts> debts) {
+        this.debts = debts;
+    }
 }
 

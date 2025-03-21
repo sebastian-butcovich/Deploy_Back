@@ -8,8 +8,10 @@ public class Debts {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private boolean pagado;
+    private boolean estado;
     private double monto;
     private String nombre;
     private double valorDelDolar;
+   @ManyToOne(fetch = FetchType.LAZY)
+    private Users usuario;
 }
