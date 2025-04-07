@@ -122,7 +122,7 @@ public class SpentService {
         f_spent.setMonto(spent.monto());
         f_spent.setDescripcion(spent.descripcion());
         f_spent.setTipo(spent.tipo());
-        f_spent.setFecha(new Date());
+        f_spent.setFecha(spent.fecha());
         Optional<Users> users = functionUtils.getUsers(params);
         f_spent.setUsuario(users.get());
         spentRepository.save(f_spent);
