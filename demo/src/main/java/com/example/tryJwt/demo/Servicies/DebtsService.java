@@ -9,8 +9,6 @@ import com.example.tryJwt.demo.Utils.FunctionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.Map;
@@ -25,7 +23,7 @@ public class DebtsService {
     UserRepository userRepository;
     @Autowired
     DebtsRespository debtsRespository;
-    public ResponseEntity<DebtsResponse>  listarDebts( Map<String,String> params)
+    public ResponseEntity<DebtsResponse>  listarDebts(Map<String,String> params)
     {
         if(!params.containsKey("token"))
         {

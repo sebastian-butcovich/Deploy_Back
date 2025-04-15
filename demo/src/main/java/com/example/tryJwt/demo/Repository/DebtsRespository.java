@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface DebtsRespository extends JpaRepository<Debts,Integer> {
-    public List<Debts> findDebtsByUsuarioId(Integer id);
+    List<Debts> findDebtsByUsuarioId(Integer id);
 }
