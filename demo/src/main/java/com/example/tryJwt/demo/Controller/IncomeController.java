@@ -55,12 +55,12 @@ public class IncomeController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<TotalResponse> getTotalIngreso(@RequestParam Map<String,String> param)
     {
-        return dashboardService.getTotalIngresos(param);
+        return dashboardService.getTotal(param,"income");
     }
     @PutMapping("/totalGraphics")
     @CrossOrigin(origins = "*")
     public ResponseEntity<ListTotalResponse> getTotalIngresoGraphics(@RequestParam Map<String,String> param, @RequestBody List<Fecha> list)
     {
-        return dashboardService.getTotalIngresosGraphics(param,list);
+        return dashboardService.getTotalGraphics(param,list,"income");
     }
 }

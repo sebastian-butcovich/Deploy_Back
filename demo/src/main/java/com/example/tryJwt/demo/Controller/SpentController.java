@@ -62,12 +62,12 @@ public class SpentController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<TotalResponse> getTotalGastos(@RequestParam Map<String, String> param)
     {
-        return dashboardService.getTotalGastos(param);
+        return dashboardService.getTotal(param,"spent");
     }
     @PutMapping("/totalGraphics")
     @CrossOrigin(origins = "*")
     public ResponseEntity<ListTotalResponse> getTotalSpentGraphics(@RequestParam Map<String,String> param, @RequestBody List<Fecha> list)
     {
-        return dashboardService.getTotalGastosGraphics(param,list);
+        return dashboardService.getTotalGraphics(param,list,"spent");
     }
 }

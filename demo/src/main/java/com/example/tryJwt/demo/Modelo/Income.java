@@ -10,7 +10,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Income{
+public class Income implements Flow{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -71,6 +71,7 @@ public class Income{
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
+
 
     public String getMoneda() {
         return moneda;

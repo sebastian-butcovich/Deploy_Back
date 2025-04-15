@@ -2,6 +2,7 @@ package com.example.tryJwt.demo.Servicies;
 
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.FileRequest.MovementsResponse;
+import com.example.tryJwt.demo.Modelo.Flow;
 import com.example.tryJwt.demo.Modelo.Income;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
@@ -59,7 +60,9 @@ public class IncomeService {
         else {
             incomes = incomeRepository.findAllByUsuario(users.get().getId());
         }
-        return ResponseEntity.ok().body(functionUtils.armarRespuestaIngreso(incomes,params));
+        List<Flow> aux = new ArrayList<>();
+        aux.addAll(incomes);
+        return ResponseEntity.ok().body(functionUtils.armarRespuesta(aux,params));
     }
     private List<Income> list(Map<String,String> params)
     {

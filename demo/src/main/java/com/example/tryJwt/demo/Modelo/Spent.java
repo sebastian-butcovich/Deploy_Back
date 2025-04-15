@@ -11,7 +11,7 @@ import java.util.Date;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class Spent {
+public class Spent implements Flow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -59,6 +59,9 @@ public class Spent {
     public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
+
+
+
     @JsonBackReference
     public Users getUsuario() {
         return usuario;

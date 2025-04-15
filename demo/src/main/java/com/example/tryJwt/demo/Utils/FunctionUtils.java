@@ -4,6 +4,7 @@ import com.example.tryJwt.demo.FileRequest.Additional_info;
 import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.FileRequest.MovementsResponse;
+import com.example.tryJwt.demo.Modelo.Flow;
 import com.example.tryJwt.demo.Modelo.Income;
 import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
@@ -35,21 +36,10 @@ public class FunctionUtils {
         Optional<Users> users = userRepository.findByEmail(username);
         return users;
     }
-    public void changeCoinsSpent(List<Spent> spents, String current, double value)
+    public void changeCoins(List<Flow> spents, String current, double value)
     {
         //double value = getValue(current, currentType);
-        for(Spent lis:spents)
-        {
-            double valor = (lis.getMonto()/value);
-            double valorRedondeado = Math.round(valor * 100.0) / 100.0;
-            lis.setMonto(valorRedondeado);
-            lis.setMoneda(current);
-        }
-    }
-    public void changeCoinsIncome(List<Income> incomes, String current, double value)
-    {
-        //double value = getValue(current, currentType);
-        for(Income lis:incomes)
+        for(Flow lis:spents)
         {
             double valor = (lis.getMonto()/value);
             double valorRedondeado = Math.round(valor * 100.0) / 100.0;
@@ -86,7 +76,7 @@ public class FunctionUtils {
         }
         return value;
     }
-    public MovementsResponse armarRespuestaIngreso (List<Income> ingresos, Map<String,String> headers)
+    public MovementsResponse armarRespuesta(List<Flow> ingresos, Map<String,String> headers)
     {
         String cotizacion = "";
         String tipo_de_cotizacion="";
@@ -106,7 +96,7 @@ public class FunctionUtils {
                 cotizacion=headers.get("currency");
             }
             double value = getValue(cotizacion,tipo_de_cotizacion);
-            changeCoinsIncome(ingresos,cotizacion,value);
+            changeCoins(ingresos,cotizacion,value);
         }
         int next_page=0;
         int page = Integer.parseInt(headers.get("page"));
@@ -143,60 +133,4 @@ public class FunctionUtils {
                 ,page,page_size,total_entries,total_pages);
     }
 
-    public MovementsResponse armarRespuestaGasto (List<Spent> spent, Map<String,String> headers)
-    {
-        String cotizacion = "";
-        String tipo_de_cotizacion="";
-        if(!headers.containsKey("currency") || headers.get("currency").equals("args"))
-        {
-            cotizacion="args";
-        }
-        else
-        {
-            if(headers.get("currency").equals("usd"))
-            {
-                cotizacion="usd";
-                tipo_de_cotizacion=headers.get("currency_type");
-            }
-            else
-            {
-                cotizacion=headers.get("currency");
-            }
-            double value = getValue(cotizacion,tipo_de_cotizacion);
-            changeCoinsSpent(spent,cotizacion,value);
-        }
-        int next_page=0;
-        int page = Integer.parseInt(headers.get("page"));
-        int page_size = Integer.parseInt(headers.get("page_size"));
-        int total_entries=spent.size();
-        int total_pages=0;
-        if( (spent.size() /page_size == 0) || (spent.size()==page_size) )
-        {
-            total_pages=1;
-            next_page=1;
-        }else
-        {
-            if((spent.size() % page_size) == 0){
-                total_pages = spent.size()/page_size;
-            }else{
-                total_pages = spent.size()/page_size +1;
-            }
-
-        }
-        List< MovementsRequest> list = new LinkedList<>();
-        if(page<total_pages)
-        {
-            next_page=page+1;
-        }
-        if(!spent.isEmpty())
-        {
-            for(int i=(page-1)*page_size;i<page_size*(page-1)+page_size&&i<=spent.size()-1;i++)
-            {
-                list.add(new MovementsRequest(spent.get(i).getMonto(),spent.get(i).getTipo()
-                        ,spent.get(i).getDescripcion(),spent.get(i).getFecha(),spent.get(i).getId()));
-            }
-        }
-        return  new MovementsResponse(list,new Additional_info(cotizacion,tipo_de_cotizacion),next_page,page
-                ,page_size,total_entries,total_pages);
-    }
 }
