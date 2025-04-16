@@ -4,18 +4,10 @@ import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.FileRequest.MovementsResponse;
 import com.example.tryJwt.demo.Modelo.Flow;
 import com.example.tryJwt.demo.Modelo.Income;
-import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.IncomeRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 

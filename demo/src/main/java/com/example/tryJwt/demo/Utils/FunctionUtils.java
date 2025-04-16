@@ -5,8 +5,6 @@ import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.FileRequest.MovementsResponse;
 import com.example.tryJwt.demo.Modelo.Flow;
-import com.example.tryJwt.demo.Modelo.Income;
-import com.example.tryJwt.demo.Modelo.Spent;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.UserRepository;
 import com.example.tryJwt.demo.Servicies.JwtService;

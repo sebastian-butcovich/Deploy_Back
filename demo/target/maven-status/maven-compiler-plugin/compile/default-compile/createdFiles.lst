@@ -30,6 +30,7 @@ com/example/tryJwt/demo/Repository/SpentRepository.class
 com/example/tryJwt/demo/Config/AppConfig.class
 com/example/tryJwt/demo/FileRequest/DebtsResponse.class
 com/example/tryJwt/demo/Servicies/SpentService.class
+com/example/tryJwt/demo/Modelo/Flow.class
 com/example/tryJwt/demo/FileRequest/TokenResponse.class
 com/example/tryJwt/demo/Modelo/Spent.class
 com/example/tryJwt/demo/Servicies/DebtsService.class

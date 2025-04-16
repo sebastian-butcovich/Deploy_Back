@@ -2,7 +2,6 @@ package com.example.tryJwt.demo.Servicies;
 
 import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

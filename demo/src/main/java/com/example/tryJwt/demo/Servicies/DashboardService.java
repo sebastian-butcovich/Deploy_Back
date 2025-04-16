@@ -82,6 +82,7 @@ public class DashboardService {
         params.put("fecha_inicio", fecha_inicio);
         params.put("fecha_fin", fecha_fin);
         List<Flow> flows = getListFlow(params,users,movemType);
+        flows = flows.reversed();
         int yearA = 0;
         int mesA =  0;
         int diaA =  0;
