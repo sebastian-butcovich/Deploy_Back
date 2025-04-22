@@ -26,6 +26,7 @@
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Income.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Spent.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Token.java
+/home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Transactions.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Users.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Repository/DebtsRespository.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Repository/IncomeRepository.java

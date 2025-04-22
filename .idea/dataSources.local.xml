@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="dataSourceStorageLocal" created-in="IU-251.23774.435">
+    <data-source name="railway@autorack.proxy.rlwy.net" uuid="96abd813-eb57-4b9e-b927-4a8a1e940fa1">
+      <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" />
+      <user-name>&quot;root&quot;</user-name>
+      <schema-mapping />
+    </data-source>
+  </component>
+</project>

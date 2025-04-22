@@ -185,12 +185,12 @@ public class DashboardService {
             }
             if(current == null || current.equals("not_current")){
                 respuesta.add(suma);
-                suma =0.0;
             }else
             {
                 double valorRedondeado = Math.round(suma * 100.0) / 100.0;
                 respuesta.add(valorRedondeado);
             }
+            suma =0.0;
         }
 
     }
