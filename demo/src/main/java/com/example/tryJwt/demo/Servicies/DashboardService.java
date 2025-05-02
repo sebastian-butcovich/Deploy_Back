@@ -60,7 +60,7 @@ public class DashboardService {
             for (Flow i : flow) {
                 gasto += i.getMonto();
             }
-            return ResponseEntity.ok(new TotalResponse(gasto, "args", "El total de lo ingresado"));
+            return ResponseEntity.ok(new TotalResponse(gasto, "ars", "El total de lo ingresado"));
         }
         String current = params.get("currency");
         String current_type = params.get("currency_type");
@@ -108,7 +108,7 @@ public class DashboardService {
                 //manipular  dias
                 generatedTotalsDays(list, i, flows, yearA, suma, diaA, mesA, respuesta,"not_current");
             }
-            return  ResponseEntity.ok(new ListTotalResponse(respuesta,"args","Los valores totales para los gráficos"));
+            return  ResponseEntity.ok(new ListTotalResponse(respuesta,"ars","Los valores totales para los gráficos"));
         }else {
             String current = params.get("currency");
             String current_type = params.get("currency_type");

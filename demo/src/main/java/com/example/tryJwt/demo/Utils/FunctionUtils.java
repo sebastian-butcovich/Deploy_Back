@@ -78,9 +78,9 @@ public class FunctionUtils {
     {
         String cotizacion = "";
         String tipo_de_cotizacion="";
-        if(!headers.containsKey("currency") || headers.get("currency").equals("args"))
+        if(!headers.containsKey("currency") || headers.get("currency").equals("ars"))
         {
-            cotizacion="args";
+            cotizacion="ars";
         }
         else
         {
