@@ -16,7 +16,7 @@
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/LoginRequest.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/MovementsRequest.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/MovementsResponse.java
-/home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/ParamsHeader.java
+/home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/Paginated/InfoPaginated.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/RegisterRequest.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/TokenResponse.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/FileRequest/TotalResponse.java
@@ -25,13 +25,11 @@
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Flow.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Income.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Spent.java
-/home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Token.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Transactions.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Modelo/Users.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Repository/DebtsRespository.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Repository/IncomeRepository.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Repository/SpentRepository.java
-/home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Repository/TokenRepository.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Repository/UserRepository.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Servicies/AuthService.java
 /home/sebastian/Documentos/Programacion/Proyecto_finanzas/backend_finanzas/demo/src/main/java/com/example/tryJwt/demo/Servicies/DashboardService.java
