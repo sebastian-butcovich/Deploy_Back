@@ -4,7 +4,6 @@ import com.example.tryJwt.demo.FileRequest.LoginRequest;
 import com.example.tryJwt.demo.FileRequest.RegisterRequest;
 import com.example.tryJwt.demo.FileRequest.TokenResponse;
 import com.example.tryJwt.demo.Modelo.Users;
-import com.example.tryJwt.demo.Repository.TokenRepository;
 import com.example.tryJwt.demo.Repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +25,6 @@ public class AuthService {
   private  PasswordEncoder passwordEncoder;
     @Autowired
   private  UserRepository userRepository;
-    @Autowired
-  private  TokenRepository tokenRepository;
   @Autowired(required = true)
     private  JwtService jwtService;
   @Autowired

@@ -4,6 +4,7 @@ import com.example.tryJwt.demo.FileRequest.Additional_info;
 import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.FileRequest.MovementsResponse;
+import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
 import com.example.tryJwt.demo.Modelo.Flow;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.UserRepository;
@@ -96,39 +97,52 @@ public class FunctionUtils {
             double value = getValue(cotizacion,tipo_de_cotizacion);
             changeCoins(ingresos,cotizacion,value);
         }
-        int next_page=0;
-        int page = Integer.parseInt(headers.get("page"));
-        int page_size = Integer.parseInt(headers.get("page_size"));
-        int total_entries=ingresos.size();
-        int total_pages=0;
-        if( (ingresos.size() /page_size == 0) || (ingresos.size() ==page_size ))
-        {
-            total_pages=1;
-            next_page=1;
-        }else
-        {
-            if((ingresos.size() % page_size) == 0){
-                total_pages = ingresos.size()/page_size;
-            }else{
-                total_pages = ingresos.size()/page_size +1;
-            }
-        }
+
         List< MovementsRequest> list = new LinkedList<>();
-        if(page<total_pages)
-        {
-            next_page=page+1;
-        }
+        InfoPaginated infoPaginated = getinfoPagination(ingresos, headers);
       if(!ingresos.isEmpty())
        {
-           for(int i=(page-1)*page_size;i<page_size*(page-1)+page_size&&i<=ingresos.size()-1;i++)
+           for(int i=(infoPaginated.getPage()-1)*infoPaginated.getPage_size();i<infoPaginated.getPage_size()
+                   *(infoPaginated.getPage()-1)+infoPaginated.getPage_size()&&i<=ingresos.size()-1;i++)
            {
                list.add(new MovementsRequest(ingresos.get(i).getMonto(),ingresos.get(i).getTipo()
                        ,ingresos.get(i).getDescripcion(),ingresos.get(i).getFecha(),ingresos.get(i).getId()));
            }
        }
 
-        return  new MovementsResponse(list,new Additional_info(cotizacion,tipo_de_cotizacion),next_page
-                ,page,page_size,total_entries,total_pages);
+        return  new MovementsResponse(list,new Additional_info(cotizacion,tipo_de_cotizacion), infoPaginated.getNext_page()
+                , infoPaginated.getPage(), infoPaginated.getPage_size(), infoPaginated.getTotal_entries(),infoPaginated.getTotal_pages());
+    }
+    public InfoPaginated getinfoPagination(List list, Map<String,String> headers)
+    {
+        InfoPaginated infoPaginated = new InfoPaginated();
+        int next_page=0;
+        int page = Integer.parseInt(headers.get("page"));
+        int page_size = Integer.parseInt(headers.get("page_size"));
+        int total_entries=list.size();
+        int total_pages=0;
+        if( (list.size() /page_size == 0) || (list.size() ==page_size ))
+        {
+            total_pages=1;
+            next_page=1;
+        }else
+        {
+            if((list.size() % page_size) == 0){
+                total_pages = list.size()/page_size;
+            }else{
+                total_pages = list.size()/page_size +1;
+            }
+        }
+        if(page<total_pages)
+        {
+            next_page=page+1;
+        }
+        infoPaginated.setNext_page(next_page);
+        infoPaginated.setPage_size(page_size);
+        infoPaginated.setTotal_entries(total_entries);
+        infoPaginated.setTotal_pages(total_pages);
+        infoPaginated.setPage(page);
+        return infoPaginated;
     }
 
 }

@@ -23,8 +23,6 @@ public class Users {
     private String password;
     @Lob
     private String foto;
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
-    private List<Token> tokens;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Spent> gastos;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -61,14 +59,6 @@ public class Users {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-    @JsonManagedReference
-    public List<Token> getTokens() {
-        return tokens;
-    }
-
-    public void setTokens(List<Token> tokens) {
-        this.tokens = tokens;
     }
     @JsonManagedReference
     public List<Spent> getGastos() {

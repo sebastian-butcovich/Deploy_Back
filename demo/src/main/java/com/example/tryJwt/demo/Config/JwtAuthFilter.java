@@ -1,8 +1,6 @@
 package com.example.tryJwt.demo.Config;
 
 import com.example.tryJwt.demo.Modelo.Users;
-import com.example.tryJwt.demo.Modelo.Token;
-import com.example.tryJwt.demo.Repository.TokenRepository;
 import com.example.tryJwt.demo.Repository.UserRepository;
 import com.example.tryJwt.demo.Servicies.JwtService;
 import jakarta.servlet.FilterChain;
@@ -13,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,8 +23,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.Optional;
 
-import static com.fasterxml.jackson.databind.type.LogicalType.Map;
-
 @Component
 @RequiredArgsConstructor
 @AllArgsConstructor
@@ -37,8 +32,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private JwtService jwtService;
     @Autowired
     private  UserDetailsService userDetailsService;
-    @Autowired
-    private TokenRepository tokenRepository;
     @Autowired
     private UserRepository userRepository;
 

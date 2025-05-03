@@ -1,7 +1,5 @@
 package com.example.tryJwt.demo.Config;
 
-import com.example.tryJwt.demo.Modelo.Token;
-import com.example.tryJwt.demo.Repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,8 +24,6 @@ public class SecurityConfig {
     private JwtAuthFilter jwtAuthFilter;
     @Autowired
     private AuthenticationProvider authenticationProvider;
-    @Autowired
-    private TokenRepository tokenRepository;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
@@ -59,10 +55,6 @@ public class SecurityConfig {
         {
             throw new IllegalArgumentException("Invalid Token");
         }
-        String jwtToken = token.substring(7);
-        Token foundToken = tokenRepository.findByToken(jwtToken).orElseThrow(()-> new IllegalArgumentException("Invalid Token"));
-        foundToken.setExpired(true);
-        foundToken.setRevoked(true);
-        tokenRepository.save(foundToken);
+
     }
 }
