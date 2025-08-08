@@ -47,10 +47,9 @@ public class SpentController {
         return spentService.editSpent(spent,params);
     }
     @DeleteMapping("/delete")
-    public ResponseEntity<String> eliminarGasto(@RequestParam  Integer id)
+    public ResponseEntity<String> eliminarGasto(@RequestParam Map<String,String>parms)
     {
-
-        return spentService.removeSpent(id);
+        return spentService.removeSpent(parms);
     }
     @GetMapping("/tipos")
     public ResponseEntity<HashSet<String>> obtenerTipos(@RequestParam Map<String,String> params)

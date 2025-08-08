@@ -2,10 +2,7 @@ package com.example.tryJwt.demo.Modelo;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
@@ -13,6 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name="users")
+@Getter
+@Setter
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +20,7 @@ public class Users {
     @Column(unique = true)
     private String email;
     private String password;
+    private Double dineroActual;
     @Lob
     private String foto;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
@@ -28,7 +28,7 @@ public class Users {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Income> ingresos;
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Debts> debts;
+    private List<FutureFlows> debts;
     public Integer getId() {
         return id;
     }
@@ -85,12 +85,13 @@ public class Users {
         this.foto = foto;
     }
 
-    public List<Debts> getDebts() {
+    public List<FutureFlows> getDebts() {
         return debts;
     }
 
-    public void setDebts(List<Debts> debts) {
+    public void setDebts(List<FutureFlows> debts) {
         this.debts = debts;
     }
+
 }
 

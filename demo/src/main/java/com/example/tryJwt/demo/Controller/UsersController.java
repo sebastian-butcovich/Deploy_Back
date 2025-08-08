@@ -17,6 +17,8 @@ import java.util.Map;
 public class UsersController {
     @Autowired
     private UsersService userService;
+
+
     @GetMapping
     public List<Users> listarUsuarios()
     {
@@ -29,13 +31,17 @@ public class UsersController {
        return userService.updateUser(updateUsers,param);
     }
     @GetMapping("/whoami")
-    public RegisterRequest quienSoy(@RequestParam String token)
+    public RegisterRequest quienSoy(@RequestParam Map<String,String> param)
     {
-        return userService.quienSoy(token);
+        return userService.quienSoy(param);
     }
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestParam String token)
     {
         return userService.deleteUser(token);
+    }
+    @PutMapping("/actualizarValorActual")
+    public ResponseEntity<String> actualizarValorActual(@RequestParam String token, @RequestParam Double valorActual){
+        return userService.actualizarValorActual(token,valorActual);
     }
 }

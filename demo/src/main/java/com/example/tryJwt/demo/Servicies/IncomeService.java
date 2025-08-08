@@ -6,9 +6,11 @@ import com.example.tryJwt.demo.Modelo.Flow;
 import com.example.tryJwt.demo.Modelo.Income;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.IncomeRepository;
+import com.example.tryJwt.demo.Repository.UserRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -19,17 +21,17 @@ public class IncomeService {
     private IncomeRepository incomeRepository;
     @Autowired
     private FunctionUtils functionUtils;
+    @Autowired
+    private UserRepository userRepository;
     public ResponseEntity<MovementsResponse> listarIngresos(Map<String,String> params)
     {
-        int page = Integer.parseInt(params.get("page"));
-        int page_size = Integer.parseInt(params.get("page_size"));
         Optional<Users> users = functionUtils.getUsers(params);
-        List<Income> incomes = null;
-        double montoMin=0.0;
-        double montoMax=0.0;
-        String tipo = null;
-        String fecha_inicio = null;
-        String fecha_final = null;
+        List<Income> incomes;
+        double montoMin;
+        double montoMax;
+        String tipo;
+        String fecha_inicio;
+        String fecha_final;
         if(!Objects.equals(params.get("monto_min"), "") && !Objects.equals(params.get("monto_max"), "")
                 && params.get("monto_min") != null && params.get("monto_max") !=null) {
             montoMin = Double.parseDouble(params.get("monto_min"));
@@ -52,8 +54,7 @@ public class IncomeService {
         else {
             incomes = incomeRepository.findAllByUsuario(users.get().getId());
         }
-        List<Flow> aux = new ArrayList<>();
-        aux.addAll(incomes);
+        List<Flow> aux = new ArrayList<>(incomes);
         return ResponseEntity.ok().body(functionUtils.armarRespuesta(aux,params));
     }
     private List<Income> list(Map<String,String> params)
@@ -86,7 +87,9 @@ public class IncomeService {
         incom.setDescripcion(ingreso.descripcion());
         incom.setUsuario(users);
         incom.setFecha(new Date());
+        users.setDineroActual(users.getDineroActual()+incom.getMonto());
         incomeRepository.save(incom);
+        userRepository.save(users);
         return ResponseEntity.ok("Ingreso exitoso");
     }
     public ResponseEntity<String> editarIngreso(MovementsRequest ingreso, Map<String,String> params)
@@ -102,9 +105,12 @@ public class IncomeService {
             return ResponseEntity.badRequest().body("No se encontro ningún ingreso con ese id");
         }
         Income income = optionalIncome.get();
+        Users user = functionUtils.getUsers(params).orElseThrow();
+        user.setDineroActual(user.getDineroActual()-income.getMonto()+ingreso.monto());
         income.setMonto(ingreso.monto());
         income.setTipo(ingreso.tipo());
         income.setDescripcion(ingreso.descripcion());
+        income.setFecha(ingreso.fecha());
         incomeRepository.save(income);
         return ResponseEntity.ok().body("El ingreso se edito correctamente");
     }
@@ -120,7 +126,10 @@ public class IncomeService {
         {
             return ResponseEntity.badRequest().body("No se encontro ningún ingreso con ese id");
         }
+        Users users = functionUtils.getUsers(params).orElseThrow();
+        users.setDineroActual(users.getDineroActual()-optionalIncome.get().getMonto());
         incomeRepository.deleteById(id);
+        userRepository.save(users);
         return ResponseEntity.ok().body("Se elimino el ingreso correctamente");
     }
     public ResponseEntity<HashSet<String>> obtenerTiposIngreso(Map<String,String> params)

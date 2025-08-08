@@ -32,8 +32,7 @@ public class FunctionUtils {
     public Optional<Users> getUsers(Map<String, String> headers) {
         String token = headers.get("token").substring(7);
         String username = jwtService.extractUsername(token);
-        Optional<Users> users = userRepository.findByEmail(username);
-        return users;
+        return userRepository.findByEmail(username);
     }
     public void changeCoins(List<Flow> spents, String current, double value)
     {
@@ -77,7 +76,7 @@ public class FunctionUtils {
     }
     public MovementsResponse armarRespuesta(List<Flow> ingresos, Map<String,String> headers)
     {
-        String cotizacion = "";
+        String cotizacion;
         String tipo_de_cotizacion="";
         if(!headers.containsKey("currency") || headers.get("currency").equals("ars"))
         {
@@ -120,7 +119,7 @@ public class FunctionUtils {
         int page = Integer.parseInt(headers.get("page"));
         int page_size = Integer.parseInt(headers.get("page_size"));
         int total_entries=list.size();
-        int total_pages=0;
+        int total_pages;
         if( (list.size() /page_size == 0) || (list.size() ==page_size ))
         {
             total_pages=1;

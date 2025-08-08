@@ -4,6 +4,7 @@ import com.example.tryJwt.demo.FileRequest.RegisterRequest;
 import com.example.tryJwt.demo.FileRequest.UpdateUsers;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.UserRepository;
+import com.example.tryJwt.demo.Utils.FunctionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,10 +22,14 @@ public class UsersService {
     private JwtService jwtService;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private FunctionUtils functionUtils;
+
     public List<Users> listarUsuarios ()
     {
         return userRepository.findAll();
     }
+
     public ResponseEntity<String> updateUser(UpdateUsers users, Map<String,String> params){
         if(users.name().equals("") || users.email().equals("")){
             return ResponseEntity.badRequest().body("No se enviaron todos los datos necesarios. Los datos son: nombre," +
@@ -51,12 +56,26 @@ public class UsersService {
         userRepository.save(us);
         return ResponseEntity.ok().body("Se actualizo el usuario correctamente");
     }
-    public RegisterRequest quienSoy(String token)
+    public RegisterRequest quienSoy(Map<String,String>params)
     {
-        String jwtToken = token.substring(7);
+        if(params.get("token") == null || params.get("token").isEmpty()){
+            return new RegisterRequest("","","","",0.0);
+        }
+        String jwtToken = params.get("token").substring(7);
        String username = jwtService.extractUsername(jwtToken);
        Users user = userRepository.findByEmail(username).orElseThrow();
-       return new RegisterRequest(user.getEmail(),"",user.getName(),"");
+       if(params.get("currency") != null && !params.get("currency").isEmpty()&& !params.get("currency").equals("ars")){
+           double actualAux = user.getDineroActual();
+           double moneda;
+           if(params.get("currency_type")==null || params.get("currency_type").isEmpty()){
+                moneda = functionUtils.getValue(params.get("currency"),"");
+           }else{
+                moneda = functionUtils.getValue(params.get("currency"),params.get("currency_type"));
+           }
+           actualAux = Math.round((actualAux/moneda)*100.0)/100.0;
+           return new RegisterRequest(user.getEmail(),"",user.getName(),"",actualAux);
+       }
+       return new RegisterRequest(user.getEmail(),"",user.getName(),"",user.getDineroActual());
     }
     public ResponseEntity<String> deleteUser(String token)
     {
@@ -72,5 +91,20 @@ public class UsersService {
         return ResponseEntity.badRequest().body("No fue posible eliminar el usuario. Seguramente el usuari que quiere" +
                 "eliminar no existe");
 
+    }
+    public ResponseEntity<String> actualizarValorActual(String token, Double valorActual){
+        if(valorActual<0){
+            return ResponseEntity.badRequest().body("El valor que se quiere actualizar el monto actual es invalido");
+        }
+        String jwtToken = token.substring(7);
+        String username = jwtService.extractUsername(jwtToken);
+        Optional<Users> user = userRepository.findByEmail(username);
+        if(user.isPresent())
+        {
+            user.get().setDineroActual(valorActual);
+            userRepository.save(user.get());
+            return ResponseEntity.ok("Se actualizo el valor");
+        }
+        return ResponseEntity.badRequest().body("No se encontro el usuario que se quiere actualizar el valor actual");
     }
 }

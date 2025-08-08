@@ -11,8 +11,11 @@ import com.example.tryJwt.demo.Utils.FunctionUtils;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import org.springframework.web.method.support.InvocableHandlerMethod;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 
 @Service
@@ -21,28 +24,33 @@ public class SpentService {
     private SpentRepository spentRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private JwtService jwtService;
-    @Autowired(required = true)
+    @Autowired()
     private FunctionUtils functionUtils;
 
     public ResponseEntity<MovementsResponse> listSpent(Map<String, String> headers)
     {
-        int page = Integer.parseInt(headers.get("page"));
-        int page_size = Integer.parseInt(headers.get("page_size"));
-        Optional<Users> users = functionUtils.getUsers(headers);
-        List<Spent> spents = null;
-        String where = "";
-        double montoMin=0.0;
-        double montoMax=0.0;
-        String tipo = null;
-        String fecha_inicio = null;
-        String fecha_final = null;
+        int page;
+        int page_size;
+        try{
+             page = Integer.parseInt(headers.get("page"));
+             page_size = Integer.parseInt(headers.get("page_size"));
+        }catch(Exception e){
+            ResponseEntity.badRequest().body("No se envio la cantidad de entradas" + e.getCause());
+        }
+      Optional<Users> users = functionUtils.getUsers(headers);
+        List<Spent> spents=null;
+        double montoMin;
+        double montoMax;
+        String tipo;
+        String fecha_inicio;
+        String fecha_final;
         if(!Objects.equals(headers.get("monto_min"), "") && !Objects.equals(headers.get("monto_max"), "")
                 && headers.get("monto_min") != null && headers.get("monto_max") !=null) {
              montoMin = Double.parseDouble(headers.get("monto_min"));
              montoMax = Double.parseDouble(headers.get("monto_max"));
-            spents = spentRepository.findAllByUsuario(users.get().getId(), montoMin, montoMax);
+            if(users.isPresent()){
+                spents = spentRepository.findAllByUsuario(users.get().getId(), montoMin, montoMax);
+            }
 
         }
         else if(!Objects.equals(headers.get("tipo"),"") &&  headers.get("tipo") != null)
@@ -104,9 +112,15 @@ public class SpentService {
         spent.setMonto(movementsRequest.monto());
         spent.setTipo(movementsRequest.tipo());
         Optional<Users> users = functionUtils.getUsers(headers);
-        spent.setUsuario(users.get());
-        spentRepository.save(spent);
-        return ResponseEntity.ok().body("Gasto agregado correctamente");
+        if(users.isPresent()){
+            spent.setUsuario(users.get());
+            users.get().setDineroActual(users.get().getDineroActual()-spent.getMonto());
+            spentRepository.save(spent);
+            userRepository.save(users.get());
+            return ResponseEntity.ok().body("Gasto agregado correctamente");
+        }else{
+            return ResponseEntity.badRequest().body("No se encontro el usuario dueño del gasto");
+        }
     }
 
 
@@ -117,26 +131,33 @@ public class SpentService {
         {
             return ResponseEntity.badRequest().body("Uno de los siguientes campos (nombre, descripción, monto) esta vacio o es nulo");
         }
+        Users users = functionUtils.getUsers(params).orElseThrow();
         Spent f_spent = spentRepository.findById(spent.id()).orElseThrow();
+        users.setDineroActual(users.getDineroActual()-f_spent.getMonto()+spent.monto());
         f_spent.setMonto(spent.monto());
         f_spent.setDescripcion(spent.descripcion());
         f_spent.setTipo(spent.tipo());
         f_spent.setFecha(spent.fecha());
-        Optional<Users> users = functionUtils.getUsers(params);
-        f_spent.setUsuario(users.get());
+        f_spent.setUsuario(users);
         spentRepository.save(f_spent);
+        userRepository.save(users);
         return ResponseEntity.ok().body("Gasto editado correctamente");
     }
-    public ResponseEntity<String> removeSpent(Integer idSpent)
+    public ResponseEntity<String> removeSpent(Map<String,String>params)
     {
-        if(idSpent == null || idSpent <=0)
+        if(params.get("id") == null || Integer.parseInt(params.get("id"))<=0)
         {
             ResponseEntity.badRequest().body("Id ingresado es invalido");
         }else{
-            Optional<Spent> spent = spentRepository.findById(idSpent);
-            if(spent.isPresent()) {
-                spentRepository.deleteById(idSpent);
-                return ResponseEntity.ok().body("Gasto eliminado exitosamente");
+            Optional<Users> usuario = functionUtils.getUsers(params);
+            if(usuario.isPresent()){
+                int idSpent = Integer.parseInt(params.get("id"));
+                Optional<Spent> spent = spentRepository.findById(idSpent);
+                if(spent.isPresent()) {
+                    usuario.get().setDineroActual(usuario.get().getDineroActual()+spent.get().getMonto());
+                    spentRepository.deleteById(idSpent);
+                    return ResponseEntity.ok().body("Gasto eliminado exitosamente");
+                }
             }
         }
         return ResponseEntity.ok().body("El gasto no se encuentra en el sistema");
