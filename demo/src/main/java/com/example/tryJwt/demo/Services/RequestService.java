@@ -1,4 +1,4 @@
-package com.example.tryJwt.demo.Servicies;
+package com.example.tryJwt.demo.Services;
 
 import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import org.springframework.beans.factory.annotation.Autowired;

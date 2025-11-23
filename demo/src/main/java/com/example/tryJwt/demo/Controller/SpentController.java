@@ -1,9 +1,9 @@
 package com.example.tryJwt.demo.Controller;
 
 import com.example.tryJwt.demo.FileRequest.*;
-import com.example.tryJwt.demo.Modelo.Spent;
-import com.example.tryJwt.demo.Servicies.DashboardService;
-import com.example.tryJwt.demo.Servicies.SpentService;
+import com.example.tryJwt.demo.Modelo.ActualFlow;
+import com.example.tryJwt.demo.Services.DashboardService;
+import com.example.tryJwt.demo.Services.SpentService;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +27,12 @@ public class SpentController {
     private DashboardService dashboardService;
     @GetMapping("/get_all")
     @JsonFormat
-    public ResponseEntity<MovementsResponse> listarGastos(@RequestParam Map<String,String> headers)
+    public ResponseEntity<MovementsPagedResponse> listarGastos(@RequestParam Map<String,String> headers)
     {
         return spentService.listSpent(headers);
     }
     @GetMapping("/oneSpent")
-    public ResponseEntity<Spent> obtenerGasto(@RequestHeader  Integer idSpent)
+    public ResponseEntity<ActualFlow> obtenerGasto(@RequestHeader  Integer idSpent)
     {
         return spentService.obtenerGasto(idSpent);
     }

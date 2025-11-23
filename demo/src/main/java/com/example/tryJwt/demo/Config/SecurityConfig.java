@@ -1,9 +1,13 @@
 package com.example.tryJwt.demo.Config;
 
+import com.example.tryJwt.demo.Modelo.Token;
+import com.example.tryJwt.demo.Repository.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -19,18 +23,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @RequiredArgsConstructor
 @EnableMethodSecurity
+@PropertySource("classpath:application.properties")
 public class SecurityConfig {
+
     @Autowired
     private JwtAuthFilter jwtAuthFilter;
+
     @Autowired
     private AuthenticationProvider authenticationProvider;
 
+    @Autowired
+    private TokenRepository tokenRepository;
+
+    @Value("${jwt.token.registration}")
+    private boolean tokenRegistration;
+
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception
-    {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req->req.requestMatchers("/auth/**")
-                        .permitAll()
+                .authorizeHttpRequests(req->req
+                        .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers("/api/health").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(sesion-> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
@@ -49,12 +62,18 @@ public class SecurityConfig {
 
         return http.build();
     }
-    private void logout(String token)
-    {
-        if(token == null || ! token.startsWith("Bearer "))
-        {
-            throw new IllegalArgumentException("Invalid Token");
-        }
 
+    private void logout(String token) {
+        if(tokenRegistration) {
+            if (token == null || !token.startsWith("Bearer ")) {
+                throw new IllegalArgumentException("Invalid Token");
+            }
+            String jwtToken = token.substring(7);
+            Token foundToken = tokenRepository.findByToken(jwtToken).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            foundToken.setExpired(true);
+            foundToken.setRevoked(true);
+            tokenRepository.save(foundToken);
+        }
     }
 }
+

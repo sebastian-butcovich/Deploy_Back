@@ -1,4 +1,4 @@
-package com.example.tryJwt.demo.Servicies;
+package com.example.tryJwt.demo.Services;
 
 import com.example.tryJwt.demo.FileRequest.RegisterRequest;
 import com.example.tryJwt.demo.FileRequest.UpdateUsers;
@@ -62,7 +62,7 @@ public class UsersService {
             return new RegisterRequest("","","","",0.0);
         }
         String jwtToken = params.get("token").substring(7);
-       String username = jwtService.extractUsername(jwtToken);
+       String username = jwtService.extractEmail(jwtToken);
        Users user = userRepository.findByEmail(username).orElseThrow();
        if(params.get("currency") != null && !params.get("currency").isEmpty()&& !params.get("currency").equals("ars")){
            double actualAux = user.getDineroActual();
@@ -80,7 +80,7 @@ public class UsersService {
     public ResponseEntity<String> deleteUser(String token)
     {
         String jwtToken = token.substring(7);
-        String username = jwtService.extractUsername(jwtToken);
+        String username = jwtService.extractEmail(jwtToken);
         Optional<Users> user = userRepository.findByEmail(username);
         if(user.isPresent())
         {
@@ -97,7 +97,7 @@ public class UsersService {
             return ResponseEntity.badRequest().body("El valor que se quiere actualizar el monto actual es invalido");
         }
         String jwtToken = token.substring(7);
-        String username = jwtService.extractUsername(jwtToken);
+        String username = jwtService.extractEmail(jwtToken);
         Optional<Users> user = userRepository.findByEmail(username);
         if(user.isPresent())
         {

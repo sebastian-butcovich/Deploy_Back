@@ -1,97 +1,42 @@
 package com.example.tryJwt.demo.Modelo;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name="users")
-@Getter
-@Setter
 public class Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @Column(name = "name",  nullable = false)
     private String name;
-    @Column(unique = true)
+
+    @Column(name = "email", unique = true, nullable = false)
     private String email;
+
+    @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "dineroActual",  nullable = false)
     private Double dineroActual;
+
     @Lob
+    @Column(name = "photo")
     private String foto;
+
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Spent> gastos;
+    private List<ActualFlow> actualFlows;
+
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Income> ingresos;
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<FutureFlows> debts;
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    @JsonManagedReference
-    public List<Spent> getGastos() {
-        return gastos;
-    }
-
-    public void setGastos(List<Spent> gastos) {
-        this.gastos = gastos;
-    }
-    @JsonManagedReference
-    public List<Income> getIngresos() {
-        return ingresos;
-    }
-
-    public void setIngresos(List<Income> ingresos) {
-        this.ingresos = ingresos;
-    }
-
-    public String getFoto() {
-        return foto;
-    }
-
-    public void setFoto(String foto) {
-        this.foto = foto;
-    }
-
-    public List<FutureFlows> getDebts() {
-        return debts;
-    }
-
-    public void setDebts(List<FutureFlows> debts) {
-        this.debts = debts;
-    }
+    private List<FutureFlow> futureFlows;
 
 }
 

@@ -3,7 +3,7 @@ package com.example.tryJwt.demo.Controller;
 import com.example.tryJwt.demo.FileRequest.RegisterRequest;
 import com.example.tryJwt.demo.FileRequest.UpdateUsers;
 import com.example.tryJwt.demo.Modelo.Users;
-import com.example.tryJwt.demo.Servicies.UsersService;
+import com.example.tryJwt.demo.Services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

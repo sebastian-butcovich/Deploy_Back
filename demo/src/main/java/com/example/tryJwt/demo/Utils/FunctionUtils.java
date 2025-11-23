@@ -1,15 +1,15 @@
 package com.example.tryJwt.demo.Utils;
 
-import com.example.tryJwt.demo.FileRequest.Additional_info;
+import com.example.tryJwt.demo.FileRequest.AdditionalInfo;
 import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
-import com.example.tryJwt.demo.FileRequest.MovementsResponse;
+import com.example.tryJwt.demo.FileRequest.MovementsPagedResponse;
 import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
-import com.example.tryJwt.demo.Modelo.Flow;
+import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.UserRepository;
-import com.example.tryJwt.demo.Servicies.JwtService;
-import com.example.tryJwt.demo.Servicies.RequestService;
+import com.example.tryJwt.demo.Services.JwtService;
+import com.example.tryJwt.demo.Services.RequestService;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,15 +29,15 @@ public class FunctionUtils {
     private UserRepository userRepository;
     @Autowired
     private RequestService requestService;
-    public Optional<Users> getUsers(Map<String, String> headers) {
-        String token = headers.get("token").substring(7);
-        String username = jwtService.extractUsername(token);
+    public Optional<Users> getUsers(String token) {
+        String normalizedToken = jwtService.normalizeToken(token);
+        String username = jwtService.extractEmail(normalizedToken);
         return userRepository.findByEmail(username);
     }
-    public void changeCoins(List<Flow> spents, String current, double value)
+    public void changeCoins(List<ActualFlow> spents, String current, double value)
     {
         //double value = getValue(current, currentType);
-        for(Flow lis:spents)
+        for(ActualFlow lis:spents)
         {
             double valor = (lis.getMonto()/value);
             double valorRedondeado = Math.round(valor * 100.0) / 100.0;
@@ -74,7 +74,7 @@ public class FunctionUtils {
         }
         return value;
     }
-    public MovementsResponse armarRespuesta(List<Flow> ingresos, Map<String,String> headers)
+    public MovementsPagedResponse armarRespuesta(List<ActualFlow> ingresos, Map<String,String> headers)
     {
         String cotizacion;
         String tipo_de_cotizacion="";
@@ -109,7 +109,7 @@ public class FunctionUtils {
            }
        }
 
-        return  new MovementsResponse(list,new Additional_info(cotizacion,tipo_de_cotizacion), infoPaginated.getNext_page()
+        return  new MovementsPagedResponse(list,new AdditionalInfo(cotizacion,tipo_de_cotizacion), infoPaginated.getNext_page()
                 , infoPaginated.getPage(), infoPaginated.getPage_size(), infoPaginated.getTotal_entries(),infoPaginated.getTotal_pages());
     }
     public InfoPaginated getinfoPagination(List list, Map<String,String> headers)

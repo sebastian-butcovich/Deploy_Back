@@ -1,16 +1,14 @@
-package com.example.tryJwt.demo.Servicies;
+package com.example.tryJwt.demo.Services;
 
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
-import com.example.tryJwt.demo.FileRequest.MovementsResponse;
-import com.example.tryJwt.demo.Modelo.Flow;
+import com.example.tryJwt.demo.FileRequest.MovementsPagedResponse;
+import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.Income;
 import com.example.tryJwt.demo.Modelo.Users;
-import com.example.tryJwt.demo.Repository.IncomeRepository;
 import com.example.tryJwt.demo.Repository.UserRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -23,7 +21,7 @@ public class IncomeService {
     private FunctionUtils functionUtils;
     @Autowired
     private UserRepository userRepository;
-    public ResponseEntity<MovementsResponse> listarIngresos(Map<String,String> params)
+    public ResponseEntity<MovementsPagedResponse> listarIngresos(Map<String,String> params)
     {
         Optional<Users> users = functionUtils.getUsers(params);
         List<Income> incomes;
@@ -54,7 +52,7 @@ public class IncomeService {
         else {
             incomes = incomeRepository.findAllByUsuario(users.get().getId());
         }
-        List<Flow> aux = new ArrayList<>(incomes);
+        List<ActualFlow> aux = new ArrayList<>(incomes);
         return ResponseEntity.ok().body(functionUtils.armarRespuesta(aux,params));
     }
     private List<Income> list(Map<String,String> params)
