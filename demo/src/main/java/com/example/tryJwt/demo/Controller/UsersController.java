@@ -2,12 +2,17 @@ package com.example.tryJwt.demo.Controller;
 
 import com.example.tryJwt.demo.FileRequest.RegisterRequest;
 import com.example.tryJwt.demo.FileRequest.UpdateUsers;
+import com.example.tryJwt.demo.Modelo.FutureFlow;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Services.UsersService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -15,33 +20,65 @@ import java.util.Map;
 @RequestMapping("api/users")
 @CrossOrigin(origins = "*")
 public class UsersController {
+
     @Autowired
-    private UsersService userService;
+    private UsersService service;
 
     @GetMapping
-    public List<Users> listarUsuarios()
-    {
-        return userService.listarUsuarios();
-    }
-    @CrossOrigin(origins = "*")
-    @PutMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody UpdateUsers updateUsers, @RequestParam Map<String,String> param) {
-       return userService.updateUser(updateUsers,param);
-    }
-    @GetMapping("/whoami")
-    public RegisterRequest quienSoy(@RequestParam Map<String,String> param)
-    {
-        return userService.quienSoy(param);
+    public ResponseEntity<Object> list(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
+        try {
+            return ResponseEntity.ok(service.list(token));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> deleteUser(@RequestParam String token)
-    {
-        return userService.deleteUser(token);
+    @CrossOrigin(origins = "*")
+    @PutMapping
+    public ResponseEntity<Object> update(@RequestBody UpdateUsers updateUsers,
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
+        try {
+            Users user = service.update(updateUsers, token);
+            return ResponseEntity.ok(user);
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
     }
+
+    @GetMapping
+    public ResponseEntity<Object> whoAmI(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
+                                         @RequestParam Map<String,String> params) {
+        try {
+            return ResponseEntity.ok(service.whoAmI(token, params));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
+    }
+
+    @DeleteMapping
+    public ResponseEntity<Object> delete(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
+        try {
+            service.delete(token);
+            return ResponseEntity.ok().build();
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
+    }
+
 
     @PutMapping("/actualizarValorActual")
-    public ResponseEntity<String> actualizarValorActual(@RequestParam String token, @RequestParam Double valorActual){
-        return userService.actualizarValorActual(token,valorActual);
+    public ResponseEntity<Object> actualizarValorActual(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
+                                                        @RequestParam Double valorActual){
+        try {
+            return ResponseEntity.ok(service.actualizarValorActual(token,valorActual));
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+        }
     }
 }

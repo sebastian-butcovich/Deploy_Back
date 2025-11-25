@@ -28,14 +28,14 @@ public class DeudaController {
     private static final TipoFutureFlow tipo = TipoFutureFlow.DEUDA;
 
     @GetMapping("/list")
-    public ResponseEntity<Object> listar(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
+    public ResponseEntity<Object> list(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
                                          @RequestParam Map<String,String> params) {
         return ResponseEntity.ok(service.list(token, params));
     }
 
     @PostMapping
-    public ResponseEntity<Object> agregar(@RequestBody FutureFlowDto ff,
-                                          @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
+    public ResponseEntity<Object> add(@RequestBody FutureFlowDto ff,
+                                          @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
                                           UriComponentsBuilder uriBuilder) {
         try {
             FutureFlow dto = service.add(ff, token, tipo);
@@ -47,9 +47,9 @@ public class DeudaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> editar(@PathVariable int id,
+    public ResponseEntity<Object> edit(@PathVariable int id,
                                          @RequestBody FutureFlowDto ff,
-                                         @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {
             FutureFlow dto = service.update(id, ff, token, tipo);
             return ResponseEntity.ok(dto);
@@ -61,8 +61,8 @@ public class DeudaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Object> eliminar(@PathVariable int id,
-                                           @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Object> delete(@PathVariable int id,
+                                           @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {
             service.delete(id, token, tipo);
             return ResponseEntity.noContent().build();

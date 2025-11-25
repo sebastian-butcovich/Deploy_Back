@@ -32,6 +32,9 @@ public class Users {
     @Column(name = "photo")
     private String foto;
 
+    @Column(name = "roles")
+    private String roles;
+
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<ActualFlow> actualFlows;
 

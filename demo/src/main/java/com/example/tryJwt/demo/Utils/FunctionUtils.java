@@ -95,8 +95,8 @@ public class FunctionUtils {
       if(!ingresos.isEmpty()) {
            for(int i=(infoPaginated.getPage()-1)*infoPaginated.getPage_size();i<infoPaginated.getPage_size()
                    *(infoPaginated.getPage()-1)+infoPaginated.getPage_size()&&i<=ingresos.size()-1;i++) {
-               list.add(new MovementsRequest(ingresos.get(i).getMonto(),ingresos.get(i).getTipo()
-                       ,ingresos.get(i).getDescripcion(),ingresos.get(i).getFecha(),ingresos.get(i).getId()));
+               list.add(new MovementsRequest(ingresos.get(i).getMonto(),ingresos.get(i).getTipo(),
+                       ingresos.get(i).getSubtipo(),ingresos.get(i).getDescripcion(),ingresos.get(i).getFecha()));
            }
        }
 

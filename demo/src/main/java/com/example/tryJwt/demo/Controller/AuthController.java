@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<Object> refreshToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) String token) {
+    public ResponseEntity<Object> refreshToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {
             return ResponseEntity.ok(service.refreshToken(token));
         } catch (IllegalArgumentException e) {
@@ -43,7 +43,7 @@ public class AuthController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<Object> validate(@RequestHeader(name = HttpHeaders.AUTHORIZATION, required = true) String token) {
+    public ResponseEntity<Object> validate(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         return ResponseEntity.ok(service.validate(token));
     }
 }

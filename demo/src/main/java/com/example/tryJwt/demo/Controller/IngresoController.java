@@ -33,8 +33,8 @@ public class IngresoController {
     private static final TipoActualFlow tipo = TipoActualFlow.INGRESO;
 
     @GetMapping("/list")
-    public ResponseEntity<Object> listaIngresos(@RequestParam Map<String, String> params,
-                                                @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Object> list(@RequestParam Map<String, String> params,
+                                                @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {
             return ResponseEntity.ok(service.pagedList(params, token, tipo));
         } catch(EntityNotFoundException e) {
@@ -45,7 +45,7 @@ public class IngresoController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> get(@PathVariable int id,
-                                      @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+                                      @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {
             return ResponseEntity.ok(service.get(id, token, tipo));
         } catch(EntityNotFoundException e) {
@@ -55,7 +55,7 @@ public class IngresoController {
 
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody MovementsRequest af,
-                                      @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token,
+                                      @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
                                       UriComponentsBuilder uriBuilder) {
         try {
             ActualFlow dto = service.add(af, token, tipo);
@@ -69,7 +69,7 @@ public class IngresoController {
     @PostMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable int id,
                                          @RequestBody MovementsRequest af,
-                                         @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {
             ActualFlow dto = service.update(id, af, token, tipo);
             return ResponseEntity.ok(dto);
@@ -82,7 +82,7 @@ public class IngresoController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> delete(@PathVariable int id,
-                                         @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+                                         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {
             service.delete(id, token, tipo);
             return ResponseEntity.noContent().build();
@@ -95,7 +95,7 @@ public class IngresoController {
     }
 
     @GetMapping("/subtipos")
-    public ResponseEntity<Object> getAllSubtypes(@RequestHeader(value = HttpHeaders.AUTHORIZATION) String token) {
+    public ResponseEntity<Object> getAllSubtypes(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {
             return ResponseEntity.ok(service.getAllSubtypes(token, tipo));
         } catch(EntityNotFoundException e) {
@@ -106,7 +106,7 @@ public class IngresoController {
     @GetMapping("/total")
     @CrossOrigin(origins = "*")
     public ResponseEntity<Object> getTotal(@RequestParam Map<String,String> params,
-                                           @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token)
+                                           @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token)
     {
         try {
             return ResponseEntity.ok(dashboardService.getTotal(params, token, tipo));
@@ -118,7 +118,7 @@ public class IngresoController {
     @CrossOrigin(origins = "*")
     public ResponseEntity<Object> getTotalGraphics(@RequestParam Map<String,String> params,
                                                    @RequestBody List<Fecha> list,
-                                                   @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token)
+                                                   @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token)
     {
         try {
             return ResponseEntity.ok(dashboardService.getTotalGraphics(params, list, token, tipo));
