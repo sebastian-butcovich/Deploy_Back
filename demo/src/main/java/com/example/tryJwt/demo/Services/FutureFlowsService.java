@@ -1,12 +1,10 @@
 package com.example.tryJwt.demo.Services;
 
-import com.example.tryJwt.demo.Enums.TipoActualFlow;
 import com.example.tryJwt.demo.Enums.TipoFutureFlow;
 import com.example.tryJwt.demo.FileRequest.FutureFlowDto;
 import com.example.tryJwt.demo.FileRequest.FutureFlowPagedResponse;
 import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
 import com.example.tryJwt.demo.Mapper.FutureFlowMapper;
-import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.FutureFlow;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.FutureFlowsRespository;
@@ -14,7 +12,6 @@ import com.example.tryJwt.demo.Repository.UserRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -137,7 +134,7 @@ public class FutureFlowsService {
         }
         if(username.get().getId().equals(found.get().getUsuario().getId())) {
             throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
-        };
+        }
         FutureFlow newFF = futureFlowMapper.toEntity(dto);
         newFF.setId(id);
         newFF.setUsuario(username.get());
@@ -159,7 +156,7 @@ public class FutureFlowsService {
         }
         if(username.get().getId().equals(found.get().getUsuario().getId())) {
             throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
-        };
+        }
         futureFlowsRespository.deleteById(id);
     }
 }

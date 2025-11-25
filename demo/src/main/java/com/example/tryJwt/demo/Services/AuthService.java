@@ -36,7 +36,7 @@ public class AuthService {
     @Autowired
     private  TokenRepository tokenRepository;
 
-    @Autowired(required = true)
+    @Autowired
     private  JwtService jwtService;
 
     @Autowired
@@ -74,7 +74,7 @@ public class AuthService {
     }
 
     public ResponseEntity<TokenResponse> refreshToken(String authHeader) {
-        String userEmail = "";
+        String userEmail;
         userEmail = jwtService.extractEmail(authHeader);
         if(userEmail == null || userEmail.isEmpty()) {
             throw new IllegalArgumentException("Invalid refresh token");

@@ -66,7 +66,7 @@ public class IngresoController {
         }
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable int id,
                                          @RequestBody MovementsRequest af,
                                          @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {

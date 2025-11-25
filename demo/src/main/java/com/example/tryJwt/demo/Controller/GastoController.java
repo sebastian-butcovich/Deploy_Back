@@ -2,9 +2,7 @@ package com.example.tryJwt.demo.Controller;
 
 import com.example.tryJwt.demo.Enums.TipoActualFlow;
 import com.example.tryJwt.demo.FileRequest.Fecha;
-import com.example.tryJwt.demo.FileRequest.ListTotalResponse;
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
-import com.example.tryJwt.demo.FileRequest.TotalResponse;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Services.ActualFlowsService;
 import com.example.tryJwt.demo.Services.DashboardService;
@@ -69,7 +67,7 @@ public class GastoController {
         }
     }
 
-    @PostMapping("/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable int id,
                                          @RequestBody MovementsRequest af,
                                          @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {

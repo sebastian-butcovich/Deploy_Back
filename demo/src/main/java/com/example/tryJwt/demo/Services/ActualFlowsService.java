@@ -79,7 +79,7 @@ public class ActualFlowsService {
 
         if(!username.get().getId().equals(found.get().getUsuario().getId())) {
             throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
-        };
+        }
         return found.get();
     }
 
@@ -138,7 +138,7 @@ public class ActualFlowsService {
         }
         if(!username.get().getId().equals(found.get().getUsuario().getId())) {
             throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
-        };
+        }
         actualFlowRepository.deleteById(id);
     }
 
@@ -157,11 +157,11 @@ public class ActualFlowsService {
     public HashSet<String> getAllSubtypes(String token,
                                            TipoActualFlow tipo) {
         List<ActualFlow> list = this.list(token, tipo);
-        List<String> retort = new LinkedList<String>();
+        List<String> retort = new LinkedList<>();
         for (ActualFlow l:list) {
             retort.add(l.getSubtipo());
         }
-        return new HashSet<String>(retort);
+        return new HashSet<>(retort);
     }
 
     /*public ResponseEntity<String> editarIngreso(MovementsRequest ingreso, Map<String,String> params)

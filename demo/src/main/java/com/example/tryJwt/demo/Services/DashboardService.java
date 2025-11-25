@@ -29,7 +29,7 @@ public class DashboardService {
     private List<ActualFlow> getListFlow(Map<String,String> params,
                                          Users users,
                                          TipoActualFlow tipo) {
-        List<ActualFlow> actualFlows = null;
+        List<ActualFlow> actualFlows;
         if (params.containsKey("fecha_inicio") && params.containsKey("fecha_fin")) {
             actualFlows = actualFlowRepository.findAllByUsuario(users.getId(), tipo, params.get("fecha_inicio"), params.get("fecha_fin"));
         } else {
@@ -69,10 +69,10 @@ public class DashboardService {
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }
-        List<Double> respuesta = new ArrayList<Double>();
+        List<Double> respuesta = new ArrayList<>();
         double suma = 0.0;
-        String fecha_inicio = list.get(0).fecha_string();
-        String fecha_fin = list.get(list.size()-1).fecha_string();
+        String fecha_inicio = list.getFirst().fecha_string();
+        String fecha_fin = list.getLast().fecha_string();
         params.put("fecha_inicio", fecha_inicio);
         params.put("fecha_fin", fecha_fin);
         List<ActualFlow> actualFlows = getListFlow(params,username.get(), tipo);

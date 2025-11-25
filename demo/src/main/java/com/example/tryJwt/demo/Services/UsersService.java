@@ -1,17 +1,12 @@
 package com.example.tryJwt.demo.Services;
 
 import com.example.tryJwt.demo.Enums.Roles;
-import com.example.tryJwt.demo.Enums.TipoFutureFlow;
-import com.example.tryJwt.demo.FileRequest.RegisterRequest;
 import com.example.tryJwt.demo.FileRequest.UpdateUsers;
-import com.example.tryJwt.demo.Mapper.RegisterRequestMapper;
-import com.example.tryJwt.demo.Modelo.FutureFlow;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.UserRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,9 +20,6 @@ public class UsersService {
 
     @Autowired
     private UserRepository userRepository;
-
-    @Autowired
-    private JwtService jwtService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;

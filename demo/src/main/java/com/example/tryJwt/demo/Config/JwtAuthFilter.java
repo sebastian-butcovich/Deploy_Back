@@ -53,8 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
-        // System.out.println("JwtAuthFilter - doFilterInternal called, tokenRegistration status: " + tokenRegistration);
-        String userEmail = "";
+        String userEmail;
         try {
             userEmail = jwtService.extractEmail(request.getHeader(HttpHeaders.AUTHORIZATION));
         } catch (IllegalArgumentException e) {

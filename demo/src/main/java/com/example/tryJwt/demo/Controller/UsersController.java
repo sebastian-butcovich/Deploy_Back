@@ -1,8 +1,6 @@
 package com.example.tryJwt.demo.Controller;
 
-import com.example.tryJwt.demo.FileRequest.RegisterRequest;
 import com.example.tryJwt.demo.FileRequest.UpdateUsers;
-import com.example.tryJwt.demo.Modelo.FutureFlow;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Services.UsersService;
 import jakarta.persistence.EntityNotFoundException;
@@ -12,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
-import java.util.List;
 import java.util.Map;
 
 @RestController
