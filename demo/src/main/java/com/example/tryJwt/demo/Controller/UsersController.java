@@ -12,12 +12,11 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("users")
+@RequestMapping("api/users")
 @CrossOrigin(origins = "*")
 public class UsersController {
     @Autowired
     private UsersService userService;
-
 
     @GetMapping
     public List<Users> listarUsuarios()
@@ -26,8 +25,7 @@ public class UsersController {
     }
     @CrossOrigin(origins = "*")
     @PutMapping("/update")
-    public ResponseEntity<String> updateUser(@RequestBody UpdateUsers updateUsers, @RequestParam Map<String,String> param)
-    {
+    public ResponseEntity<String> updateUser(@RequestBody UpdateUsers updateUsers, @RequestParam Map<String,String> param) {
        return userService.updateUser(updateUsers,param);
     }
     @GetMapping("/whoami")
@@ -35,11 +33,13 @@ public class UsersController {
     {
         return userService.quienSoy(param);
     }
+
     @DeleteMapping("/delete")
     public ResponseEntity<String> deleteUser(@RequestParam String token)
     {
         return userService.deleteUser(token);
     }
+
     @PutMapping("/actualizarValorActual")
     public ResponseEntity<String> actualizarValorActual(@RequestParam String token, @RequestParam Double valorActual){
         return userService.actualizarValorActual(token,valorActual);

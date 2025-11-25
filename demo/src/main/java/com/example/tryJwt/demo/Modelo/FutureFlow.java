@@ -22,6 +22,9 @@ public class FutureFlow {
     @Column(name = "tipo", nullable = false)
     private TipoFutureFlow tipo;
 
+    @Column(name = "subtipo", nullable = false)
+    private String subtipo;
+
     @Column(name = "descripcion")
     private String descripcion;
 
@@ -37,7 +40,13 @@ public class FutureFlow {
     @Column(name = "fecha", nullable = false)
     private Date fecha;
 
-    @Column(name = "fechaEstimadaPago", nullable = false)
+    @Column(name = "fechaCreacion", nullable = false)
+    private Date fechaCreacion;
+
+    @Column(name = "fechaUltimaModificacion", nullable = false)
+    private Date fechaUltimaModificacion;
+
+    @Column(name = "fechaEstimadaPago")
     private Date fechaEstimadaDePago;
 
     @ManyToOne(fetch = FetchType.LAZY)

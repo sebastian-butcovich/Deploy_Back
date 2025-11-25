@@ -14,6 +14,7 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
@@ -35,20 +36,22 @@ public class FutureFlowsService {
     @Autowired
     FutureFlowsRespository futureFlowsRespository;
 
-    public FutureFlowPagedResponse listar(String token,
-                                          Map<String,String> params) {
+    @Transactional
+    public FutureFlowPagedResponse list(String token,
+                                          Map<String, String> params) {
         Optional<Users> user = functionUtils.getUsers(token);
-        if(user.isEmpty()) {
+        if (user.isEmpty()) {
             throw new EntityNotFoundException("Usuario no encontrado");
         }
         Users users = userRepository.findByEmail(user.get().getEmail()).orElseThrow();
         List<FutureFlow> futureflows = futureFlowsRespository.findFutureFlowsByUsuarioId(users.getId());
         InfoPaginated infoPaginated = functionUtils.getinfoPagination(futureflows, params);
         return new FutureFlowPagedResponse(futureflows, infoPaginated.getNext_page(), infoPaginated.getPage(),
-                infoPaginated.getPage_size(), infoPaginated.getTotal_entries(),infoPaginated.getTotal_pages(),"OK");
+                infoPaginated.getPage_size(), infoPaginated.getTotal_entries(), infoPaginated.getTotal_pages(), "OK");
     }
 
-    public FutureFlow agregar(FutureFlowDto ffs,
+    @Transactional
+    public FutureFlow add(FutureFlowDto ffs,
                               String token,
                               TipoFutureFlow tipo) {
         Optional<Users> username = functionUtils.getUsers(token);
@@ -66,6 +69,8 @@ public class FutureFlowsService {
         savedFF.setFecha(new Date());
         savedFF.setUsuario(username.get());
         savedFF.setTipo(tipo);
+        savedFF.setFechaCreacion(new Date());
+        savedFF.setFechaUltimaModificacion(new Date());
         return futureFlowsRespository.save(savedFF);
     }
 
@@ -94,37 +99,47 @@ public class FutureFlowsService {
                 && futureflows.getMonto() != 0 && futureflows.getValorDelDolar() != 0 && futureflows.getFecha() != null;
     } */
 
-    public FutureFlow editarFutureFlows(int id,
-                                        FutureFlowDto futureflows,
-                                        String token,
-                                        TipoFutureFlow tipo) {
-       Optional<Users> username = functionUtils.getUsers(token);
-       if(username.isEmpty()){
-           throw new EntityNotFoundException("Usuario no encontrado");
-       }
-       /*if(!validateFutureFlowEdit(futureflows)){
-           throw new IllegalArgumentException("FutureFlow incorrecto");
-       }*/
-       FutureFlow futureflowsS = futureFlowsRespository.findById(id).orElseThrow();
-       futureflowsS.setNombreDelAdeudado(futureflows.getNombreDelAdeudado());
-       futureflowsS.setMonto(futureflows.getMonto());
-       futureflowsS.setValorDelDolar(futureflows.getValorDelDolar());
-       futureflowsS.setFecha(futureflows.getFecha());
-       futureflowsS.setEstado(futureflows.getEstado());
-       FutureFlow ff = futureFlowsRespository.save(futureflowsS);
-       return futureFlowMapper.toDto(ff);
+    @Transactional
+    public FutureFlow update(int id,
+                            FutureFlowDto dto,
+                            String token,
+                            TipoFutureFlow tipo) {
+        Optional<Users> username = functionUtils.getUsers(token);
+        if(username.isEmpty()){
+            throw new EntityNotFoundException("Usuario no encontrado");
+        }
+        /*if(!validateFutureFlowEdit(futureflows)){
+            throw new IllegalArgumentException("FutureFlow incorrecto");
+        }*/
+        Optional<FutureFlow> found = futureFlowsRespository.findById(id);
+        if(found.isEmpty()){
+            throw new EntityNotFoundException("El " + tipo.toString() + " con id '" + id + "' no encontrado");
+        }
+        if(username.get().getId().equals(found.get().getUsuario().getId())) {
+            throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
+        };
+        FutureFlow newFF = futureFlowMapper.toEntity(dto);
+        newFF.setId(id);
+        newFF.setUsuario(username.get());
+        newFF.setFechaUltimaModificacion(new Date());
+        return futureFlowsRespository.save(newFF);
     }
 
-    public ResponseEntity<String> eliminarFutureFlows(String token, Map<String,String> params) {
-        if(params.get("id").isEmpty()){
-            return ResponseEntity.badRequest().body("Id invalido");
+    @Transactional
+    public void delete(int id,
+                         String token,
+                         TipoFutureFlow tipo) {
+        Optional<Users> username = functionUtils.getUsers(token);
+        if(username.isEmpty()){
+            throw new EntityNotFoundException("Usuario no encontrado");
         }
-        Integer id = Integer.parseInt(params.get("id"));
-        Optional<FutureFlow> futureflows = futureFlowsRespository.findById(id);
-        if(futureflows.isEmpty()){
-            return ResponseEntity.badRequest().body("Deuda no encontrada");
+        Optional<FutureFlow> found = futureFlowsRespository.findById(id);
+        if(found.isEmpty()){
+            throw new EntityNotFoundException("El " + tipo.toString() + " con id '" + id + "' no encontrado");
         }
+        if(username.get().getId().equals(found.get().getUsuario().getId())) {
+            throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
+        };
         futureFlowsRespository.deleteById(id);
-        return ResponseEntity.ok("Deuda eliminada correctamente");
     }
 }

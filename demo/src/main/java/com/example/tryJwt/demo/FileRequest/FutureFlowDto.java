@@ -7,6 +7,7 @@ import java.util.Date;
 
 public record FutureFlowDto( EstadoPD estado,
                              TipoFutureFlow tipo,
+                             String subtipo,
                              double monto,
                              String nombreContraparte,
                              double valorDelDolar,

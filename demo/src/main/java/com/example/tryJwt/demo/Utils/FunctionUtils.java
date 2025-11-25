@@ -74,23 +74,16 @@ public class FunctionUtils {
         }
         return value;
     }
-    public MovementsPagedResponse armarRespuesta(List<ActualFlow> ingresos, Map<String,String> headers)
-    {
+    public MovementsPagedResponse armarRespuesta(List<ActualFlow> ingresos, Map<String,String> headers) {
         String cotizacion;
         String tipo_de_cotizacion="";
-        if(!headers.containsKey("currency") || headers.get("currency").equals("ars"))
-        {
+        if(!headers.containsKey("currency") || headers.get("currency").equals("ars")) {
             cotizacion="ars";
-        }
-        else
-        {
-            if(headers.get("currency").equals("usd") )
-            {
+        } else {
+            if(headers.get("currency").equals("usd") ) {
                 cotizacion="usd";
                 tipo_de_cotizacion=headers.get("currency_type");
-            }
-            else
-            {
+            } else {
                 cotizacion=headers.get("currency");
             }
             double value = getValue(cotizacion,tipo_de_cotizacion);
@@ -99,41 +92,36 @@ public class FunctionUtils {
 
         List< MovementsRequest> list = new LinkedList<>();
         InfoPaginated infoPaginated = getinfoPagination(ingresos, headers);
-      if(!ingresos.isEmpty())
-       {
+      if(!ingresos.isEmpty()) {
            for(int i=(infoPaginated.getPage()-1)*infoPaginated.getPage_size();i<infoPaginated.getPage_size()
-                   *(infoPaginated.getPage()-1)+infoPaginated.getPage_size()&&i<=ingresos.size()-1;i++)
-           {
+                   *(infoPaginated.getPage()-1)+infoPaginated.getPage_size()&&i<=ingresos.size()-1;i++) {
                list.add(new MovementsRequest(ingresos.get(i).getMonto(),ingresos.get(i).getTipo()
                        ,ingresos.get(i).getDescripcion(),ingresos.get(i).getFecha(),ingresos.get(i).getId()));
            }
        }
 
-        return  new MovementsPagedResponse(list,new AdditionalInfo(cotizacion,tipo_de_cotizacion), infoPaginated.getNext_page()
-                , infoPaginated.getPage(), infoPaginated.getPage_size(), infoPaginated.getTotal_entries(),infoPaginated.getTotal_pages());
+        return  new MovementsPagedResponse(list,new AdditionalInfo(cotizacion,tipo_de_cotizacion), infoPaginated.getNext_page(),
+                 infoPaginated.getPage(), infoPaginated.getPage_size(), infoPaginated.getTotal_entries(),infoPaginated.getTotal_pages());
     }
-    public InfoPaginated getinfoPagination(List list, Map<String,String> headers)
+    public InfoPaginated getinfoPagination(List list, Map<String,String> params)
     {
         InfoPaginated infoPaginated = new InfoPaginated();
         int next_page=0;
-        int page = Integer.parseInt(headers.get("page"));
-        int page_size = Integer.parseInt(headers.get("page_size"));
+        int page = Integer.parseInt(params.get("page"));
+        int page_size = Integer.parseInt(params.get("page_size"));
         int total_entries=list.size();
         int total_pages;
-        if( (list.size() /page_size == 0) || (list.size() ==page_size ))
-        {
+        if( (list.size() /page_size == 0) || (list.size() ==page_size )) {
             total_pages=1;
             next_page=1;
-        }else
-        {
+        } else {
             if((list.size() % page_size) == 0){
                 total_pages = list.size()/page_size;
-            }else{
+            } else {
                 total_pages = list.size()/page_size +1;
             }
         }
-        if(page<total_pages)
-        {
+        if(page<total_pages) {
             next_page=page+1;
         }
         infoPaginated.setNext_page(next_page);
