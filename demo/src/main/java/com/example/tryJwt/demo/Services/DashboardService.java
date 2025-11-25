@@ -1,64 +1,57 @@
 package com.example.tryJwt.demo.Services;
 
+import com.example.tryJwt.demo.Enums.TipoActualFlow;
 import com.example.tryJwt.demo.FileRequest.Fecha;
 import com.example.tryJwt.demo.FileRequest.ListTotalResponse;
 import com.example.tryJwt.demo.FileRequest.TotalResponse;
-import com.example.tryJwt.demo.Modelo.Income;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.ActualFlowRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class DashboardService {
-    @Autowired
-    private IncomeRepository incomeRepository;
+
     @Autowired
     private ActualFlowRepository actualFlowRepository;
+
     @Autowired
     private FunctionUtils functionUtils;
 
-    private List<ActualFlow> getListFlow(Map<String,String> params, Users users, String movemType) {
-        List<ActualFlow> spents = null;
-        List<Income> incomes = null;
-        List<ActualFlow> actualFlows = new ArrayList<>();
-        if(movemType.equals("spent")) {
-            if (params.containsKey("fecha_inicio") && params.containsKey("fecha_fin")) {
-                spents=  actualFlowRepository.findAllByUsuario(users.getId(), params.get("fecha_inicio"), params.get("fecha_fin"));
-            } else {
-                spents =  actualFlowRepository.findAllByUsuario(users.getId());
-            }
-            actualFlows.addAll(spents);
-        }else if (movemType.equals("income")) {
-            if (params.containsKey("fecha_inicio") && params.containsKey("fecha_fin")) {
-                incomes = incomeRepository.findAllByUsuario(users.getId(), params.get("fecha_inicio"), params.get("fecha_fin"));
-            }else
-            {
-                incomes = incomeRepository.findAllByUsuario(users.getId());
-            }
-            actualFlows.addAll(incomes);
+    private List<ActualFlow> getListFlow(Map<String,String> params,
+                                         Users users,
+                                         TipoActualFlow tipo) {
+        List<ActualFlow> actualFlows = null;
+        if (params.containsKey("fecha_inicio") && params.containsKey("fecha_fin")) {
+            actualFlows = actualFlowRepository.findAllByUsuario(users.getId(), tipo, params.get("fecha_inicio"), params.get("fecha_fin"));
+        } else {
+            actualFlows = actualFlowRepository.findAllByUsuario(users.getId(), tipo);
         }
         return actualFlows;
     }
-    public ResponseEntity<TotalResponse> getTotal(Map<String, String> params,String movemType ) {
-        Users users = functionUtils.getUsers(params).orElseThrow();
-        List<ActualFlow> actualFlow = getListFlow(params,users,movemType);
+    public TotalResponse getTotal(Map<String, String> params, String token, TipoActualFlow tipo) {
+        Optional<Users> username = functionUtils.getUsers(token);
+        if(username.isEmpty()){
+            throw new EntityNotFoundException("Usuario no encontrado");
+        }
+        List<ActualFlow> actualFlow = getListFlow(params,username.get(), tipo);
         if (actualFlow.isEmpty()) {
-            return ResponseEntity.ok().body(new TotalResponse(0.0, "", "No hay gastos agregados"));
+            return new TotalResponse(0.0, "", "No hay gastos agregados");
         }
         double gasto = 0.0;
         if (params.get("currency") == null) {
             for (ActualFlow i : actualFlow) {
                 gasto += i.getMonto();
             }
-            return ResponseEntity.ok(new TotalResponse(gasto, "ars", "El total de lo ingresado"));
+            return new TotalResponse(gasto, "ars", "El total de lo ingresado");
         }
         String current = params.get("currency");
         String current_type = params.get("currency_type");
@@ -68,18 +61,21 @@ public class DashboardService {
             gasto += i.getMonto();
         }
         double valorRedondeado = Math.round(gasto * 100.0) / 100.0;
-        return ResponseEntity.ok(new TotalResponse(valorRedondeado, current, "El total de lo ingresado"));
+        return new TotalResponse(valorRedondeado, current, "El total de lo ingresado");
     }
 
-    public ResponseEntity<ListTotalResponse> getTotalGraphics(Map<String, String> params, List<Fecha> list, String movemType) {
-        Users users = functionUtils.getUsers(params).orElseThrow();
+    public ListTotalResponse getTotalGraphics(Map<String, String> params, List<Fecha> list, String token, TipoActualFlow tipo) {
+        Optional<Users> username = functionUtils.getUsers(token);
+        if(username.isEmpty()){
+            throw new EntityNotFoundException("Usuario no encontrado");
+        }
         List<Double> respuesta = new ArrayList<Double>();
         double suma = 0.0;
         String fecha_inicio = list.get(0).fecha_string();
         String fecha_fin = list.get(list.size()-1).fecha_string();
         params.put("fecha_inicio", fecha_inicio);
         params.put("fecha_fin", fecha_fin);
-        List<ActualFlow> actualFlows = getListFlow(params,users,movemType);
+        List<ActualFlow> actualFlows = getListFlow(params,username.get(), tipo);
         actualFlows = actualFlows.reversed();
         int yearA = 0;
         int mesA =  0;
@@ -106,7 +102,7 @@ public class DashboardService {
                 //manipular  dias
                 generatedTotalsDays(list, i, actualFlows, yearA, suma, diaA, mesA, respuesta,"not_current");
             }
-            return  ResponseEntity.ok(new ListTotalResponse(respuesta,"ars","Los valores totales para los gráficos"));
+            return new ListTotalResponse(respuesta,"ars","Los valores totales para los gráficos");
         }else {
             String current = params.get("currency");
             String current_type = params.get("currency_type");
@@ -127,7 +123,7 @@ public class DashboardService {
                 //manipular dias
                 generatedTotalsDays(list, i, actualFlows, yearA, suma, diaA, mesA, respuesta,current);
             }
-            return  ResponseEntity.ok(new ListTotalResponse(respuesta,current,"Los valores totales para los graficos"));
+            return new ListTotalResponse(respuesta,current,"Los valores totales para los graficos");
         }
     }
 

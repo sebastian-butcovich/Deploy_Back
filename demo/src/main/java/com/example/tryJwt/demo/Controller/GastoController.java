@@ -106,20 +106,27 @@ public class GastoController {
         }
     }
 
-
-
-
-
     @GetMapping("/total")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<TotalResponse> getTotal(@RequestParam Map<String,String> param)
+    public ResponseEntity<Object> getTotal(@RequestParam Map<String,String> params,
+                                                  @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token)
     {
-        return dashboardService.getTotal(param,"spent");
+        try {
+            return ResponseEntity.ok(dashboardService.getTotal(params, token, tipo));
+        } catch(EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
     }
     @PutMapping("/totalGraphics")
     @CrossOrigin(origins = "*")
-    public ResponseEntity<ListTotalResponse> getTotalGraphics(@RequestParam Map<String,String> param, @RequestBody List<Fecha> list)
+    public ResponseEntity<Object> getTotalGraphics(@RequestParam Map<String,String> params,
+                                                              @RequestBody List<Fecha> list,
+                                                              @RequestHeader(value = HttpHeaders.AUTHORIZATION) String token)
     {
-        return dashboardService.getTotalGraphics(param,list,"spent");
+        try {
+            return ResponseEntity.ok(dashboardService.getTotalGraphics(params, list, token, tipo));
+        } catch(EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
     }
 }
