@@ -1,10 +1,12 @@
 package com.example.tryJwt.demo.Services;
 
+import com.example.tryJwt.demo.Enums.TipoActualFlow;
 import com.example.tryJwt.demo.Enums.TipoFutureFlow;
 import com.example.tryJwt.demo.FileRequest.FutureFlowDto;
 import com.example.tryJwt.demo.FileRequest.FutureFlowPagedResponse;
 import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
 import com.example.tryJwt.demo.Mapper.FutureFlowMapper;
+import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.FutureFlow;
 import com.example.tryJwt.demo.Modelo.Users;
 import com.example.tryJwt.demo.Repository.FutureFlowsRespository;
@@ -36,7 +38,7 @@ public class FutureFlowsService {
     @Autowired
     FutureFlowsRespository futureFlowsRespository;
 
-    @Transactional
+
     public FutureFlowPagedResponse list(String token,
                                           Map<String, String> params) {
         Optional<Users> user = functionUtils.getUsers(token);
@@ -48,6 +50,24 @@ public class FutureFlowsService {
         InfoPaginated infoPaginated = functionUtils.getinfoPagination(futureflows, params);
         return new FutureFlowPagedResponse(futureflows, infoPaginated.getNext_page(), infoPaginated.getPage(),
                 infoPaginated.getPage_size(), infoPaginated.getTotal_entries(), infoPaginated.getTotal_pages(), "OK");
+    }
+
+    public FutureFlow get(int id,
+                          String token,
+                          TipoFutureFlow tipo) {
+        Optional<Users> username = functionUtils.getUsers(token);
+        if (username.isEmpty()) {
+            throw new EntityNotFoundException("Usuario no encontrado");
+        }
+        Optional<FutureFlow> found = futureFlowsRespository.findById(id);
+        if (found.isEmpty()) {
+            throw new EntityNotFoundException("El " + tipo.toString() + " con id '" + id + "' no encontrado");
+        }
+
+        if (!username.get().getId().equals(found.get().getUsuario().getId())) {
+            throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
+        }
+        return found.get();
     }
 
     @Transactional

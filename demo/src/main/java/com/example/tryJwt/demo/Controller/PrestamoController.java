@@ -33,6 +33,16 @@ public class PrestamoController {
      return ResponseEntity.ok(service.list(token, params));
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> get(@PathVariable int id,
+                                      @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
+        try {
+            return ResponseEntity.ok(service.get(id, token, tipo));
+        } catch(EntityNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+        }
+    }
+
     @PostMapping
     public ResponseEntity<Object> add(@RequestBody FutureFlowDto ff,
                                           @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
