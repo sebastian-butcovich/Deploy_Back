@@ -1,5 +1,6 @@
 package com.example.tryJwt.demo.Utils;
 
+import com.example.tryJwt.demo.Enums.Roles;
 import com.example.tryJwt.demo.FileRequest.AdditionalInfo;
 import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
 import com.example.tryJwt.demo.FileRequest.MovementsRequest;
@@ -10,10 +11,12 @@ import com.example.tryJwt.demo.Modelo.Usuario;
 import com.example.tryJwt.demo.Repository.UsuarioRepository;
 import com.example.tryJwt.demo.Services.JwtService;
 import com.example.tryJwt.demo.Services.RequestService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -130,6 +133,13 @@ public class FunctionUtils {
         infoPaginated.setTotal_pages(total_pages);
         infoPaginated.setPage(page);
         return infoPaginated;
+    }
+
+    @Transactional(readOnly = true)
+    public boolean checkIsAdmin(String token) {
+        Usuario me = usuarioRepository.findByEmail(jwtService.extractEmail(token))
+                .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
+        return (me.getRoles() != null && me.getRoles().toLowerCase().contains(Roles.ADMIN.toString().toLowerCase()));
     }
 
 }

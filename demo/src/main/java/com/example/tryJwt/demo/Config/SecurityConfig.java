@@ -38,6 +38,10 @@ public class SecurityConfig {
     @Value("${jwt.token.registration}")
     private boolean tokenRegistration;
 
+    @Autowired
+    public EndpointExistenceFilter endpointExistenceFilter;
+
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -47,6 +51,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated())
                 .sessionManagement(sesion-> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
+                .addFilterBefore(endpointExistenceFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout(logout->
                         logout.addLogoutHandler((request, response, authentication) ->

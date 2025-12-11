@@ -12,30 +12,21 @@ import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Service
 @AllArgsConstructor
 public class UsuarioService {
 
-    private static final DateTimeFormatter DATE_FORMAT =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private final UsuarioRepository repository;
     private final UsuarioMapper usuarioMapper;
     private final JwtService jwtService;
     private final FunctionUtils functionUtils;
 
-    @Transactional(readOnly = true)
-    public boolean checkIsAdmin(String token) {
-        Usuario me = repository.findByEmail(jwtService.extractEmail(token))
-                .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
-        return (me.getRoles() != null && me.getRoles().toLowerCase().contains(Roles.ADMIN.toString().toLowerCase()));
-    }
 
     @Transactional(readOnly = true)
     public Iterable<UsuarioDto> getAll(String token) {
-        if (this.checkIsAdmin(token)) {
+        if (functionUtils.checkIsAdmin(token)) {
             List<Usuario> usuarios = repository.findAll();
             return usuarios
                     .stream()
@@ -56,7 +47,7 @@ public class UsuarioService {
 
     @Transactional(readOnly = true)
     public UsuarioDto get(String token, Long id) {
-        if (this.checkIsAdmin(token)) {
+        if (functionUtils.checkIsAdmin(token)) {
             Usuario found = repository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
             return usuarioMapper.toDto(found);
@@ -67,7 +58,7 @@ public class UsuarioService {
 
     @Transactional
     public UsuarioDto update(String token, Long id, UsuarioDto dto) {
-        if(checkIsAdmin(token)) {
+        if(functionUtils.checkIsAdmin(token)) {
             Usuario found = repository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
             Usuario updated = usuarioMapper.toEntity(dto);
@@ -93,7 +84,7 @@ public class UsuarioService {
 
     @Transactional
     public void delete(String token, Long id) {
-        if(checkIsAdmin(token)) {
+        if(functionUtils.checkIsAdmin(token)) {
             Usuario me = repository.findById(id)
                     .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
             repository.delete(me);
