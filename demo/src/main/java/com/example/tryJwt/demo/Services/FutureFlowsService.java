@@ -6,9 +6,9 @@ import com.example.tryJwt.demo.FileRequest.FutureFlowPagedResponse;
 import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
 import com.example.tryJwt.demo.Mapper.FutureFlowMapper;
 import com.example.tryJwt.demo.Modelo.FutureFlow;
-import com.example.tryJwt.demo.Modelo.Users;
+import com.example.tryJwt.demo.Modelo.Usuario;
 import com.example.tryJwt.demo.Repository.FutureFlowsRespository;
-import com.example.tryJwt.demo.Repository.UserRepository;
+import com.example.tryJwt.demo.Repository.UsuarioRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,7 @@ public class FutureFlowsService {
     FutureFlowMapper futureFlowMapper;
 
     @Autowired
-    UserRepository userRepository;
+    UsuarioRepository usuarioRepository;
 
     @Autowired
     FutureFlowsRespository futureFlowsRespository;
@@ -38,12 +38,12 @@ public class FutureFlowsService {
 
     public FutureFlowPagedResponse list(String token,
                                           Map<String, String> params) {
-        Optional<Users> user = functionUtils.getUsers(token);
+        Optional<Usuario> user = functionUtils.getUsers(token);
         if (user.isEmpty()) {
             throw new EntityNotFoundException("Usuario no encontrado");
         }
-        Users users = userRepository.findByEmail(user.get().getEmail()).orElseThrow();
-        List<FutureFlow> futureflows = futureFlowsRespository.findFutureFlowsByUsuarioId(users.getId());
+        Usuario usuario = usuarioRepository.findByEmail(user.get().getEmail()).orElseThrow();
+        List<FutureFlow> futureflows = futureFlowsRespository.findFutureFlowsByUsuarioId(usuario.getId());
         InfoPaginated infoPaginated = functionUtils.getinfoPagination(futureflows, params);
         return new FutureFlowPagedResponse(futureflows, infoPaginated.getNext_page(), infoPaginated.getPage(),
                 infoPaginated.getPage_size(), infoPaginated.getTotal_entries(), infoPaginated.getTotal_pages(), "OK");
@@ -52,7 +52,7 @@ public class FutureFlowsService {
     public FutureFlow get(int id,
                           String token,
                           TipoFutureFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if (username.isEmpty()) {
             throw new EntityNotFoundException("Usuario no encontrado");
         }
@@ -71,7 +71,7 @@ public class FutureFlowsService {
     public FutureFlow add(FutureFlowDto ffs,
                               String token,
                               TipoFutureFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }
@@ -121,7 +121,7 @@ public class FutureFlowsService {
                             FutureFlowDto dto,
                             String token,
                             TipoFutureFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }
@@ -146,7 +146,7 @@ public class FutureFlowsService {
     public void delete(int id,
                          String token,
                          TipoFutureFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }

@@ -6,8 +6,8 @@ import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.FileRequest.MovementsPagedResponse;
 import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
-import com.example.tryJwt.demo.Modelo.Users;
-import com.example.tryJwt.demo.Repository.UserRepository;
+import com.example.tryJwt.demo.Modelo.Usuario;
+import com.example.tryJwt.demo.Repository.UsuarioRepository;
 import com.example.tryJwt.demo.Services.JwtService;
 import com.example.tryJwt.demo.Services.RequestService;
 import lombok.AllArgsConstructor;
@@ -26,13 +26,13 @@ public class FunctionUtils {
     @Autowired
     private JwtService jwtService;
     @Autowired
-    private UserRepository userRepository;
+    private UsuarioRepository usuarioRepository;
     @Autowired
     private RequestService requestService;
-    public Optional<Users> getUsers(String token) {
+    public Optional<Usuario> getUsers(String token) {
         String normalizedToken = jwtService.normalizeToken(token);
         String username = jwtService.extractEmail(normalizedToken);
-        return userRepository.findByEmail(username);
+        return usuarioRepository.findByEmail(username);
     }
     public void changeCoins(List<ActualFlow> spents, String current, double value)
     {

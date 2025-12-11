@@ -1,6 +1,6 @@
 package com.example.tryJwt.demo.Services;
 
-import com.example.tryJwt.demo.Modelo.Users;
+import com.example.tryJwt.demo.Modelo.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -22,7 +22,7 @@ import java.util.Map;
 public class JwtService {
 
     @Value("${jwt.access.token.expiration}")
-    private long expirationToken;
+    private long expirationAccessToken;
 
     @Value("${jwt.refresh.token.expiration}")
     private long expirationRefreshToken;
@@ -31,19 +31,19 @@ public class JwtService {
     private String secretKey;
 
 
-    public String generateToken(Users user)
+    public String generateAccessToken(Usuario user)
     {
-        return buildToken(user,expirationToken);
+        return buildToken(user,expirationAccessToken);
     }
 
-    public String generateRefreshToken(Users user)
+    public String generateRefreshToken(Usuario user)
     {
         return buildToken(user,expirationRefreshToken);
     }
 
-    private String buildToken( Users user,long expiration) {
+    private String buildToken(Usuario user, long expiration) {
         return Jwts.builder().id(user.getId().toString())
-                .claims(Map.of("name",user.getName()))
+                .claims(Map.of("name",user.getEmail()))
                 .subject(user.getEmail())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis()+expiration))
@@ -91,13 +91,12 @@ public class JwtService {
         return token.substring(7);
     }
 
-    public boolean isValidToken(String refreshToken, Users user) {
-        String userEmail = extractEmail(refreshToken);
-        return (userEmail.equals(user.getEmail()) && !isTokenExpired(refreshToken));
+    public boolean isValidToken(String token, Usuario user) {
+        String userEmail = extractEmail(token);
+        return (userEmail.equals(user.getEmail()) && !isTokenExpired(token));
     }
 
-    public boolean isTokenExpired(String token)
-    {
+    public boolean isTokenExpired(String token) {
         return extractExpirationToken(token).before(new Date());
     }
 
@@ -114,4 +113,5 @@ public class JwtService {
             throw new IllegalArgumentException("Token inválido o mal formado", ex);
         }
     }
+
 }

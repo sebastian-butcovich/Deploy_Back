@@ -1,9 +1,9 @@
 package com.example.tryJwt.demo.Config;
 
 import com.example.tryJwt.demo.Modelo.Token;
-import com.example.tryJwt.demo.Modelo.Users;
+import com.example.tryJwt.demo.Modelo.Usuario;
 import com.example.tryJwt.demo.Repository.TokenRepository;
-import com.example.tryJwt.demo.Repository.UserRepository;
+import com.example.tryJwt.demo.Repository.UsuarioRepository;
 import com.example.tryJwt.demo.Services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -45,7 +45,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private TokenRepository tokenRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UsuarioRepository usuarioRepository;
 
     @Value("${jwt.token.registration}")
     private boolean tokenRegistration;
@@ -64,7 +64,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             return;
         }
         UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
-        Optional<Users> user = userRepository.findByEmail(userDetails.getUsername());
+        Optional<Usuario> user = usuarioRepository.findByEmail(userDetails.getUsername());
         if(user.isEmpty()) {
             filterChain.doFilter(request,response);
             return;

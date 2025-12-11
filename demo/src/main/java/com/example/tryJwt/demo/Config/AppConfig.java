@@ -1,7 +1,7 @@
 package com.example.tryJwt.demo.Config;
 
-import com.example.tryJwt.demo.Modelo.Users;
-import com.example.tryJwt.demo.Repository.UserRepository;
+import com.example.tryJwt.demo.Modelo.Usuario;
+import com.example.tryJwt.demo.Repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,11 +22,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @EnableWebSecurity
 public class AppConfig {
     @Autowired
-    private UserRepository userRepository;
+    private UsuarioRepository usuarioRepository;
     @Bean
     public UserDetailsService userDetailsService(){
         return username -> {
-            Users user = userRepository.findByEmail(username)
+            Usuario user = usuarioRepository.findByEmail(username)
                     .orElseThrow(()->new UsernameNotFoundException("User not found"));
             return User.builder()
                     .username(user.getEmail())

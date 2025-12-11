@@ -5,7 +5,7 @@ import com.example.tryJwt.demo.FileRequest.MovementsRequest;
 import com.example.tryJwt.demo.FileRequest.MovementsPagedResponse;
 import com.example.tryJwt.demo.Mapper.ActualFlowMapper;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
-import com.example.tryJwt.demo.Modelo.Users;
+import com.example.tryJwt.demo.Modelo.Usuario;
 import com.example.tryJwt.demo.Repository.ActualFlowRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,7 +32,7 @@ public class ActualFlowsService {
                                                                  String token,
                                                                  TipoActualFlow tipo)
     {
-        Optional<Users> users = functionUtils.getUsers(token);
+        Optional<Usuario> users = functionUtils.getUsers(token);
         List<ActualFlow> actualFlows;
         double montoMin;
         double montoMax;
@@ -68,7 +68,7 @@ public class ActualFlowsService {
     public ActualFlow get(int id,
                               String token,
                               TipoActualFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }
@@ -88,7 +88,7 @@ public class ActualFlowsService {
     public ActualFlow add(MovementsRequest movm,
                               String token,
                               TipoActualFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }
@@ -106,7 +106,7 @@ public class ActualFlowsService {
                              MovementsRequest dto,
                              String token,
                              TipoActualFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if (username.isEmpty()) {
             throw new EntityNotFoundException("Usuario no encontrado");
         }
@@ -128,7 +128,7 @@ public class ActualFlowsService {
     public void delete(int id,
                          String token,
                          TipoActualFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }
@@ -145,7 +145,7 @@ public class ActualFlowsService {
 
     private List<ActualFlow> list(String token,
                                   TipoActualFlow tipo) {
-        Optional<Users> users = functionUtils.getUsers(token);
+        Optional<Usuario> users = functionUtils.getUsers(token);
         if (users.isPresent()) {
             return actualFlowRepository.findAllByUsuario(users.get().getId(), tipo);
         } else {

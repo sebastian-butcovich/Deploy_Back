@@ -5,7 +5,7 @@ import com.example.tryJwt.demo.Modelo.Usuario;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
-public interface RegisterRequestMapper {
-    UsuarioDto toDto(Usuario user);
+public interface UsuarioMapper {
+    UsuarioDto toDto(Usuario e);
     Usuario toEntity(UsuarioDto dto);
 }

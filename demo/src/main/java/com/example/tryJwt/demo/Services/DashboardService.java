@@ -5,7 +5,7 @@ import com.example.tryJwt.demo.FileRequest.Fecha;
 import com.example.tryJwt.demo.FileRequest.ListTotalResponse;
 import com.example.tryJwt.demo.FileRequest.TotalResponse;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
-import com.example.tryJwt.demo.Modelo.Users;
+import com.example.tryJwt.demo.Modelo.Usuario;
 import com.example.tryJwt.demo.Repository.ActualFlowRepository;
 import com.example.tryJwt.demo.Utils.FunctionUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,18 +27,18 @@ public class DashboardService {
     private FunctionUtils functionUtils;
 
     private List<ActualFlow> getListFlow(Map<String,String> params,
-                                         Users users,
+                                         Usuario usuario,
                                          TipoActualFlow tipo) {
         List<ActualFlow> actualFlows;
         if (params.containsKey("fecha_inicio") && params.containsKey("fecha_fin")) {
-            actualFlows = actualFlowRepository.findAllByUsuario(users.getId(), tipo, params.get("fecha_inicio"), params.get("fecha_fin"));
+            actualFlows = actualFlowRepository.findAllByUsuario(usuario.getId(), tipo, params.get("fecha_inicio"), params.get("fecha_fin"));
         } else {
-            actualFlows = actualFlowRepository.findAllByUsuario(users.getId(), tipo);
+            actualFlows = actualFlowRepository.findAllByUsuario(usuario.getId(), tipo);
         }
         return actualFlows;
     }
     public TotalResponse getTotal(Map<String, String> params, String token, TipoActualFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }
@@ -65,7 +65,7 @@ public class DashboardService {
     }
 
     public ListTotalResponse getTotalGraphics(Map<String, String> params, List<Fecha> list, String token, TipoActualFlow tipo) {
-        Optional<Users> username = functionUtils.getUsers(token);
+        Optional<Usuario> username = functionUtils.getUsers(token);
         if(username.isEmpty()){
             throw new EntityNotFoundException("Usuario no encontrado");
         }

@@ -50,7 +50,7 @@ public class FutureFlow {
     private Date fechaEstimadaDePago;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Users usuario;
+    private Usuario usuario;
 
     @Override
     public boolean equals(Object o) {

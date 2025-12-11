@@ -42,7 +42,7 @@ public class ActualFlow {
 
     @JoinColumn(name = "id_autor", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    private Users usuario;
+    private Usuario usuario;
 
     @Transient
     private String moneda;
