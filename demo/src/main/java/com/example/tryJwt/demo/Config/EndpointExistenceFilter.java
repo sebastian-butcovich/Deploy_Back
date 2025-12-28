@@ -28,6 +28,7 @@ public class EndpointExistenceFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
             HandlerExecutionChain chain = handlerMapping.getHandler(request);
+            var headers = request.getHeaderNames();
             if (chain == null) {
                 response.setStatus(HttpServletResponse.SC_NOT_FOUND);
                 response.setContentType("application/json");

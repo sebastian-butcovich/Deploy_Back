@@ -6,6 +6,7 @@ import com.example.tryJwt.demo.Repository.TokenRepository;
 import com.example.tryJwt.demo.Repository.UsuarioRepository;
 import com.example.tryJwt.demo.Services.JwtService;
 import jakarta.servlet.FilterChain;
+import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -23,6 +24,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -49,12 +51,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Value("${jwt.token.registration}")
     private boolean tokenRegistration;
-
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String userEmail;
         try {
+            var headers = request.getHeaderNames()  ;
             userEmail = jwtService.extractEmail(request.getHeader(HttpHeaders.AUTHORIZATION));
         } catch (IllegalArgumentException e) {
             filterChain.doFilter(request, response);

@@ -45,10 +45,10 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(req->req
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/health").permitAll()
-                        .anyRequest().authenticated())
+                //.authorizeHttpRequests(req->req
+                  //      .requestMatchers("/api/auth/**").permitAll()
+                    //    .requestMatchers("/api/health").permitAll()
+                      //  .anyRequest().authenticated())
                 .sessionManagement(sesion-> sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(endpointExistenceFilter, UsernamePasswordAuthenticationFilter.class)
