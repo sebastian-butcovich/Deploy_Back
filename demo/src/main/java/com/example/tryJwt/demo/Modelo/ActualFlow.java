@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity
@@ -23,7 +24,7 @@ public class ActualFlow {
     private TipoActualFlow tipo;
 
     @Column(name = "subtipo", nullable = false)
-    private String subtipo;
+    private String subtipo; // Subtipos que puede escribir el usuario (ej: gastos ordinarios, extraordinarios, entretenimiento, etc.)
 
     @Column(name = "descripción")
     private String descripcion;
@@ -32,7 +33,7 @@ public class ActualFlow {
     private Double monto;
 
     @Column(name = "fecha",  nullable = false)
-    private Date fecha;
+    private LocalDate fecha;
 
     @Column(name = "fechaCreacion", nullable = false)
     private Date fechaCreacion;

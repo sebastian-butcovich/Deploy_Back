@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.Date;
 @Entity
 @Table(name = "futureFlows")
@@ -23,7 +24,7 @@ public class FutureFlow {
     private TipoFutureFlow tipo;
 
     @Column(name = "subtipo", nullable = false)
-    private String subtipo;
+    private String subtipo;  // Subtipos que puede escribir el usuario (ej: gastos ordinarios, extraordinarios, entretenimiento, etc.)
 
     @Column(name = "descripcion")
     private String descripcion;
@@ -38,7 +39,7 @@ public class FutureFlow {
     private double valorDolar;
 
     @Column(name = "fecha", nullable = false)
-    private Date fecha;
+    private LocalDate fecha;
 
     @Column(name = "fechaCreacion", nullable = false)
     private Date fechaCreacion;
@@ -47,7 +48,7 @@ public class FutureFlow {
     private Date fechaUltimaModificacion;
 
     @Column(name = "fechaEstimadaPago")
-    private Date fechaEstimadaDePago;
+    private LocalDate fechaEstimadaDePago;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Usuario usuario;
@@ -55,7 +56,7 @@ public class FutureFlow {
     @Override
     public boolean equals(Object o) {
         if(o instanceof FutureFlow futureFlow) {
-            return this.getNombreContraparte().equals(futureFlow.getNombreContraparte()) && this.getFecha().getDate()==futureFlow.getFecha().getDate()
+            return this.getNombreContraparte().equals(futureFlow.getNombreContraparte()) && this.getFecha()==futureFlow.getFecha()
                     && futureFlow.getFecha().getMonth() == this.getFecha().getMonth() && futureFlow.getFecha().getYear() == this.getFecha().getYear()
                     && futureFlow.getMonto() == this.getMonto();
         }else {return false;}

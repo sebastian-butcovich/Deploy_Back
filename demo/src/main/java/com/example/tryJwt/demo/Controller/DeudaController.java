@@ -57,7 +57,7 @@ public class DeudaController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Object> edit(@PathVariable int id,
+    public ResponseEntity<Object> update(@PathVariable int id,
                                          @RequestBody FutureFlowDto ff,
                                          @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
         try {

@@ -77,7 +77,7 @@ public class FunctionUtils {
         }
         return value;
     }
-    public MovementsPagedResponse armarRespuesta(List<ActualFlow> ingresos, Map<String,String> headers) {
+    public MovementsPagedResponse armarRespuesta(List<ActualFlow> actualFlow, Map<String,String> headers) {
         String cotizacion;
         String tipo_de_cotizacion="";
         if(!headers.containsKey("currency") || headers.get("currency").equals("ars")) {
@@ -90,16 +90,16 @@ public class FunctionUtils {
                 cotizacion=headers.get("currency");
             }
             double value = getValue(cotizacion,tipo_de_cotizacion);
-            changeCoins(ingresos,cotizacion,value);
+            changeCoins(actualFlow,cotizacion,value);
         }
 
         List< MovementsRequest> list = new LinkedList<>();
-        InfoPaginated infoPaginated = getinfoPagination(ingresos, headers);
-      if(!ingresos.isEmpty()) {
+        InfoPaginated infoPaginated = getinfoPagination(actualFlow, headers);
+      if(!actualFlow.isEmpty()) {
            for(int i=(infoPaginated.getPage()-1)*infoPaginated.getPage_size();i<infoPaginated.getPage_size()
-                   *(infoPaginated.getPage()-1)+infoPaginated.getPage_size()&&i<=ingresos.size()-1;i++) {
-               list.add(new MovementsRequest(ingresos.get(i).getMonto(),ingresos.get(i).getTipo(),
-                       ingresos.get(i).getSubtipo(),ingresos.get(i).getDescripcion(),ingresos.get(i).getFecha()));
+                   *(infoPaginated.getPage()-1)+infoPaginated.getPage_size()&&i<=actualFlow.size()-1;i++) {
+               list.add(new MovementsRequest(actualFlow.get(i).getMonto(),actualFlow.get(i).getTipo(),
+                       actualFlow.get(i).getSubtipo(),actualFlow.get(i).getDescripcion(),actualFlow.get(i).getFecha()));
            }
        }
 

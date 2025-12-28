@@ -83,7 +83,7 @@ public class FutureFlowsService {
             throw new RuntimeException("Datos repetidos");
         }*/
         FutureFlow savedFF = futureFlowMapper.toEntity(ffs);
-        savedFF.setFecha(new Date());
+        savedFF.setFecha(savedFF.getFecha());
         savedFF.setUsuario(username.get());
         savedFF.setTipo(tipo);
         savedFF.setFechaCreacion(new Date());

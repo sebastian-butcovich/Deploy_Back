@@ -93,7 +93,7 @@ public class ActualFlowsService {
             throw new EntityNotFoundException("Usuario no encontrado");
         }
         ActualFlow savedMovm = actualFlowMapper.toEntity(movm);
-        savedMovm.setFecha(new Date());
+        // savedMovm.setFecha(new Date());
         savedMovm.setFechaCreacion(new Date());
         savedMovm.setFechaUltimaModificacion(new Date());
         savedMovm.setUsuario(username.get());
