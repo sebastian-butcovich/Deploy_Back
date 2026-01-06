@@ -98,6 +98,9 @@ public class ActualFlowsService {
         savedMovm.setFechaUltimaModificacion(new Date());
         savedMovm.setUsuario(username.get());
         savedMovm.setTipo(tipo);
+        if (!ActualFlow.isValid(savedMovm)) {
+            throw new IllegalArgumentException("El elemento " + tipo.toString().toLowerCase() + " ingresado por parametro no es valido");
+        }
         return actualFlowRepository.save(savedMovm);
     }
 
@@ -112,15 +115,20 @@ public class ActualFlowsService {
         }
         Optional<ActualFlow> found = actualFlowRepository.findById(id);
         if (found.isEmpty()) {
-            throw new EntityNotFoundException("El " + tipo.toString() + " con id '" + id + "' no encontrado");
+            throw new EntityNotFoundException("El elemento " + tipo.toString().toLowerCase() + " con id '" + id + "' no encontrado");
         }
         if (username.get().getId().equals(found.get().getUsuario().getId())) {
-            throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
+            throw new IllegalArgumentException("El elemento " + tipo.toString().toLowerCase() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
         }
         ActualFlow newAF = actualFlowMapper.toEntity(dto);
         newAF.setId(id);
         newAF.setUsuario(username.get());
+        newAF.setFechaCreacion(found.get().getFechaCreacion());
         newAF.setFechaUltimaModificacion(new Date());
+        newAF.setTipo(tipo);
+        if (!ActualFlow.isValid(newAF)) {
+            throw new IllegalArgumentException("El elemento " + tipo.toString().toLowerCase() + " ingresado por parametro no es valido");
+        }
         return actualFlowRepository.save(newAF);
     }
 
@@ -134,10 +142,10 @@ public class ActualFlowsService {
         }
         Optional<ActualFlow> found = actualFlowRepository.findById(id);
         if(found.isEmpty()){
-            throw new EntityNotFoundException("El " + tipo.toString() + " con id '" + id + "' no encontrado");
+            throw new EntityNotFoundException("El elemento " + tipo.toString().toLowerCase() + " con id '" + id + "' no encontrado");
         }
         if(!username.get().getId().equals(found.get().getUsuario().getId())) {
-            throw new IllegalArgumentException("El " + tipo.toString() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
+            throw new IllegalArgumentException("El elemento " + tipo.toString().toLowerCase() + " con id '" + id + "' no pertenece al usuario con id '" + username.get().getId() + "'");
         }
         actualFlowRepository.deleteById(id);
     }

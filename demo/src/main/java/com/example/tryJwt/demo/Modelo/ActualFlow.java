@@ -48,4 +48,10 @@ public class ActualFlow {
     @Transient
     private String moneda;
 
+    public static boolean isValid(ActualFlow af) {
+        return !(af.getTipo() == null || af.getSubtipo() == null || af.getSubtipo().isEmpty() ||
+                af.getMonto() == 0.0 || af.getFecha() == null || af.getFechaCreacion() == null ||
+                af.getUsuario() == null);
+    }
+
 }

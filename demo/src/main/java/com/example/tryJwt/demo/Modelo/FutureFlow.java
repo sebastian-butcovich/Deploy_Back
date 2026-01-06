@@ -61,4 +61,10 @@ public class FutureFlow {
                     && futureFlow.getMonto() == this.getMonto();
         }else {return false;}
     }
+
+    public static boolean isValid(FutureFlow ff) {
+        return !(ff.getTipo() == null || ff.getSubtipo() == null || ff.getSubtipo().isEmpty() ||
+                ff.getMonto() == 0.0 || ff.getNombreContraparte() == null || ff.getNombreContraparte().isEmpty() ||
+                ff.getValorDolar() == 0.0 || ff.getFecha() == null || ff.getFechaCreacion() == null || ff.getFechaUltimaModificacion() == null);
+    }
 }
