@@ -5,6 +5,7 @@ import com.example.tryJwt.demo.FileRequest.FutureFlowDto;
 import com.example.tryJwt.demo.FileRequest.FutureFlowPagedResponse;
 import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
 import com.example.tryJwt.demo.Mapper.FutureFlowMapper;
+import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.FutureFlow;
 import com.example.tryJwt.demo.Modelo.Usuario;
 import com.example.tryJwt.demo.Repository.FutureFlowsRespository;
@@ -83,11 +84,14 @@ public class FutureFlowsService {
             throw new RuntimeException("Datos repetidos");
         }*/
         FutureFlow savedFF = futureFlowMapper.toEntity(ffs);
-        savedFF.setFecha(new Date());
+        savedFF.setFecha(savedFF.getFecha());
         savedFF.setUsuario(username.get());
         savedFF.setTipo(tipo);
         savedFF.setFechaCreacion(new Date());
         savedFF.setFechaUltimaModificacion(new Date());
+        if (!FutureFlow.isValid(savedFF)) {
+            throw new IllegalArgumentException("El elemento " + tipo.toString().toLowerCase() + " ingresado por parametro no es valido");
+        }
         return futureFlowsRespository.save(savedFF);
     }
 
@@ -138,7 +142,11 @@ public class FutureFlowsService {
         FutureFlow newFF = futureFlowMapper.toEntity(dto);
         newFF.setId(id);
         newFF.setUsuario(username.get());
+        newFF.setFechaCreacion(found.get().getFechaCreacion());
         newFF.setFechaUltimaModificacion(new Date());
+        if(!FutureFlow.isValid(newFF)) {
+            throw new IllegalArgumentException("El elemento " + tipo.toString().toLowerCase() + " ingresado por parametro no es valido");
+        }
         return futureFlowsRespository.save(newFF);
     }
 

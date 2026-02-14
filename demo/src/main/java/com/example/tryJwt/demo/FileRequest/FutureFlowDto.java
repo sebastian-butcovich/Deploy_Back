@@ -3,6 +3,7 @@ package com.example.tryJwt.demo.FileRequest;
 import com.example.tryJwt.demo.Enums.EstadoPD;
 import com.example.tryJwt.demo.Enums.TipoFutureFlow;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public record FutureFlowDto( EstadoPD estado,
@@ -11,6 +12,6 @@ public record FutureFlowDto( EstadoPD estado,
                              double monto,
                              String nombreContraparte,
                              double valorDelDolar,
-                             Date fecha,
-                             Date fechaEstimadaDePago) {
+                             LocalDate fecha,
+                             LocalDate fechaEstimadaDePago) {
 }

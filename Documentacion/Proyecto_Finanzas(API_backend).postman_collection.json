@@ -1,0 +1,1367 @@
+{
+	"info": {
+		"_postman_id": "e6589f07-0a73-4134-a5cc-c50a9104f5f7",
+		"name": "Proyecto_Finanzas(API_backend)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9496920"
+	},
+	"item": [
+		{
+			"name": "Ingresos",
+			"item": [
+				{
+					"name": "Obtener todos los ingresos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/ingreso/list?page=1&page_size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ingreso",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "10"
+								},
+								{
+									"key": "monto_min",
+									"value": "200.0",
+									"disabled": true
+								},
+								{
+									"key": "monto_max",
+									"value": "450.0",
+									"disabled": true
+								},
+								{
+									"key": "tipo",
+									"value": "caso",
+									"disabled": true
+								},
+								{
+									"key": "fecha_inicio",
+									"value": "2024-07-23",
+									"disabled": true
+								},
+								{
+									"key": "fecha_fin",
+									"value": "2024-07-24",
+									"disabled": true
+								},
+								{
+									"key": "currency",
+									"value": "dol",
+									"description": "Cotizacion. Valores permitidos: ars, dol, eur, brl, clp, uyu",
+									"disabled": true
+								},
+								{
+									"key": "currency_type",
+									"value": "blue",
+									"description": "Tipo de cotizacion. Valores permitidos: oficial, blue, bolsa, contadoconliqui, tarjeta, mayorista, cripto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un ingreso (TO-BE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/ingreso/get?criterion=monto_max&currency=dol&currency_type=blue",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ingreso",
+								"get"
+							],
+							"query": [
+								{
+									"key": "monto",
+									"value": "500.0",
+									"disabled": true
+								},
+								{
+									"key": "tipo",
+									"value": "super",
+									"disabled": true
+								},
+								{
+									"key": "fecha",
+									"value": "2024-07-23",
+									"disabled": true
+								},
+								{
+									"key": "criterion",
+									"value": "monto_max",
+									"description": "Valores permitidos: fecha_min, fecha_max, monto_min, monto_max, created_on_min, created_on_max, last_updated_on_min, last_updated_on_max"
+								},
+								{
+									"key": "currency",
+									"value": "dol",
+									"description": "Cotizacion. Valores permitidos: ars, dol, eur, brl, clp, uyu"
+								},
+								{
+									"key": "currency_type",
+									"value": "blue",
+									"description": "Tipo de cotizacion. Valores permitidos: oficial, blue, bolsa, contadoconliqui, tarjeta, mayorista, cripto"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar ingreso",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"una descripcion cualquiera\",\r\n    \"monto\": 3000.0,\r\n    \"subtipo\": \"Sueldo neto\",\r\n    \"fecha\": \"2024-04-30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/ingreso",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ingreso"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar ingreso",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"Prueba de ingreso\",\r\n    \"monto\": 2000.0,\r\n    \"subtipo\": \"Supermercado\",\r\n    \"fecha\": \"2024-04-30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/ingreso/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ingreso",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar ingreso",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/ingreso/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ingreso",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener tipos ingreso (TO-BE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/ingreso/tipos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ingreso",
+								"tipos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener promedio ingresos (TO-BE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/ingreso/average?fecha_inicio=2024-07-08&fecha_fin=2024-09-12",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ingreso",
+								"average"
+							],
+							"query": [
+								{
+									"key": "fecha_inicio",
+									"value": "2024-07-08"
+								},
+								{
+									"key": "fecha_fin",
+									"value": "2024-09-12"
+								},
+								{
+									"key": "currency",
+									"value": "eur",
+									"description": "Cotizacion. Valores permitidos: ars, dol, eur, brl, clp, uyu",
+									"disabled": true
+								},
+								{
+									"key": "currency_type",
+									"value": "blue",
+									"description": "Tipo de cotizacion. Valores permitidos: oficial, blue, bolsa, contadoconliqui, tarjeta, mayorista, cripto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un ingreso",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/ingresos/get/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"ingresos",
+								"get",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Gastos",
+			"item": [
+				{
+					"name": "Obtener todos los gastos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/gasto/list?page=1&page_size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"gasto",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "10"
+								},
+								{
+									"key": "monto_min",
+									"value": "200.0",
+									"disabled": true
+								},
+								{
+									"key": "monto_max",
+									"value": "450.0",
+									"disabled": true
+								},
+								{
+									"key": "tipo",
+									"value": "caso",
+									"disabled": true
+								},
+								{
+									"key": "fecha_inicio",
+									"value": "2024-07-23",
+									"disabled": true
+								},
+								{
+									"key": "fecha_fin",
+									"value": "2024-07-24",
+									"disabled": true
+								},
+								{
+									"key": "currency",
+									"value": "dol",
+									"description": "Cotizacion. Valores permitidos: ars, dol, eur, brl, clp, uyu",
+									"disabled": true
+								},
+								{
+									"key": "currency_type",
+									"value": "blue",
+									"description": "Tipo de cotizacion. Valores permitidos: oficial, blue, bolsa, contadoconliqui, tarjeta, mayorista, cripto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un gasto (TO-BE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/gasto/get?criterion=monto_max&currency=dol&currency_type=blue",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"gasto",
+								"get"
+							],
+							"query": [
+								{
+									"key": "monto",
+									"value": "500.0",
+									"disabled": true
+								},
+								{
+									"key": "tipo",
+									"value": "super",
+									"disabled": true
+								},
+								{
+									"key": "fecha",
+									"value": "2024-07-23",
+									"disabled": true
+								},
+								{
+									"key": "criterion",
+									"value": "monto_max",
+									"description": "Valores permitidos: fecha_min, fecha_max, monto_min, monto_max, created_on_min, created_on_max, last_updated_on_min, last_updated_on_max"
+								},
+								{
+									"key": "currency",
+									"value": "dol",
+									"description": "Cotizacion. Valores permitidos: ars, dol, eur, brl, clp, uyu"
+								},
+								{
+									"key": "currency_type",
+									"value": "blue",
+									"description": "Tipo de cotizacion. Valores permitidos: oficial, blue, bolsa, contadoconliqui, tarjeta, mayorista, cripto"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar gasto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"una descripcion cualquiera\",\r\n    \"monto\": 500.0,\r\n    \"subtipo\": \"supermercado\",\r\n    \"fecha\": \"2024-04-30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/gasto",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"gasto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar gasto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"Prueba de gasto\",\r\n    \"monto\": 500.0,\r\n    \"subtipo\": \"Supermercado\",\r\n    \"fecha\": \"2024-04-30\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/gasto/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"gasto",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar gasto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/gasto/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"gasto",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener tipos gasto (TO-BE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/gasto/tipos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"gasto",
+								"tipos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener promedio gastos (TO-BE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/gasto/average?fecha_inicio=2024-07-08&fecha_fin=2024-09-12",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"gasto",
+								"average"
+							],
+							"query": [
+								{
+									"key": "fecha_inicio",
+									"value": "2024-07-08"
+								},
+								{
+									"key": "fecha_fin",
+									"value": "2024-09-12"
+								},
+								{
+									"key": "currency",
+									"value": "eur",
+									"description": "Cotizacion. Valores permitidos: ars, dol, eur, brl, clp, uyu",
+									"disabled": true
+								},
+								{
+									"key": "currency_type",
+									"value": "blue",
+									"description": "Tipo de cotizacion. Valores permitidos: oficial, blue, bolsa, contadoconliqui, tarjeta, mayorista, cripto",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un gasto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/gasto/get/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"gasto",
+								"get",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Prestamos",
+			"item": [
+				{
+					"name": "Obtener todos los prestamos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/prestamo/list?page=1&page_size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prestamo",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un prestamo",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/prestamo/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prestamo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar un prestamo",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"EstadoPD\": \"INCONCLUSO\", //Posibles estados: INCONCLUSO, PAGADO\r\n    \"subtipo\": \"fiado\",\r\n    \"monto\": 500,\r\n    \"nombreContraparte\": \"John Doe\",\r\n    \"fecha\": \"\",\r\n    \"fechaEstimadaDePago\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/prestamo",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prestamo"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar un prestamo",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"EstadoPD\": \"INCONCLUSO\", //Posibles estados: INCONCLUSO, PAGADO\r\n    \"subtipo\": \"fiado\",\r\n    \"monto\": 500,\r\n    \"nombreContraparte\": \"John Doe\",\r\n    \"fecha\": \"\",\r\n    \"fechaEstimadaDePago\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/prestamo/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prestamo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un prestamo",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/prestamo/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"prestamo",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Deudas",
+			"item": [
+				{
+					"name": "Obtener todos las deudas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/deuda/list?page=1&page_size=10",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"deuda",
+								"list"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "page_size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener un deuda",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/deuda/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"deuda",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar una deuda",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"EstadoPD\": \"INCONCLUSO\", //Posibles estados: INCONCLUSO, PAGADO\r\n    \"subtipo\": \"fiado\",\r\n    \"monto\": 500,\r\n    \"nombreContraparte\": \"John Doe\",\r\n    \"fecha\": \"\",\r\n    \"fechaEstimadaDePago\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/deuda",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"deuda"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar una deuda",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"EstadoPD\": \"INCONCLUSO\", //Posibles estados: INCONCLUSO, PAGADO\r\n    \"subtipo\": \"fiado\",\r\n    \"monto\": 500,\r\n    \"nombreContraparte\": \"John Doe\",\r\n    \"fecha\": \"\",\r\n    \"fechaEstimadaDePago\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/deuda/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"deuda",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar una deuda",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/deuda/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"deuda",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Autenticacion",
+			"item": [
+				{
+					"name": "Registrar usuario",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"prueba\",\r\n    \"firstname\": \"cosme\",\r\n    \"surname\": \"fulanito\",\r\n    \"dineroActual\": 12000.0,\r\n    \"email\": \"prueba@algo.com\",\r\n    \"password\": \"4321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/register",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Iniciar sesion",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save login tokens\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"access_token\", jsonData.access_token);\r",
+									"    pm.collectionVariables.set(\"refresh_token\", jsonData.refresh_token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"prueba\",\r\n    \"password\": \"4321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/login",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar access token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Save new access token\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.collectionVariables.set(\"access_token\", jsonData.access_token);\r",
+									"    pm.collectionVariables.set(\"refresh_token\", jsonData.refresh_token);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {},
+								"requests": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"refreshToken\": \"{{refresh_token}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/refresh",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"refresh"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validar token",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/validate",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"validate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar contraseña usuario autenticado",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"oldPassword\": \"1234\",\r\n    \"newPassword\": \"4321\",\r\n    \"repeatNewPassword\": \"4321\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/auth/changePassword",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"auth",
+								"changePassword"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "Consultar todos los usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/list",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar usuario logueado",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Consultar un usuario (ADMIN)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar usuario logueado",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/delete",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"delete"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminar un usuario (ADMIN)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/delete/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"delete",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar usuario logueado",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"prueba\",\r\n    \"email\": \"prueba@algo.com\",\r\n    \"firstname\": \"cosme\",\r\n    \"surname\": \"fulanito\",\r\n    \"dineroActual\": 12000.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/update",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar un usuario (ADMIN)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"prueba\",\r\n    \"password\": \"12345\",\r\n    \"email\": \"prueba@algo.com\",\r\n    \"firstname\": \"cosme\",\r\n    \"surname\": \"fulanito\",\r\n    \"dineroActual\": 12000.0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/update/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"update",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualizar saldo usuario logueado",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/usuarios/actualizarValorActual?valorActual=1500.0",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"usuarios",
+								"actualizarValorActual"
+							],
+							"query": [
+								{
+									"key": "valorActual",
+									"value": "1500.0"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Feedback (TO-BE)",
+			"item": [
+				{
+					"name": "Obtener entradas de feedback (TO-BE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/feedback",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"feedback"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "page_size",
+									"value": "10",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Agregar feedback (TO-BE)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descripcion\": \"Esta app es lo mejor que hay :)\",\r\n    \"tipo\": \"FEATURE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/api/feedback",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"feedback"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener tipos feedback (TO-BE)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/api/feedback/tipos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"api",
+								"feedback",
+								"tipos"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chequeo de salud",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/health",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"health"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{access_token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"requests": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "access_token",
+			"value": ""
+		},
+		{
+			"key": "refresh_token",
+			"value": ""
+		},
+		{
+			"key": "baseUrl",
+			"value": "",
+			"type": "default"
+		}
+	]
+}
