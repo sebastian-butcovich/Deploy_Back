@@ -4,14 +4,14 @@ import com.example.tryJwt.demo.Enums.EstadoPD;
 import com.example.tryJwt.demo.Enums.TipoFutureFlow;
 import com.example.tryJwt.demo.FileRequest.FutureFlowDto;
 import com.example.tryJwt.demo.Modelo.FutureFlow;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-14T19:48:56-0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.9 (Amazon.com Inc.)"
+    date = "2026-02-14T20:43:08-0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 25 (Oracle Corporation)"
 )
 @Component
 public class FutureFlowMapperImpl implements FutureFlowMapper {
@@ -46,8 +46,8 @@ public class FutureFlowMapperImpl implements FutureFlowMapper {
         String subtipo = null;
         double monto = 0.0d;
         String nombreContraparte = null;
-        Date fecha = null;
-        Date fechaEstimadaDePago = null;
+        LocalDate fecha = null;
+        LocalDate fechaEstimadaDePago = null;
 
         estado = ff.getEstado();
         tipo = ff.getTipo();
