@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  backend:
+    build: .
+    ports:
+      - "8080:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/proyecto_finanzas
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: 1234
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      # uncomment below if you want to automatically create and select a database
+      MYSQL_DATABASE: proyecto_finanzas
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:
