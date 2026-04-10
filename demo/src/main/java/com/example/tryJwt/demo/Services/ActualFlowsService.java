@@ -1,8 +1,8 @@
 package com.example.tryJwt.demo.Services;
 
 import com.example.tryJwt.demo.Enums.TipoActualFlow;
-import com.example.tryJwt.demo.FileRequest.MovementsRequest;
-import com.example.tryJwt.demo.FileRequest.MovementsPagedResponse;
+import com.example.tryJwt.demo.FileRequest.Request.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.Responses.MovementsPagedResponse;
 import com.example.tryJwt.demo.Mapper.ActualFlowMapper;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.Usuario;

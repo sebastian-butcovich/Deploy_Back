@@ -36,12 +36,11 @@ public class Usuario {
     private Double dineroActual;
 
     @Lob
-    @Column(name = "photo")
+    @Column(name = "photo", columnDefinition = "LONGTEXT")
     private String foto;
 
     @Column(name = "roles")
     private String roles;
-
     @Column(name = "creado", nullable = false)
     private Date creado;
 

@@ -83,8 +83,8 @@ public class DashboardService {
         int i = 0;
         if(i<= actualFlows.size()-1)
         {
-            diaA = actualFlows.get(i).getFecha().getDayOfMonth();
-            mesA = actualFlows.get(i).getFecha().getMonthValue()+1;
+            diaA = actualFlows.get(i).getFecha().getDate();
+            mesA = actualFlows.get(i).getFecha().getMonth()+1;
             yearA = actualFlows.get(i).getFecha().getYear()+1900;
         }
         if(!params.containsKey("currency")){
@@ -150,8 +150,8 @@ public class DashboardService {
                 i++;
                 if(i <= actualFlows.size()-1)
                 {
-                    diaA = actualFlows.get(i).getFecha().getDayOfMonth();
-                    mesA = actualFlows.get(i).getFecha().getMonthValue()+1;
+                    diaA = actualFlows.get(i).getFecha().getDate();
+                    mesA = actualFlows.get(i).getFecha().getMonth()+1;
                     yearA = actualFlows.get(i).getFecha().getYear()+1900;
                 }
             }
@@ -160,8 +160,8 @@ public class DashboardService {
                 suma += actualFlows.get(i).getMonto();
                 i++;
                 if (i <= actualFlows.size() - 1) {
-                    diaA = actualFlows.get(i).getFecha().getDayOfMonth();
-                    mesA = actualFlows.get(i).getFecha().getMonthValue()+1;
+                    diaA = actualFlows.get(i).getFecha().getDate();
+                    mesA = actualFlows.get(i).getFecha().getMonth() + 1;
                     yearA = actualFlows.get(i).getFecha().getYear() + 1900;
                 }
             }
@@ -172,8 +172,8 @@ public class DashboardService {
                 i++;
                 if(i <= actualFlows.size()-1)
                 {
-                    diaA = actualFlows.get(i).getFecha().getDayOfMonth();
-                    mesA = actualFlows.get(i).getFecha().getMonthValue()+1;
+                    diaA = actualFlows.get(i).getFecha().getDate();
+                    mesA = actualFlows.get(i).getFecha().getMonth()+1;
                     yearA = actualFlows.get(i).getFecha().getYear()+1900;
                 }
             }
@@ -213,8 +213,8 @@ public class DashboardService {
                 if(i <= actualFlows.size()-1)
                 {
                     yearA = actualFlows.get(i).getFecha().getYear() + 1900;
-                    diaA = actualFlows.get(i).getFecha().getDayOfMonth();
-                    mesA = actualFlows.get(i).getFecha().getMonthValue()+1;
+                    mesA = actualFlows.get(i).getFecha().getMonth()+1;
+                    diaA = actualFlows.get(i).getFecha().getDate();
                 }
             }
             //caso2.1: el año es el mismo, pero cambia el mes de una semana a la otra tomando
@@ -227,8 +227,8 @@ public class DashboardService {
                 if(i <= actualFlows.size()-1)
                 {
                     yearA = actualFlows.get(i).getFecha().getYear() + 1900;
-                    diaA = actualFlows.get(i).getFecha().getDayOfMonth();
-                    mesA = actualFlows.get(i).getFecha().getMonthValue()+1;
+                    mesA = actualFlows.get(i).getFecha().getMonth()+1;
+                    diaA = actualFlows.get(i).getFecha().getDate();
                 }
             }
             //caso 2.2: mismo año pero cambia el mes tomando los dias de comienzo de mes
@@ -240,8 +240,8 @@ public class DashboardService {
                 if(i <= actualFlows.size()-1)
                 {
                     yearA = actualFlows.get(i).getFecha().getYear() + 1900;
-                    diaA = actualFlows.get(i).getFecha().getDayOfMonth();
-                    mesA = actualFlows.get(i).getFecha().getMonthValue()+1;
+                    mesA = actualFlows.get(i).getFecha().getMonth()+1;
+                    diaA = actualFlows.get(i).getFecha().getDate();
                 }
             }
             //caso 1: no cambia de mes ni de año y solo se toma en cuenta los dias
@@ -252,8 +252,8 @@ public class DashboardService {
                 if(i <= actualFlows.size()-1)
                 {
                     yearA = actualFlows.get(i).getFecha().getYear() + 1900;
-                    diaA = actualFlows.get(i).getFecha().getDayOfMonth();
-                    mesA = actualFlows.get(i).getFecha().getMonthValue()+1;
+                    mesA = actualFlows.get(i).getFecha().getMonth()+1;
+                    diaA = actualFlows.get(i).getFecha().getDate();
                 }
             }
             if(current == null || current.equals("not_current")){
@@ -285,8 +285,8 @@ public class DashboardService {
                 suma += actualFlows.get(i).getMonto();
                 i++;
             }
-            while(i <= actualFlows.size()-1&&yearI == yearF && mesI<= actualFlows.get(i).getFecha().getMonthValue()+1
-                    && actualFlows.get(i).getFecha().getMonthValue()+1<mesF)
+            while(i <= actualFlows.size()-1&&yearI == yearF && mesI<= actualFlows.get(i).getFecha().getMonth()+1
+                    && actualFlows.get(i).getFecha().getMonth()+1<mesF)
             {
                 suma += actualFlows.get(i).getMonto();
                 i++;

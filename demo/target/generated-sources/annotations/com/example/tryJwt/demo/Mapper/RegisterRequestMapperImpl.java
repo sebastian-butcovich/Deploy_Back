@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-14T20:45:20-0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 25 (Oracle Corporation)"
+    date = "2026-02-14T19:48:56-0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.9 (Amazon.com Inc.)"
 )
 @Component
 public class RegisterRequestMapperImpl implements RegisterRequestMapper {

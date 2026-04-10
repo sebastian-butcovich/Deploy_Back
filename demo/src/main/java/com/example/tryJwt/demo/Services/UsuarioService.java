@@ -75,10 +75,11 @@ public class UsuarioService {
     public UsuarioDto updateMyself(String token, UsuarioDto dto) {
         Usuario me = repository.findByEmail(jwtService.extractEmail(token))
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
-        Usuario updated = usuarioMapper.toEntity(dto);
+         Usuario updated = usuarioMapper.toEntity(dto);
         updated.setId(me.getId());
         updated.setUltimaModificacion(new Date());
         Usuario res = repository.save(updated);
+        res.setCreado(new Date());
         return usuarioMapper.toDto(res);
     }
 

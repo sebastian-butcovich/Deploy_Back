@@ -1,6 +1,6 @@
 package com.example.tryJwt.demo.Mapper;
 
-import com.example.tryJwt.demo.FileRequest.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.Request.MovementsRequest;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
 import org.mapstruct.Mapper;
 

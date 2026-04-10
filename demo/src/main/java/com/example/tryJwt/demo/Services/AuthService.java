@@ -1,10 +1,12 @@
 package com.example.tryJwt.demo.Services;
 
-import com.example.tryJwt.demo.FileRequest.ChangePasswordRequest;
-import com.example.tryJwt.demo.FileRequest.LoginRequest;
+import com.example.tryJwt.demo.FileRequest.Request.ChangePasswordRequest;
+import com.example.tryJwt.demo.FileRequest.Request.LoginRequest;
+import com.example.tryJwt.demo.FileRequest.Responses.LoginResponse;
 import com.example.tryJwt.demo.FileRequest.UsuarioDto;
-import com.example.tryJwt.demo.FileRequest.TokenResponse;
+import com.example.tryJwt.demo.FileRequest.Responses.TokenResponse;
 import com.example.tryJwt.demo.Mapper.RegisterRequestMapper;
+import com.example.tryJwt.demo.Mapper.UsuarioMapper;
 import com.example.tryJwt.demo.Modelo.Token;
 import com.example.tryJwt.demo.Modelo.Usuario;
 import com.example.tryJwt.demo.Repository.UsuarioRepository;
@@ -13,7 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import jakarta.servlet.http.Cookie;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,6 +54,8 @@ public class AuthService {
 
     @Autowired
     private RegisterRequestMapper registerRequestMapper;
+    @Autowired
+    private UsuarioMapper usuarioMapper;
 
 
     @Transactional
@@ -71,7 +74,7 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenResponse login (LoginRequest request) {
+    public LoginResponse login (LoginRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.email(),
@@ -79,6 +82,7 @@ public class AuthService {
                 )
         );
         Optional<Usuario> user = usuarioRepository.findByEmail(request.email());
+        UsuarioDto usuario = usuarioMapper.toDto(user.get());;
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Invalid username or password");
         }
@@ -89,12 +93,34 @@ public class AuthService {
                 revokeUserRefreshToken(user.get());
                 String newRefreshToken = jwtService.generateRefreshToken(user.get());
                 saveUserToken(user.get(), newRefreshToken);
-                return new TokenResponse(accessToken, newRefreshToken);
+                return new LoginResponse(accessToken, newRefreshToken,
+                        usuario.email(),
+                        usuario.username(),
+                        usuario.firstname(),
+                        usuario.firstname(),
+                        usuario.surname(),
+                        user.get().getCreado(),
+                        usuario.foto(),
+                        usuario.dineroActual());
             } else {
-                return new TokenResponse(accessToken, savedRefreshToken.get().getToken());
+                return new LoginResponse(accessToken, savedRefreshToken.get().getToken(),usuario.email(),
+                        usuario.username(),
+                        usuario.firstname(),
+                        usuario.firstname(),
+                        usuario.surname(),
+                        user.get().getCreado(),
+                        usuario.foto(),
+                        usuario.dineroActual());
             }
         } else {
-            return new TokenResponse(accessToken, jwtService.generateRefreshToken(user.get()));
+            return new LoginResponse(accessToken, jwtService.generateRefreshToken(user.get()),usuario.email(),
+                    usuario.username(),
+                    usuario.firstname(),
+                    usuario.firstname(),
+                    usuario.surname(),
+                    user.get().getCreado(),
+                    usuario.foto(),
+                    usuario.dineroActual());
         }
     }
 

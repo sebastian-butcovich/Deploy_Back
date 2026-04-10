@@ -2,7 +2,7 @@ package com.example.tryJwt.demo.Controller;
 
 import com.example.tryJwt.demo.Enums.TipoActualFlow;
 import com.example.tryJwt.demo.FileRequest.Fecha;
-import com.example.tryJwt.demo.FileRequest.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.Request.MovementsRequest;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Services.ActualFlowsService;
 import com.example.tryJwt.demo.Services.DashboardService;

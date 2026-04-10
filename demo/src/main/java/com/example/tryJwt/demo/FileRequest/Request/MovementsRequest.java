@@ -1,4 +1,4 @@
-package com.example.tryJwt.demo.FileRequest;
+package com.example.tryJwt.demo.FileRequest.Request;
 
 import com.example.tryJwt.demo.Enums.TipoActualFlow;
 

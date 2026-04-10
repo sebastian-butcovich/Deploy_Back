@@ -1,6 +1,6 @@
 package com.example.tryJwt.demo.Mapper;
 
-import com.example.tryJwt.demo.FileRequest.TokenResponse;
+import com.example.tryJwt.demo.FileRequest.Responses.TokenResponse;
 import com.example.tryJwt.demo.Modelo.Token;
 import org.mapstruct.Mapper;
 

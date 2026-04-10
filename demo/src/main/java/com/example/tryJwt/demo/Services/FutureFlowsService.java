@@ -2,10 +2,9 @@ package com.example.tryJwt.demo.Services;
 
 import com.example.tryJwt.demo.Enums.TipoFutureFlow;
 import com.example.tryJwt.demo.FileRequest.FutureFlowDto;
-import com.example.tryJwt.demo.FileRequest.FutureFlowPagedResponse;
+import com.example.tryJwt.demo.FileRequest.Responses.FutureFlowPagedResponse;
 import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
 import com.example.tryJwt.demo.Mapper.FutureFlowMapper;
-import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.FutureFlow;
 import com.example.tryJwt.demo.Modelo.Usuario;
 import com.example.tryJwt.demo.Repository.FutureFlowsRespository;

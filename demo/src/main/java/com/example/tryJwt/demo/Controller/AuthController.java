@@ -1,9 +1,10 @@
 package com.example.tryJwt.demo.Controller;
 
-import com.example.tryJwt.demo.FileRequest.ChangePasswordRequest;
-import com.example.tryJwt.demo.FileRequest.LoginRequest;
+import com.example.tryJwt.demo.FileRequest.Request.ChangePasswordRequest;
+import com.example.tryJwt.demo.FileRequest.Request.LoginRequest;
+import com.example.tryJwt.demo.FileRequest.Responses.LoginResponse;
 import com.example.tryJwt.demo.FileRequest.UsuarioDto;
-import com.example.tryJwt.demo.FileRequest.TokenResponse;
+import com.example.tryJwt.demo.FileRequest.Responses.TokenResponse;
 import com.example.tryJwt.demo.Services.AuthService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,7 @@ public class AuthController {
 
     @PostMapping("/login")
     public final ResponseEntity<Object> authenticate(@RequestBody final LoginRequest request) {
-        final TokenResponse token = service.login(request);
+        final LoginResponse token = service.login(request);
         return ResponseEntity.ok(token);
     }
 

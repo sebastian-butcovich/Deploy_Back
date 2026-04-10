@@ -2,9 +2,9 @@ package com.example.tryJwt.demo.Utils;
 
 import com.example.tryJwt.demo.Enums.Roles;
 import com.example.tryJwt.demo.FileRequest.AdditionalInfo;
-import com.example.tryJwt.demo.FileRequest.ApiDolarResponse;
-import com.example.tryJwt.demo.FileRequest.MovementsRequest;
-import com.example.tryJwt.demo.FileRequest.MovementsPagedResponse;
+import com.example.tryJwt.demo.FileRequest.Responses.ApiDolarResponse;
+import com.example.tryJwt.demo.FileRequest.Request.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.Responses.MovementsPagedResponse;
 import com.example.tryJwt.demo.FileRequest.Paginated.InfoPaginated;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
 import com.example.tryJwt.demo.Modelo.Usuario;

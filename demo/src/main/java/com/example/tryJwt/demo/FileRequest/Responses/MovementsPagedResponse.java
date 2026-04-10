@@ -1,4 +1,7 @@
-package com.example.tryJwt.demo.FileRequest;
+package com.example.tryJwt.demo.FileRequest.Responses;
+
+import com.example.tryJwt.demo.FileRequest.AdditionalInfo;
+import com.example.tryJwt.demo.FileRequest.Request.MovementsRequest;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.example.tryJwt.demo.FileRequest;
+package com.example.tryJwt.demo.FileRequest.Responses;
 
 import java.util.List;
 
