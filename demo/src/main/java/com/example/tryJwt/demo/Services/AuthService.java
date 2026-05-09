@@ -141,6 +141,9 @@ public class AuthService {
             throw new IllegalArgumentException("Refresh token owner does not correspond with access token owner");
         }
         String newAccessToken = jwtService.generateAccessToken(user.get());
+        //Solución más simple que se me ocurrio para safar.
+        // Esto a futuro debería cambiar.
+        refreshToken = jwtService.normalizeToken(refreshToken);
         return new TokenResponse(newAccessToken, refreshToken);
     }
 

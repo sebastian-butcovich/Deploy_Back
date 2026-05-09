@@ -1,14 +1,14 @@
 package com.example.tryJwt.demo.Mapper;
 
-import com.example.tryJwt.demo.FileRequest.TokenResponse;
+import com.example.tryJwt.demo.FileRequest.Responses.TokenResponse;
 import com.example.tryJwt.demo.Modelo.Token;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-14T19:48:56-0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.9 (Amazon.com Inc.)"
+    date = "2026-05-08T21:37:51-0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.11 (Microsoft)"
 )
 @Component
 public class TokenResponseMapperImpl implements TokenResponseMapper {

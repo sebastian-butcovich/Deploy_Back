@@ -1,16 +1,16 @@
 package com.example.tryJwt.demo.Mapper;
 
 import com.example.tryJwt.demo.Enums.TipoActualFlow;
-import com.example.tryJwt.demo.FileRequest.MovementsRequest;
+import com.example.tryJwt.demo.FileRequest.Request.MovementsRequest;
 import com.example.tryJwt.demo.Modelo.ActualFlow;
-import java.util.Date;
+import java.time.LocalDate;
 import javax.annotation.processing.Generated;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2026-02-14T19:48:56-0300",
-    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.9 (Amazon.com Inc.)"
+    date = "2026-05-08T21:37:51-0300",
+    comments = "version: 1.6.3, compiler: javac, environment: Java 21.0.11 (Microsoft)"
 )
 @Component
 public class ActualFlowMapperImpl implements ActualFlowMapper {
@@ -25,7 +25,7 @@ public class ActualFlowMapperImpl implements ActualFlowMapper {
         TipoActualFlow tipo = null;
         String subtipo = null;
         String descripcion = null;
-        Date fecha = null;
+        LocalDate fecha = null;
 
         monto = flow.getMonto();
         tipo = flow.getTipo();
