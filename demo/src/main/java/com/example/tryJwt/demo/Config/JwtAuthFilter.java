@@ -1,12 +1,10 @@
 package com.example.tryJwt.demo.Config;
 
-import com.example.tryJwt.demo.Modelo.Token;
 import com.example.tryJwt.demo.Modelo.Usuario;
-import com.example.tryJwt.demo.Repository.TokenRepository;
+import com.example.tryJwt.demo.Repository.RefreshTokenRepository;
 import com.example.tryJwt.demo.Repository.UsuarioRepository;
 import com.example.tryJwt.demo.Services.JwtService;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.FilterConfig;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,7 +22,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -44,7 +41,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private  UserDetailsService userDetailsService;
 
     @Autowired
-    private TokenRepository tokenRepository;
+    private RefreshTokenRepository refreshTokenRepository;
 
     @Autowired
     private UsuarioRepository usuarioRepository;
@@ -55,7 +52,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain) throws ServletException, IOException {
         String userEmail;
         try {
-            var headers = request.getHeaderNames()  ;
+            var headers = request.getHeaderNames();
             userEmail = jwtService.extractEmail(request.getHeader(HttpHeaders.AUTHORIZATION));
         } catch (IllegalArgumentException e) {
             filterChain.doFilter(request, response);
@@ -70,16 +67,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             filterChain.doFilter(request,response);
             return;
         }
-        if(tokenRegistration) {
-            Token token = tokenRepository.findByToken(request.getHeader(HttpHeaders.AUTHORIZATION).substring(7)).orElse(null);
-            if (token == null || token.isExpired() || token.isRevoked()) {
-                filterChain.doFilter(request, response);
-            }
-        } else {
-            if(!jwtService.isValidToken(request.getHeader(HttpHeaders.AUTHORIZATION), user.get())) {
-                filterChain.doFilter(request,response);
-                return;
-            }
+        if(!jwtService.isTokenExpired(request.getHeader(HttpHeaders.AUTHORIZATION))) {
+            filterChain.doFilter(request,response);
+            return;
         }
         var authToken = new UsernamePasswordAuthenticationToken(
                 userDetails,

@@ -1,7 +1,8 @@
 package com.example.tryJwt.demo.Config;
 
 import com.example.tryJwt.demo.Modelo.Token;
-import com.example.tryJwt.demo.Repository.TokenRepository;
+import com.example.tryJwt.demo.Repository.RefreshTokenRepository;
+import com.example.tryJwt.demo.Services.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +34,7 @@ public class SecurityConfig {
     private AuthenticationProvider authenticationProvider;
 
     @Autowired
-    private TokenRepository tokenRepository;
+    private RefreshTokenRepository refreshTokenRepository;
 
     @Value("${jwt.token.registration}")
     private boolean tokenRegistration;
@@ -70,14 +71,16 @@ public class SecurityConfig {
 
     private void logout(String token) {
         if(tokenRegistration) {
-            if (token == null || !token.startsWith("Bearer ")) {
+            /*if (token == null || !token.startsWith("Bearer ")) {
                 throw new IllegalArgumentException("Invalid Token");
             }
             String jwtToken = token.substring(7);
-            Token foundToken = tokenRepository.findByToken(jwtToken).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
+            Token foundToken = refreshTokenRepository.findByToken(jwtToken).orElseThrow(() -> new IllegalArgumentException("Invalid Token"));
             foundToken.setExpired(true);
             foundToken.setRevoked(true);
-            tokenRepository.save(foundToken);
+            refreshTokenRepository.save(foundToken);
+            jwtService.revokeUserRefreshToken(token);*/
+            refreshTokenRepository.deleteByToken(token);
         }
     }
 }

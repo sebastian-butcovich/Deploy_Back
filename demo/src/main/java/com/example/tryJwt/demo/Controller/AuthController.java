@@ -6,6 +6,7 @@ import com.example.tryJwt.demo.FileRequest.Responses.LoginResponse;
 import com.example.tryJwt.demo.FileRequest.UsuarioDto;
 import com.example.tryJwt.demo.FileRequest.Responses.TokenResponse;
 import com.example.tryJwt.demo.Services.AuthService;
+import com.example.tryJwt.demo.Services.JwtService;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
 
@@ -26,46 +28,70 @@ public class AuthController {
     @Autowired
     private AuthService service;
 
+    @Autowired
+    private JwtService jwtService;
+
 
     @PostMapping("/register")
-    public ResponseEntity<Object> register (@RequestBody final UsuarioDto request) {
-        final TokenResponse token = service.register(request);
-        return ResponseEntity.ok(token);
+    @ResponseStatus(HttpStatus.CREATED)
+    public TokenResponse register (@RequestBody final UsuarioDto request) {
+        try {
+            return service.register(request);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @PostMapping("/login")
-    public final ResponseEntity<Object> authenticate(@RequestBody final LoginRequest request) {
-        final LoginResponse token = service.login(request);
-        return ResponseEntity.ok(token);
+    @ResponseStatus(HttpStatus.OK)
+    public final LoginResponse authenticate(@RequestBody final LoginRequest request) {
+        try {
+            return service.login(request);
+        } catch (UsernameNotFoundException e) {
+            throw new ResponseStatusException(
+                HttpStatus.UNAUTHORIZED, e.getMessage());
+        }
     }
 
     @PostMapping("/refresh")
-    public ResponseEntity<Object> refreshAccessToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String accessToken,
+    @ResponseStatus(HttpStatus.OK)
+    public TokenResponse refreshAccessToken(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String accessToken,
                                                      @RequestHeader("refreshToken") String refreshToken) {
         try {
-            return ResponseEntity.ok(service.refreshAccessToken(accessToken, refreshToken));
+            return service.refreshAccessToken(accessToken, refreshToken);
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (UsernameNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", e.getMessage()));
+            throw new ResponseStatusException(
+                    HttpStatus.UNAUTHORIZED, e.getMessage());
         }
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<Object> validate(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
-        return ResponseEntity.ok(service.validate(token));
+    @ResponseStatus(HttpStatus.OK)
+    public Map<String, Boolean> validate(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token) {
+        try {
+            return Map.of("token_expired", jwtService.isTokenExpired(token));
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage());
+        }
     }
 
     @PostMapping("/changePassword")
-    public ResponseEntity<Object> changePassword(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void changePassword(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token,
                                                  @RequestBody ChangePasswordRequest req) {
         try {
             service.changePassword(token, req);
-            return ResponseEntity.noContent().build();
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", e.getMessage()));
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, e.getMessage());
         } catch (EntityNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", e.getMessage()));
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, e.getMessage());
         }
     }
 }

@@ -13,6 +13,7 @@ import com.example.tryJwt.demo.Repository.UsuarioRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -22,7 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import com.example.tryJwt.demo.Repository.TokenRepository;
+import com.example.tryJwt.demo.Repository.RefreshTokenRepository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -32,6 +33,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @AllArgsConstructor
 @PropertySource("classpath:application.properties")
+@Log4j2
 public class AuthService {
 
     @Autowired
@@ -41,35 +43,35 @@ public class AuthService {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
-    private  TokenRepository tokenRepository;
-
-    @Autowired
     private  JwtService jwtService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
 
-    @Value("${jwt.token.registration}")
-    private boolean tokenRegistration;
-
     @Autowired
     private RegisterRequestMapper registerRequestMapper;
+
     @Autowired
     private UsuarioMapper usuarioMapper;
 
 
     @Transactional
     public TokenResponse register(UsuarioDto request) {
+        log.debug("Register request received for user {}", request.email());
+        if(usuarioRepository.existsByEmail(request.email())) {
+            throw new IllegalArgumentException("The email already exists");
+        }
+        // Proceso y guardo en user los valores recibidos en req
         Usuario user = registerRequestMapper.toEntity(request);
         user.setCreado(new Date());
         user.setUltimaModificacion(new Date());
         user.setPassword(passwordEncoder.encode(request.password()));
         user.setId(null);
-        user.setDineroActual(0.0);
-        Usuario saveUser = usuarioRepository.save(user);
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
-        saveUserToken(saveUser,refreshToken);
+        usuarioRepository.save(user);
+        // Genero y guardo los tokens (si tokenRegistration == true)
+        String refreshToken = jwtService.getRefreshToken(user);
+        String accessToken = jwtService.getAccessToken(refreshToken, user);
+        // Retorno los tokens generados para uso
         return new TokenResponse(accessToken,refreshToken);
     }
 
@@ -81,47 +83,52 @@ public class AuthService {
                         request.password()
                 )
         );
+        log.debug("Login request received for user {}", request.email());
         Optional<Usuario> user = usuarioRepository.findByEmail(request.email());
-        UsuarioDto usuario = usuarioMapper.toDto(user.get());;
         if (user.isEmpty()) {
             throw new UsernameNotFoundException("Invalid username or password");
         }
-        String accessToken = jwtService.generateAccessToken(user.get());
-        if(tokenRegistration) {
-            Optional<Token> savedRefreshToken = tokenRepository.findValidIsFalseOrRevokedIsFalseByUserId(user.get().getId());
-            if (savedRefreshToken.isEmpty() || !jwtService.isValidToken(savedRefreshToken.get().getToken(), user.get())) {
-                revokeUserRefreshToken(user.get());
+        UsuarioDto usuario = usuarioMapper.toDto(user.get());
+        String refreshToken = jwtService.getRefreshToken(user.get());
+        String accessToken = jwtService.getAccessToken(refreshToken, user.get());
+        return LoginResponse.builder() // Creo el dto response con los datos del usuario logueado
+                .access_token(accessToken)
+                .refresh_token(refreshToken)
+                .email(usuario.email())
+                .username(usuario.username())
+                .firstname(usuario.firstname())
+                .surname(usuario.surname())
+                .create(user.get().getCreado())
+                .foto(usuario.foto())
+                .dineroActual(usuario.dineroActual())
+                .build();
+
+        /*log.debug("Se persiste el token? {}", tokenRegistration);
+        if(tokenRegistration) { // Si se guardan los tokens en la BD
+            // Obtengo el primer token valido y
+            Optional<Token> savedRefreshToken = refreshTokenRepository.findRevokedIsFalseByUserId(user.get().getId());
+            if (savedRefreshToken.isEmpty() || !jwtService.isTokenExpired(savedRefreshToken.get().getToken())) {
+                // Si no existe token o está invalido creo uno nuevo, lo guardo y retorno
+                log.debug("Token vacio/invalido; genera uno");
+                jwtService.revokeUserRefreshToken(user.get());
                 String newRefreshToken = jwtService.generateRefreshToken(user.get());
-                saveUserToken(user.get(), newRefreshToken);
-                return new LoginResponse(accessToken, newRefreshToken,
-                        usuario.email(),
-                        usuario.username(),
-                        usuario.firstname(),
-                        usuario.firstname(),
-                        usuario.surname(),
-                        user.get().getCreado(),
-                        usuario.foto(),
-                        usuario.dineroActual());
+                jwtService.saveUserToken(user.get(), newRefreshToken);
+                return returnLogin.toBuilder()
+                        .refresh_token(newRefreshToken)
+                        .build();
             } else {
-                return new LoginResponse(accessToken, savedRefreshToken.get().getToken(),usuario.email(),
-                        usuario.username(),
-                        usuario.firstname(),
-                        usuario.firstname(),
-                        usuario.surname(),
-                        user.get().getCreado(),
-                        usuario.foto(),
-                        usuario.dineroActual());
+                // Retorno token persistido
+                return returnLogin.toBuilder()
+                        .refresh_token(savedRefreshToken.get().getToken())
+                        .build();
             }
         } else {
-            return new LoginResponse(accessToken, jwtService.generateRefreshToken(user.get()),usuario.email(),
-                    usuario.username(),
-                    usuario.firstname(),
-                    usuario.firstname(),
-                    usuario.surname(),
-                    user.get().getCreado(),
-                    usuario.foto(),
-                    usuario.dineroActual());
-        }
+            // Genero el token y retorno
+            log.debug("Genero token nuevo");
+            return returnLogin.toBuilder()
+                    .refresh_token(jwtService.generateRefreshToken(user.get()))
+                    .build();
+        }*/
     }
 
     @Transactional
@@ -131,19 +138,19 @@ public class AuthService {
         if(user.isEmpty()) {
             throw new UsernameNotFoundException("Username not found with email: " + userEmail);
         }
-        if(!jwtService.isValidToken(expiredAccessToken,user.get())) {
-            throw new IllegalArgumentException("Invalid access token");
-        }
-        if(!jwtService.isValidToken(refreshToken,user.get())) {
+        if(!jwtService.isTokenExpired(refreshToken)) {
+            // isTokenExpired verifica implicitamente si es un token firmado valido tambien
             throw new IllegalArgumentException("Invalid refresh token. Must login again");
         }
         if(!userEmail.equals(jwtService.extractEmail(refreshToken))) {
             throw new IllegalArgumentException("Refresh token owner does not correspond with access token owner");
         }
-        String newAccessToken = jwtService.generateAccessToken(user.get());
-        //Solución más simple que se me ocurrio para safar.
+        log.debug("Refresh token received for user {}", userEmail);
+        String newAccessToken = jwtService.getAccessToken(refreshToken, user.get());
+        // Solución más simple que se me ocurrio para safar.
         // Esto a futuro debería cambiar.
-        refreshToken = jwtService.normalizeToken(refreshToken);
+        // bdgarat: Estaria arreglado con check si hay bearer. Comentada linea de abajo (deprecada)
+        // refreshToken = jwtService.normalizeToken(refreshToken);
         return new TokenResponse(newAccessToken, refreshToken);
     }
 
@@ -151,6 +158,7 @@ public class AuthService {
     public void changePassword(String token, ChangePasswordRequest req) {
         Usuario me = usuarioRepository.findByEmail(jwtService.extractEmail(token))
                 .orElseThrow(() -> new EntityNotFoundException("No se encontro el elemento con token: " + token));
+        log.debug("Change password for user {}", me.getEmail());
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         if(!me.getPassword().equals(encoder.encode(req.repeatNewPassword()))) {
             throw new IllegalArgumentException("La contraseña antigua no coincide con la provista");
@@ -162,33 +170,4 @@ public class AuthService {
         usuarioRepository.save(me);
     }
 
-    private void saveUserToken(Usuario user, String jwtToken) {
-        if(tokenRegistration) {
-            Token token = new Token();
-            token.setUser(user);
-            token.setToken(jwtToken);
-            token.setTokenType(Token.TokenType.BEARER);
-            token.setRevoked(false);
-            token.setExpired(false);
-            tokenRepository.save(token);
-        }
-    }
-
-    private void revokeUserRefreshToken(Usuario usuario) {
-        if(tokenRegistration) {
-            Optional<Token> token = tokenRepository.findValidIsFalseOrRevokedIsFalseByUserId(usuario.getId());
-            if (token.isPresent()) {
-                token.get().setExpired(true);
-                token.get().setRevoked(true);
-                tokenRepository.save(token.get());
-            }
-        }
-    }
-
-    public Integer validate(String token) {
-        if(jwtService.isTokenExpired(token)) {
-            return 1;
-        }
-        return 0;
-    }
 }

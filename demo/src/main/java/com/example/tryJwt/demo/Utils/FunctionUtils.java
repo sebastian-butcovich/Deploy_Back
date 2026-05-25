@@ -26,17 +26,21 @@ import java.util.Optional;
 @AllArgsConstructor
 @Service
 public class FunctionUtils {
+
     @Autowired
     private JwtService jwtService;
     @Autowired
     private UsuarioRepository usuarioRepository;
     @Autowired
     private RequestService requestService;
+
+
     public Optional<Usuario> getUsers(String token) {
         //String normalizedToken = jwtService.normalizeToken(token);
         String username = jwtService.extractEmail(token);
         return usuarioRepository.findByEmail(username);
     }
+
     public void changeCoins(List<ActualFlow> spents, String current, double value)
     {
         //double value = getValue(current, currentType);
